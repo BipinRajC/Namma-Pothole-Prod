@@ -65,7 +65,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_BASE_URL: https://nammapothole.com/api
-        VITE_GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
+        VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY}
     container_name: namma-pothole-frontend
     restart: unless-stopped
     volumes:
