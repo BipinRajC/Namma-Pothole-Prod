@@ -1,0 +1,55 @@
+# Caddyfile for nammapothole.com
+# Handles HTTPS automatically with Let's Encrypt
+
+nammapothole.com {
+    # Frontend - serve React app
+    handle / {
+        reverse_proxy frontend:80
+    }
+    
+    # Backend API routes
+    handle /api/* {
+        uri strip_prefix /api
+        reverse_proxy backend:3000
+    }
+    
+    # Health check endpoint
+    handle /health {
+        reverse_proxy frontend:80
+    }
+    
+    # Security headers
+    header {
+        # Remove server information
+        -Server
+        
+        # Security headers
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        
+        # Content Security Policy
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://maps.googleapis.com; frame-src 'none'; object-src 'none';"
+    }
+    
+    # Gzip compression
+    encode gzip
+    
+    # Logging
+    log {
+        output file /var/log/caddy/nammapothole.log {
+            roll_size 100mb
+            roll_keep 5
+            roll_keep_for 720h
+        }
+        format json
+        level INFO
+    }
+}
+
+# Redirect www to non-www
+www.nammapothole.com {
+    redir https://nammapothole.com{uri} permanent
+}

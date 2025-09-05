@@ -1,0 +1,34 @@
+{
+  "name": "namma-pothole",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch index.js",
+    "prod": "node index.js",
+    "tunnel": "node ngrok-setup.js",
+    "dev:tunnel": "concurrently \"npm run dev\" \"npm run tunnel\"",
+    "test": "node --check index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.879.0",
+    "@aws-sdk/s3-request-presigner": "^3.879.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mongoose": "^8.18.0",
+    "node-fetch": "^3.3.2",
+    "redis": "^5.8.2",
+    "sharp": "^0.34.3",
+    "twilio": "^5.8.2",
+    "uuid": "^11.1.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "ngrok": "^5.0.0-beta.2"
+  }
+}
