@@ -7,12 +7,23 @@ import {
 
 /**
  * API service for complaint management using axios
- * Connects to backend at http://localhost:3000
+ * Connects to backend using environment variable or falls back to localhost
  */
+
+// Get API base URL from environment variables
+const getApiBaseUrl = () => {
+  // In production, use the environment variable
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  
+  // Fallback for development
+  return "http://localhost:3000";
+};
 
 // Configure axios defaults
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: getApiBaseUrl(),
   timeout: 10000, // 10 seconds timeout
   headers: {
     "Content-Type": "application/json",
@@ -43,7 +54,7 @@ export const fetchComplaints = async (): Promise<ComplaintsResponse> => {
       (error as { code?: string }).code === "ERR_NETWORK"
     ) {
       throw new Error(
-        "Cannot connect to backend server. Please ensure the server is running on http://localhost:3000"
+        `Cannot connect to backend server. Please ensure the server is running on ${getApiBaseUrl()}`
       );
     }
 
