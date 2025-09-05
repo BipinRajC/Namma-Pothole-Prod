@@ -172,7 +172,7 @@ export const createInfoWindowContent = (complaint: {
       </span>
     </div>
     <div style="margin-bottom: 8px; font-size: 12px; color: #666;">
-      ${new Date(complaint.timestamp).toLocaleString("en-IN", {
+      ${new Date(parseInt(complaint.timestamp) * 1000).toLocaleString("en-IN", {
         dateStyle: "short",
         timeStyle: "short",
       })}

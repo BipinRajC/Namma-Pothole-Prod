@@ -242,7 +242,7 @@ export const Dashboard = () => {
                             </div>
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {new Date(complaint.timestamp).toLocaleDateString(
+                            {new Date(parseInt(complaint.timestamp) * 1000).toLocaleDateString(
                               "en-IN"
                             )}
                           </div>

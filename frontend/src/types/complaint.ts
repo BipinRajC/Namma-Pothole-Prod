@@ -6,7 +6,7 @@ export interface Complaint {
   latitude: number;
   longitude: number;
   imageUrl: string;
-  timestamp: string; // ISO 8601 format
+  timestamp: string; // Epoch timestamp in seconds (as string)
   status: "reported" | "acknowledged" | "resolved";
 }
 

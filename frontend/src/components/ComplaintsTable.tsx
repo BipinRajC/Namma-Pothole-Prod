@@ -35,7 +35,9 @@ export const ComplaintsTable = ({
   } | null>(null);
 
   const formatDateTime = (timestamp: string) => {
-    return new Date(timestamp).toLocaleString("en-IN", {
+    // Convert epoch seconds to milliseconds for JavaScript Date
+    const timestampMs = parseInt(timestamp) * 1000;
+    return new Date(timestampMs).toLocaleString("en-IN", {
       timeZone: "Asia/Kolkata",
       year: "numeric",
       month: "short",
