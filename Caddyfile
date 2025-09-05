@@ -10,14 +10,12 @@ nammapothole.com {
     
     # Health check endpoint
     handle /health {
-        respond "OK" 200
+        reverse_proxy frontend:80
     }
     
-    # Frontend - serve React app static files
+    # Frontend - proxy to nginx container
     handle /* {
-        root * /var/www/html
-        try_files {path} /index.html
-        file_server
+        reverse_proxy frontend:80
     }
     
     # Security headers
@@ -33,7 +31,7 @@ nammapothole.com {
         Referrer-Policy "strict-origin-when-cross-origin"
         
         # Content Security Policy
-        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://maps.googleapis.com; frame-src 'none'; object-src 'none';"
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://maps.googleapis.com https://nammapothole.com; frame-src 'none'; object-src 'none';"
     }
     
     # Gzip compression

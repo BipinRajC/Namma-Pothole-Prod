@@ -58,18 +58,18 @@ services:
     networks:
       - namma-network
 
-  # Frontend React application (builds static files for Caddy)
+  # Frontend React application with Nginx
   frontend:
     build: 
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_BASE_URL: https://nammapothole.com/api
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
         VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY}
     container_name: namma-pothole-frontend
     restart: unless-stopped
-    volumes:
-      - frontend_files:/var/www/html
+    ports:
+      - "8080:80"
     depends_on:
       - backend
     networks:
@@ -87,7 +87,6 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
-      - frontend_files:/var/www/html:ro
     depends_on:
       - frontend
       - backend
@@ -100,8 +99,6 @@ volumes:
   caddy_data:
     driver: local
   caddy_config:
-    driver: local
-  frontend_files:
     driver: local
 
 networks:
