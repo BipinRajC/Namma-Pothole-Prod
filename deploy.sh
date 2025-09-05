@@ -34,7 +34,7 @@ echo "🔍 Checking environment variables..."
 source .env
 
 # Validate required environment variables
-required_vars=("MONGODB_URI" "TWILIO_ACCOUNT_SID" "TWILIO_AUTH_TOKEN" "AWS_ACCESS_KEY" "AWS_SECRET_KEY" "AWS_S3_BUCKET" "GOOGLE_MAPS_API_KEY")
+required_vars=("MONGODB_URI" "TWILIO_ACCOUNT_SID" "TWILIO_AUTH_TOKEN" "AWS_ACCESS_KEY" "AWS_SECRET_KEY" "AWS_S3_BUCKET" "VITE_GOOGLE_MAPS_API_KEY")
 
 for var in "${required_vars[@]}"; do
     if [ -z "${!var}" ]; then

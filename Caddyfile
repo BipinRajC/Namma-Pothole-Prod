@@ -2,11 +2,6 @@
 # Handles HTTPS automatically with Let's Encrypt
 
 nammapothole.com {
-    # Frontend - serve React app
-    handle / {
-        reverse_proxy frontend:80
-    }
-    
     # Backend API routes
     handle /api/* {
         uri strip_prefix /api
@@ -15,7 +10,14 @@ nammapothole.com {
     
     # Health check endpoint
     handle /health {
-        reverse_proxy frontend:80
+        respond "OK" 200
+    }
+    
+    # Frontend - serve React app static files
+    handle /* {
+        root * /var/www/html
+        try_files {path} /index.html
+        file_server
     }
     
     # Security headers
