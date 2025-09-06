@@ -70,9 +70,7 @@ export const About = () => {
           <h1 className="text-4xl font-bold text-foreground">About Namma Pothole</h1>
         </div>
         <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-          A citizen-driven initiative to improve Bengaluru's road infrastructure through 
-          technology and community engagement. Report potholes via WhatsApp and track 
-          their resolution in real-time.
+          Namma Pothole is a government-registered civic technology service dedicated to improving urban road safety and infrastructure. Our organization empowers residents to report potholes and road hazards, facilitating prompt communication and actionable insights for local authorities. By streamlining the maintenance reporting process, we support municipal agencies in efficiently managing repairs and enhancing the quality of public roadways for all citizens.
         </p>
         <div className="flex items-center justify-center gap-2 mt-4">
           <Badge variant="secondary" className="flex items-center gap-1">
@@ -152,6 +150,68 @@ export const About = () => {
 
       <Separator />
 
+      {/* Business Information Section */}
+      <div className="space-y-6">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-2">Business Information</h2>
+          <p className="text-muted-foreground">
+            Official business details and registration information
+          </p>
+        </div>
+
+        <Card>
+          <CardContent className="p-8">
+            <div className="grid gap-8 md:grid-cols-2">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Legal Business Name</h3>
+                  <p className="text-muted-foreground">Namma Pothole</p>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Business Address</h3>
+                  <p className="text-muted-foreground">
+                    11, Lake City Layout<br/>
+                    6th cross road, Kodichikkanahalli<br/>
+                    Behind Janapriya Apts Phase2<br/>
+                    Bengaluru, Karnataka, India
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Contact Information</h3>
+                  <div className="space-y-2">
+                    <p className="text-muted-foreground flex items-center gap-2">
+                      <Mail className="h-4 w-4" />
+                      namma.pothole@gmail.com
+                    </p>
+                    <p className="text-muted-foreground flex items-center gap-2">
+                      <Phone className="h-4 w-4" />
+                      +91 7676795199
+                    </p>
+                    <p className="text-muted-foreground flex items-center gap-2">
+                      <MapPin className="h-4 w-4" />
+                      Bengaluru, Karnataka
+                    </p>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Business Type</h3>
+                  <p className="text-muted-foreground">
+                    Government-registered civic technology service
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Separator />
+
       {/* Contact Section */}
       <div className="space-y-6">
         <div className="text-center">
@@ -199,10 +259,10 @@ export const About = () => {
                 <Button
                   variant="outline"
                   className="flex items-center gap-2 mx-auto"
-                  onClick={() => window.open('tel:+919108420079')}
+                  onClick={() => window.open('tel:+917676795199')}
                 >
                   <Phone className="h-4 w-4" />
-                  +91 9108420079
+                  +91 7676795199
                 </Button>
               </div>
             </CardContent>
@@ -250,13 +310,45 @@ export const About = () => {
       </div>
 
       {/* Footer */}
-      <div className="text-center py-8 border-t">
-        <p className="text-sm text-muted-foreground">
-          © 2024 Namma Pothole. Built with ❤️ for Bengaluru's infrastructure.
-        </p>
-        <p className="text-xs text-muted-foreground mt-2">
-          Open source project contributing to smart city initiatives.
-        </p>
+      <div className="py-8 border-t space-y-4">
+        <div className="grid gap-6 md:grid-cols-3 text-center md:text-left">
+          {/* Business Name & Description */}
+          <div>
+            <h3 className="font-semibold text-lg mb-2">Namma Pothole</h3>
+            <p className="text-sm text-muted-foreground">
+              Government-registered civic technology service dedicated to improving urban road safety and infrastructure.
+            </p>
+          </div>
+          
+          {/* Contact Info */}
+          <div>
+            <h4 className="font-semibold mb-2">Contact Information</h4>
+            <div className="space-y-1 text-sm text-muted-foreground">
+              <p>namma.pothole@gmail.com</p>
+              <p>+91 7676795199</p>
+            </div>
+          </div>
+          
+          {/* Address */}
+          <div>
+            <h4 className="font-semibold mb-2">Business Address</h4>
+            <div className="text-sm text-muted-foreground">
+              <p>11, Lake City Layout</p>
+              <p>6th cross road, Kodichikkanahalli</p>
+              <p>Behind Janapriya Apts Phase2</p>
+              <p>Bengaluru, Karnataka, India</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="text-center border-t pt-4">
+          <p className="text-sm text-muted-foreground">
+            © 2024 Namma Pothole. All rights reserved.
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Government-registered civic technology service supporting municipal infrastructure management.
+          </p>
+        </div>
       </div>
     </div>
   );

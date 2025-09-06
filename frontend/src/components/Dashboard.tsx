@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   BarChart3,
   Info,
+  Mail,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -22,6 +23,8 @@ import { PotholeMap } from "./PotholeMap";
 import { loadGoogleMaps } from "@/services/googleMapsService";
 import { DarkModeToggle } from "./DarkModeToggle";
 import { About } from "./About";
+import { Footer } from "./Footer";
+import { Contact } from "./Contact";
 
 /**
  * Main dashboard component for pothole complaint management
@@ -31,7 +34,7 @@ export const Dashboard = () => {
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
     null
   );
-  const [activeTab, setActiveTab] = useState<"overview" | "table" | "map" | "about">(
+  const [activeTab, setActiveTab] = useState<"overview" | "table" | "map" | "about" | "contact">(
     "overview"
   );
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
@@ -124,10 +127,10 @@ export const Dashboard = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Pothole Management Dashboard
+              Namma Pothole - Pothole Management Dashboard
             </h1>
             <p className="text-muted-foreground mt-1">
-              Monitor and manage pothole complaints across Bengaluru
+              Government-registered civic technology service - Monitor and manage pothole complaints across Bengaluru
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -171,25 +174,29 @@ export const Dashboard = () => {
         <Tabs
           value={activeTab}
           onValueChange={(value) =>
-            setActiveTab(value as "overview" | "table" | "map" | "about")
+            setActiveTab(value as "overview" | "table" | "map" | "about" | "contact")
           }
         >
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Overview
             </TabsTrigger>
             <TabsTrigger value="table" className="flex items-center gap-2">
               <TableIcon className="h-4 w-4" />
-              Complaints Table
+              Complaints
             </TabsTrigger>
             <TabsTrigger value="map" className="flex items-center gap-2">
               <MapPin className="h-4 w-4" />
-              Map View
+              Map
             </TabsTrigger>
             <TabsTrigger value="about" className="flex items-center gap-2">
               <Info className="h-4 w-4" />
               About
+            </TabsTrigger>
+            <TabsTrigger value="contact" className="flex items-center gap-2">
+              <Mail className="h-4 w-4" />
+              Contact
             </TabsTrigger>
           </TabsList>
 
@@ -293,8 +300,16 @@ export const Dashboard = () => {
           <TabsContent value="about" className="mt-6">
             <About />
           </TabsContent>
+
+          {/* Contact Tab */}
+          <TabsContent value="contact" className="mt-6">
+            <Contact />
+          </TabsContent>
         </Tabs>
       </div>
+      
+      {/* Footer with business information */}
+      <Footer />
     </div>
   );
 };
