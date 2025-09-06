@@ -39,8 +39,14 @@ RUN apk add --no-cache curl
 # Copy built files to Caddy's default directory
 COPY --from=build /app/dist /usr/share/caddy
 
-# Simple Caddyfile for serving static files
-RUN echo ":80 { root * /usr/share/caddy; file_server; try_files {path} /index.html }" > /etc/caddy/Caddyfile
+# Create Caddyfile for serving static files
+RUN cat > /etc/caddy/Caddyfile << 'EOF'
+:80 {
+    root * /usr/share/caddy
+    file_server
+    try_files {path} /index.html
+}
+EOF
 
 # Health check - test if Caddy is actually serving content
 HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
