@@ -72,7 +72,7 @@ export const Footer = () => {
             </Button>
           </div>
           <p className="text-sm text-muted-foreground">
-            © 2024 Namma Pothole. All rights reserved.
+            © 2025 Namma Pothole. All rights reserved. Established August 2025.
           </p>
           <p className="text-xs text-muted-foreground">
             Government-registered civic technology service supporting municipal infrastructure management.

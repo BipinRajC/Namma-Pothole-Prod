@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,19 +23,18 @@ import { ComplaintsTable } from "./ComplaintsTable";
 import { PotholeMap } from "./PotholeMap";
 import { loadGoogleMaps } from "@/services/googleMapsService";
 import { DarkModeToggle } from "./DarkModeToggle";
-import { About } from "./About";
 import { Footer } from "./Footer";
-import { Contact } from "./Contact";
 
 /**
  * Main dashboard component for pothole complaint management
  * Combines table view and map view with statistics
  */
 export const Dashboard = () => {
+  const navigate = useNavigate();
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
     null
   );
-  const [activeTab, setActiveTab] = useState<"overview" | "table" | "map" | "about" | "contact">(
+  const [activeTab, setActiveTab] = useState<"overview" | "table" | "map">(
     "overview"
   );
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
@@ -122,22 +122,41 @@ export const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-dashboard-bg">
-      <div className={`container mx-auto ${activeTab === 'map' ? 'p-2 space-y-2' : 'p-6 space-y-6'}`}>
+      <div className={`container mx-auto ${activeTab === 'map' ? 'p-2 space-y-2 max-w-none' : 'px-4 md:px-6 py-4 md:py-6 space-y-4 md:space-y-6'}`}>
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
+        <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground truncate">
               Namma Pothole - Pothole Management Dashboard
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-sm md:text-base text-muted-foreground mt-1">
               Government-registered civic technology service - Monitor and manage pothole complaints across Bengaluru
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 lg:flex-nowrap">
+            <Button
+              onClick={() => navigate("/about")}
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Info className="h-4 w-4" />
+              <span className="hidden sm:inline">About</span>
+            </Button>
+            <Button
+              onClick={() => navigate("/contact")}
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Mail className="h-4 w-4" />
+              <span className="hidden sm:inline">Contact</span>
+            </Button>
             <DarkModeToggle />
             <Button
               onClick={handleRefresh}
               disabled={complaintsLoading || statsLoading}
+              size="sm"
               className="flex items-center gap-2"
             >
               <RefreshCw
@@ -145,7 +164,7 @@ export const Dashboard = () => {
                   complaintsLoading || statsLoading ? "animate-spin" : ""
                 }`}
               />
-              Refresh Data
+              <span className="hidden sm:inline">Refresh Data</span>
             </Button>
           </div>
         </div>
@@ -174,10 +193,10 @@ export const Dashboard = () => {
         <Tabs
           value={activeTab}
           onValueChange={(value) =>
-            setActiveTab(value as "overview" | "table" | "map" | "about" | "contact")
+            setActiveTab(value as "overview" | "table" | "map")
           }
         >
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Overview
@@ -189,14 +208,6 @@ export const Dashboard = () => {
             <TabsTrigger value="map" className="flex items-center gap-2">
               <MapPin className="h-4 w-4" />
               Map
-            </TabsTrigger>
-            <TabsTrigger value="about" className="flex items-center gap-2">
-              <Info className="h-4 w-4" />
-              About
-            </TabsTrigger>
-            <TabsTrigger value="contact" className="flex items-center gap-2">
-              <Mail className="h-4 w-4" />
-              Contact
             </TabsTrigger>
           </TabsList>
 
@@ -296,15 +307,6 @@ export const Dashboard = () => {
             />
           </TabsContent>
 
-          {/* About Tab */}
-          <TabsContent value="about" className="mt-6">
-            <About />
-          </TabsContent>
-
-          {/* Contact Tab */}
-          <TabsContent value="contact" className="mt-6">
-            <Contact />
-          </TabsContent>
         </Tabs>
       </div>
       

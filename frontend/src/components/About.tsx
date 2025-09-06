@@ -343,7 +343,7 @@ export const About = () => {
         
         <div className="text-center border-t pt-4">
           <p className="text-sm text-muted-foreground">
-            © 2024 Namma Pothole. All rights reserved.
+            © 2025 Namma Pothole. All rights reserved. Established August 2025.
           </p>
           <p className="text-xs text-muted-foreground mt-1">
             Government-registered civic technology service supporting municipal infrastructure management.

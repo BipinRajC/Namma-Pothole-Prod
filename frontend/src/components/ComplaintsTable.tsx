@@ -90,18 +90,19 @@ export const ComplaintsTable = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px]">ID</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Timestamp</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-center">Image</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
+          <div className="rounded-md border overflow-hidden">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[80px] min-w-[80px]">ID</TableHead>
+                    <TableHead className="min-w-[140px]">Location</TableHead>
+                    <TableHead className="hidden sm:table-cell min-w-[120px]">Timestamp</TableHead>
+                    <TableHead className="min-w-[80px]">Status</TableHead>
+                    <TableHead className="text-center min-w-[60px]">Image</TableHead>
+                    <TableHead className="text-right min-w-[100px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
               <TableBody>
                 {complaints.length === 0 ? (
                   <TableRow>
@@ -121,17 +122,23 @@ export const ComplaintsTable = ({
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-3 w-3 text-muted-foreground" />
-                          <span className="font-mono text-xs">
-                            {formatCoordinates(
-                              complaint.latitude,
-                              complaint.longitude
-                            )}
-                          </span>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-3 w-3 text-muted-foreground" />
+                            <span className="font-mono text-xs">
+                              {formatCoordinates(
+                                complaint.latitude,
+                                complaint.longitude
+                              )}
+                            </span>
+                          </div>
+                          <div className="sm:hidden flex items-center gap-1 text-xs text-muted-foreground">
+                            <Calendar className="h-3 w-3" />
+                            {formatDateTime(complaint.timestamp)}
+                          </div>
                         </div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell">
                         <div className="flex items-center gap-2">
                           <Calendar className="h-3 w-3 text-muted-foreground" />
                           <span className="text-sm">
@@ -173,6 +180,7 @@ export const ComplaintsTable = ({
                 )}
               </TableBody>
             </Table>
+            </div>
           </div>
         </CardContent>
       </Card>

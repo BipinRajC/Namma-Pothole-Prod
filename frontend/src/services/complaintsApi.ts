@@ -40,7 +40,6 @@ export const fetchComplaints = async (): Promise<ComplaintsResponse> => {
     );
 
     const data = response.data;
-
     if (!data.success) {
       throw new Error(data.error || "Failed to fetch complaints from server");
     }
