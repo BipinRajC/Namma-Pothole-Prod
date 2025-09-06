@@ -33,14 +33,17 @@ RUN if [ -n "$VITE_API_BASE_URL" ]; then \
 # Production stage - Caddy
 FROM caddy:2-alpine
 
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 # Copy built files to Caddy's default directory
 COPY --from=build /app/dist /usr/share/caddy
 
 # Simple Caddyfile for serving static files
 RUN echo ":80 { root * /usr/share/caddy; file_server; try_files {path} /index.html }" > /etc/caddy/Caddyfile
 
-# Health check
+# Health check - test if Caddy is actually serving content
 HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
-  CMD caddy validate --config /etc/caddy/Caddyfile || exit 1
+  CMD curl -f http://localhost/ || exit 1
 
 EXPOSE 80
