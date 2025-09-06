@@ -476,6 +476,7 @@ app.get("/complaints", async (req, res) => {
       data: complaints,
       count: complaints.length,
     });
+
   } catch (error) {
     console.error("Error fetching complaints:", error);
     res.status(500).json({

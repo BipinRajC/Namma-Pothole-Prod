@@ -165,7 +165,8 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 export const getAllComplaints = async () => {
   try {
     // Fetch all complaints but exclude the phoneNumber field
-    const complaints = await Complaint.find({}, { phoneNumber: 0 });
+    // Sort by timestamp in descending order (latest first)
+    const complaints = await Complaint.find({}, { phoneNumber: 0 }).sort({ timestamp: -1 });
     return complaints;
   } catch (err) {
     console.error("Error fetching complaints:", err);
