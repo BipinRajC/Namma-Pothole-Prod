@@ -46,8 +46,9 @@ AWS_SECRET_KEY=your_actual_aws_secret_key
 AWS_S3_BUCKET=your-s3-bucket-name
 AWS_S3_BUCKET_REGION=ap-south-1
 
-# Google Maps API Key
-GOOGLE_MAPS_API_KEY=your_actual_google_maps_api_key
+# Frontend Configuration  
+VITE_GOOGLE_MAPS_API_KEY=your_actual_google_maps_api_key
+VITE_API_BASE_URL=https://nammapothole.com/api
 ```
 
 ### 3. Deploy
@@ -108,9 +109,10 @@ The Caddyfile is configured for `nammapothole.com` and will:
 - Proxy API calls to `/api/*` to the backend
 
 ### Environment Variables
-- Frontend environment variables are replaced at runtime
-- Backend connects to local Redis via Docker network and remote MongoDB Atlas
+- Frontend environment variables (`VITE_*`) are baked into static files during Docker build
+- Backend connects to local Redis via Docker network and remote MongoDB Atlas  
 - Local services communicate via internal Docker network
+- Frontend variables are visible to users (client-side) - never put secrets in `VITE_*` variables
 
 ## Monitoring & Maintenance
 
@@ -172,7 +174,22 @@ free -h
 
 ### Common Issues
 
-#### 1. Services Not Starting
+#### 1. Frontend Environment Variables Not Working
+```bash
+# Debug environment variables
+docker exec namma-pothole-frontend debug-env.sh
+
+# Rebuild frontend with new variables
+docker-compose build --no-cache frontend
+docker-compose up -d
+
+# Check build logs for environment variable debug output
+docker-compose logs frontend | grep "🔍"
+```
+
+**See [DEBUG-ENVIRONMENT-VARIABLES.md](./DEBUG-ENVIRONMENT-VARIABLES.md) for detailed debugging guide.**
+
+#### 2. Services Not Starting
 ```bash
 # Check logs
 docker-compose logs service-name
@@ -183,12 +200,12 @@ docker-compose build --no-cache
 docker-compose up -d
 ```
 
-#### 2. Domain Not Resolving
+#### 3. Domain Not Resolving
 - Verify DNS A record points to your EC2 IP
 - Check security groups allow ports 80 and 443
 - Wait for DNS propagation (up to 24 hours)
 
-#### 3. SSL Certificate Issues
+#### 4. SSL Certificate Issues
 ```bash
 # Check Caddy logs
 docker-compose logs caddy
@@ -197,7 +214,7 @@ docker-compose logs caddy
 # Ensure port 80 is accessible for ACME challenge
 ```
 
-#### 4. Database Connection Issues
+#### 5. Database Connection Issues
 ```bash
 # Check if MongoDB is running
 docker-compose logs mongodb

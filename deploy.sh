@@ -34,7 +34,7 @@ echo "🔍 Checking environment variables..."
 source .env
 
 # Validate required environment variables
-required_vars=("MONGODB_URI" "TWILIO_ACCOUNT_SID" "TWILIO_AUTH_TOKEN" "AWS_ACCESS_KEY" "AWS_SECRET_KEY" "AWS_S3_BUCKET" "VITE_GOOGLE_MAPS_API_KEY")
+required_vars=("MONGODB_URI" "TWILIO_ACCOUNT_SID" "TWILIO_AUTH_TOKEN" "AWS_ACCESS_KEY" "AWS_SECRET_KEY" "AWS_S3_BUCKET" "VITE_GOOGLE_MAPS_API_KEY" "VITE_API_BASE_URL")
 
 for var in "${required_vars[@]}"; do
     if [ -z "${!var}" ]; then
@@ -44,6 +44,15 @@ for var in "${required_vars[@]}"; do
 done
 
 echo "✅ Environment variables validated"
+
+# Debug: Show environment variables (sanitized)
+echo "🔍 Environment variables summary:"
+echo "  MONGODB_URI: ${MONGODB_URI:0:20}..." 
+echo "  TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:0:10}..."
+echo "  AWS_S3_BUCKET: $AWS_S3_BUCKET"
+echo "  AWS_S3_BUCKET_REGION: $AWS_S3_BUCKET_REGION"
+echo "  VITE_API_BASE_URL: $VITE_API_BASE_URL"
+echo "  VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY:0:10}..."
 
 # Stop existing containers if running
 echo "🛑 Stopping existing containers..."
@@ -100,8 +109,13 @@ echo "📱 Your application is now running at:"
 echo "   🌐 Website: https://nammapothole.com"
 echo "   🔧 Backend API: https://nammapothole.com/api"
 echo ""
+echo "🔍 Debug environment variables in containers:"
+echo "   docker exec namma-pothole-frontend debug-env.sh    # Check frontend env vars"
+echo "   docker exec namma-pothole-backend printenv | grep VITE  # Check backend env vars"
+echo ""
 echo "📊 Monitor your deployment:"
 echo "   docker-compose logs -f                    # View all logs"
+echo "   docker-compose logs -f frontend           # View frontend build logs"
 echo "   docker-compose ps                         # Check service status"
 echo "   docker stats                             # Monitor resource usage"
 echo ""
@@ -109,6 +123,7 @@ echo "🛠️  Useful commands:"
 echo "   docker-compose restart backend           # Restart backend only"
 echo "   docker-compose down                      # Stop all services"
 echo "   docker-compose up -d                     # Start all services"
+echo "   docker-compose build --no-cache frontend # Rebuild frontend with new env vars"
 echo ""
 echo "🔒 Don't forget to:"
 echo "   1. Point your domain DNS to this server's IP"
