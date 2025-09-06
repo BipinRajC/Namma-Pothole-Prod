@@ -76,11 +76,83 @@ export const PrivacyPolicy = () => {
               We may collect phone numbers when users interact with our WhatsApp service for pothole reporting. This information is used solely for service delivery and follow-up communications.
             </p>
           </div>
+
+          <div>
+            <h4 className="font-semibold mb-2">WhatsApp Communication Data</h4>
+            <p className="text-muted-foreground">
+              When you use our WhatsApp service, we collect:
+            </p>
+            <ul className="list-disc list-inside text-muted-foreground ml-4 space-y-1 mt-2">
+              <li>Your phone number (automatically provided by WhatsApp)</li>
+              <li>Your WhatsApp profile name</li>
+              <li>Messages and responses you send to our service</li>
+              <li>Consent preferences and opt-out status</li>
+              <li>Interaction timestamps for service improvement</li>
+            </ul>
+          </div>
           
           <div>
             <h4 className="font-semibold mb-2">Images and Media</h4>
             <p className="text-muted-foreground">
               Users may submit photos of road conditions to help authorities assess the severity and nature of reported issues.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* WhatsApp Data Processing */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Mail className="h-5 w-5" />
+            WhatsApp Data Processing
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <h4 className="font-semibold mb-2">Data Controller and Processor Relationship</h4>
+            <p className="text-muted-foreground">
+              Namma Pothole acts as the data controller, while WhatsApp LLC/WhatsApp Ireland Limited acts as the data processor for messages sent through their platform. This relationship is governed by WhatsApp's Business Data Processing Terms.
+            </p>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold mb-2">Data Shared with WhatsApp</h4>
+            <ul className="list-disc list-inside text-muted-foreground space-y-1">
+              <li>Your phone number (for message delivery)</li>
+              <li>Profile information you choose to share</li>
+              <li>Messages and media you send to our service</li>
+              <li>Location data when voluntarily shared</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold mb-2">Legal Basis for Processing</h4>
+            <p className="text-muted-foreground">
+              We process your WhatsApp data based on:
+            </p>
+            <ul className="list-disc list-inside text-muted-foreground ml-4 space-y-1 mt-2">
+              <li><strong>Your explicit consent:</strong> Given when you agree to use our WhatsApp service</li>
+              <li><strong>Legitimate interest:</strong> Providing civic technology services for public infrastructure improvement</li>
+              <li><strong>Public interest:</strong> Facilitating communication between citizens and municipal authorities</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-2">Your Rights Regarding WhatsApp Data</h4>
+            <ul className="list-disc list-inside text-muted-foreground space-y-1">
+              <li><strong>Opt-out:</strong> Send "STOP" to unsubscribe anytime</li>
+              <li><strong>Data access:</strong> Request copies of your data we hold</li>
+              <li><strong>Data deletion:</strong> Request deletion of your information</li>
+              <li><strong>Data portability:</strong> Request your data in a portable format</li>
+              <li><strong>Withdraw consent:</strong> Revoke consent for future data processing</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-2">WhatsApp's Privacy Policy</h4>
+            <p className="text-muted-foreground">
+              WhatsApp's processing of your data is also governed by their Privacy Policy. We recommend reviewing WhatsApp's terms to understand how they handle your communications.
             </p>
           </div>
         </CardContent>

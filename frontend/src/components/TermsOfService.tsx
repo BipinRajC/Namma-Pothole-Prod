@@ -132,6 +132,85 @@ export const TermsOfService = () => {
         </CardContent>
       </Card>
 
+      {/* WhatsApp Service Terms */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Mail className="h-5 w-5" />
+            WhatsApp Communication Service
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <h4 className="font-semibold mb-2">Service Description</h4>
+            <p className="text-muted-foreground">
+              We provide a WhatsApp-based reporting service that allows citizens to report road infrastructure issues directly through WhatsApp messaging. This service is subject to both our terms and WhatsApp's Business Terms of Service.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-2">Consent and Authorization</h4>
+            <p className="text-muted-foreground">
+              By using our WhatsApp service, you explicitly consent to:
+            </p>
+            <ul className="list-disc list-inside text-muted-foreground ml-4 space-y-1 mt-2">
+              <li>Receiving messages from Namma Pothole for service notifications</li>
+              <li>Sharing your contact information with WhatsApp as required for message delivery</li>
+              <li>Having your reports processed and shared with municipal authorities</li>
+              <li>Data processing as described in our Privacy Policy</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-2">Opt-out Rights</h4>
+            <p className="text-muted-foreground">
+              You may opt-out of our WhatsApp service at any time by:
+            </p>
+            <ul className="list-disc list-inside text-muted-foreground ml-4 space-y-1 mt-2">
+              <li>Sending "STOP", "UNSUBSCRIBE", or "OPT-OUT" to our WhatsApp number</li>
+              <li>Blocking our WhatsApp business account</li>
+              <li>Contacting us directly at namma.pothole@gmail.com</li>
+            </ul>
+            <p className="text-muted-foreground mt-2">
+              Opting out will not affect previously submitted reports, which remain active for municipal action.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-2">WhatsApp Business Policy Compliance</h4>
+            <p className="text-muted-foreground">
+              Our WhatsApp service complies with:
+            </p>
+            <ul className="list-disc list-inside text-muted-foreground ml-4 space-y-1 mt-2">
+              <li>WhatsApp Business Terms of Service</li>
+              <li>WhatsApp Business Messaging Policy</li>
+              <li>WhatsApp Business Data Processing Terms</li>
+              <li>All applicable data protection and privacy laws</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-2">Service Limitations</h4>
+            <p className="text-muted-foreground">
+              Our WhatsApp service:
+            </p>
+            <ul className="list-disc list-inside text-muted-foreground ml-4 space-y-1 mt-2">
+              <li>Is intended for business/civic use only, not personal communications</li>
+              <li>Operates within WhatsApp's 24-hour messaging window for responses</li>
+              <li>May be temporarily unavailable due to technical issues or maintenance</li>
+              <li>Does not provide emergency services or immediate response capabilities</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-2">Data Sharing with WhatsApp</h4>
+            <p className="text-muted-foreground">
+              When you use our WhatsApp service, certain data is shared with WhatsApp LLC/WhatsApp Ireland Limited as required for message delivery. This includes your phone number, messages, and any media you share. WhatsApp acts as our data processor under their Business Data Processing Terms.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Government Cooperation */}
       <Card>
         <CardHeader>

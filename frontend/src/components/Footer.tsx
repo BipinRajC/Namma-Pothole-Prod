@@ -52,7 +52,7 @@ export const Footer = () => {
         </div>
         
         <div className="text-center border-t pt-4 mt-6 space-y-3">
-          <div className="flex items-center justify-center gap-4 text-sm">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm">
             <Button
               variant="link"
               size="sm"
@@ -61,7 +61,7 @@ export const Footer = () => {
             >
               Privacy Policy
             </Button>
-            <span className="text-muted-foreground">•</span>
+            <span className="text-muted-foreground hidden sm:inline">•</span>
             <Button
               variant="link"
               size="sm"
@@ -69,6 +69,15 @@ export const Footer = () => {
               onClick={() => navigate('/terms')}
             >
               Terms of Service
+            </Button>
+            <span className="text-muted-foreground hidden sm:inline">•</span>
+            <Button
+              variant="link"
+              size="sm"
+              className="h-auto p-0 text-muted-foreground hover:text-foreground"
+              onClick={() => navigate('/data-processing')}
+            >
+              WhatsApp Data Terms
             </Button>
           </div>
           <p className="text-sm text-muted-foreground">
