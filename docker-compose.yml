@@ -58,7 +58,7 @@ services:
     networks:
       - namma-network
 
-  # Frontend React application (builds static files for Caddy)
+  # Frontend React application (caddy serving static files)
   frontend:
     build: 
       context: ./frontend
@@ -68,10 +68,15 @@ services:
         VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY}
     container_name: namma-pothole-frontend
     restart: unless-stopped
-    volumes:
-      - frontend_files:/var/www/html
+    ports:
+      - "8080:80"
     depends_on:
       - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     networks:
       - namma-network
 
@@ -87,7 +92,6 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
-      - frontend_files:/var/www/html:ro
     depends_on:
       - frontend
       - backend
@@ -100,8 +104,6 @@ volumes:
   caddy_data:
     driver: local
   caddy_config:
-    driver: local
-  frontend_files:
     driver: local
 
 networks:

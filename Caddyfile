@@ -13,11 +13,9 @@ nammapothole.com {
         respond "OK" 200
     }
     
-    # Frontend - serve React app static files
+    # Frontend - proxy to caddy container
     handle /* {
-        root * /var/www/html
-        try_files {path} /index.html
-        file_server
+        reverse_proxy frontend:80
     }
     
     # Security headers
