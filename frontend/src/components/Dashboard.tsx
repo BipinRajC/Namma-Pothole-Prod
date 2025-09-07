@@ -122,7 +122,9 @@ export const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-dashboard-bg">
-      <div className={`container mx-auto ${activeTab === 'map' ? 'p-2 space-y-2 max-w-none' : 'px-4 md:px-6 py-4 md:py-6 space-y-4 md:space-y-6'}`}>
+      <div
+        className={`container mx-auto px-4 md:px-6 py-4 md:py-6 space-y-4 md:space-y-6`}
+      >
         {/* Header */}
         <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
           <div className="min-w-0 flex-1">
@@ -130,7 +132,8 @@ export const Dashboard = () => {
               Namma Pothole - Pothole Management Dashboard
             </h1>
             <p className="text-sm md:text-base text-muted-foreground mt-1">
-              Government-registered civic technology service - Monitor and manage pothole complaints across Bengaluru
+              MSME government-registered civic technology service - Monitor and
+              manage pothole complaints across Bengaluru
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2 lg:flex-nowrap">
@@ -260,9 +263,9 @@ export const Dashboard = () => {
                             </div>
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {new Date(parseInt(complaint.timestamp) * 1000).toLocaleDateString(
-                              "en-IN"
-                            )}
+                            {new Date(
+                              parseInt(complaint.timestamp) * 1000
+                            ).toLocaleDateString("en-IN")}
                           </div>
                         </div>
                       ))}
@@ -277,13 +280,15 @@ export const Dashboard = () => {
               </Card>
 
               {/* Map Preview */}
-              <PotholeMap
-                complaints={complaints.slice(0, 10)} // Show limited markers for overview
-                selectedComplaint={selectedComplaint}
-                onComplaintSelect={setSelectedComplaint}
-                isLoading={complaintsLoading}
-                isFullScreen={false}
-              />
+              {!complaintsLoading && (
+                <PotholeMap
+                  complaints={complaints.slice(0, 10)} // Show limited markers for overview
+                  selectedComplaint={selectedComplaint}
+                  onComplaintSelect={setSelectedComplaint}
+                  isLoading={complaintsLoading}
+                  isFullScreen={false}
+                />
+              )}
             </div>
           </TabsContent>
 
@@ -306,10 +311,9 @@ export const Dashboard = () => {
               isFullScreen={true}
             />
           </TabsContent>
-
         </Tabs>
       </div>
-      
+
       {/* Footer with business information */}
       <Footer />
     </div>

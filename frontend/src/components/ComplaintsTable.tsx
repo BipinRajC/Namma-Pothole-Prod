@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -10,10 +10,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Eye, MapPin, Calendar, Image as ImageIcon } from "lucide-react";
+import { Eye, MapPin, Calendar, ImageIcon } from "lucide-react";
 import { Complaint } from "@/types/complaint";
 import { StatusBadge } from "./StatusBadge";
-import { ImagePreviewModal } from "./ImagePreviewModal";
+// import { ImagePreviewModal } from "./ImagePreviewModal";
 
 interface ComplaintsTableProps {
   complaints: Complaint[];
@@ -29,10 +29,10 @@ export const ComplaintsTable = ({
   isLoading,
   onViewOnMap,
 }: ComplaintsTableProps) => {
-  const [selectedImage, setSelectedImage] = useState<{
-    url: string;
-    complaintId: string;
-  } | null>(null);
+  // const [selectedImage, setSelectedImage] = useState<{
+  //   url: string;
+  //   complaintId: string;
+  // } | null>(null);
 
   const formatDateTime = (timestamp: string) => {
     // Convert epoch seconds to milliseconds for JavaScript Date
@@ -97,100 +97,99 @@ export const ComplaintsTable = ({
                   <TableRow>
                     <TableHead className="w-[80px] min-w-[80px]">ID</TableHead>
                     <TableHead className="min-w-[140px]">Location</TableHead>
-                    <TableHead className="hidden sm:table-cell min-w-[120px]">Timestamp</TableHead>
+                    <TableHead className="hidden sm:table-cell min-w-[120px]">
+                      Timestamp
+                    </TableHead>
                     <TableHead className="min-w-[80px]">Status</TableHead>
-                    <TableHead className="text-center min-w-[60px]">Image</TableHead>
-                    <TableHead className="text-right min-w-[100px]">Actions</TableHead>
+                    <TableHead className="text-center min-w-[60px]">
+                      Image
+                    </TableHead>
+                    <TableHead className="text-right min-w-[100px]">
+                      Actions
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
-              <TableBody>
-                {complaints.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={6}
-                      className="h-24 text-center text-muted-foreground"
-                    >
-                      No complaints found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  complaints.map((complaint) => (
-                    <TableRow key={complaint._id} className="hover:bg-muted/50">
-                      <TableCell className="font-mono text-xs">
-                        <Badge variant="outline" className="font-mono">
-                          {complaint._id.slice(-8)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <MapPin className="h-3 w-3 text-muted-foreground" />
-                            <span className="font-mono text-xs">
-                              {formatCoordinates(
-                                complaint.latitude,
-                                complaint.longitude
-                              )}
-                            </span>
-                          </div>
-                          <div className="sm:hidden flex items-center gap-1 text-xs text-muted-foreground">
-                            <Calendar className="h-3 w-3" />
-                            {formatDateTime(complaint.timestamp)}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-3 w-3 text-muted-foreground" />
-                          <span className="text-sm">
-                            {formatDateTime(complaint.timestamp)}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <StatusBadge status={complaint.status} />
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() =>
-                            setSelectedImage({
-                              url: complaint.imageUrl,
-                              complaintId: complaint._id,
-                            })
-                          }
-                          className="h-8 w-8 p-0"
-                        >
-                          <ImageIcon className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => onViewOnMap?.(complaint)}
-                          className="flex items-center gap-1"
-                        >
-                          <Eye className="h-3 w-3" />
-                          View on Map
-                        </Button>
+                <TableBody>
+                  {complaints.length === 0 ? (
+                    <TableRow>
+                      <TableCell
+                        colSpan={6}
+                        className="h-24 text-center text-muted-foreground"
+                      >
+                        No complaints found
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+                  ) : (
+                    complaints.map((complaint) => (
+                      <TableRow
+                        key={complaint._id}
+                        className="hover:bg-muted/50"
+                      >
+                        <TableCell className="font-mono text-xs">
+                          <Badge variant="outline" className="font-mono">
+                            {complaint._id.slice(-8)}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <MapPin className="h-3 w-3 text-muted-foreground" />
+                              <span className="font-mono text-xs">
+                                {formatCoordinates(
+                                  complaint.latitude,
+                                  complaint.longitude
+                                )}
+                              </span>
+                            </div>
+                            <div className="sm:hidden flex items-center gap-1 text-xs text-muted-foreground">
+                              <Calendar className="h-3 w-3" />
+                              {formatDateTime(complaint.timestamp)}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="h-3 w-3 text-muted-foreground" />
+                            <span className="text-sm">
+                              {formatDateTime(complaint.timestamp)}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <StatusBadge status={complaint.status} />
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Button
+                            disabled={true}
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                          >
+                            <ImageIcon className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onViewOnMap?.(complaint)}
+                            className="flex items-center gap-1"
+                          >
+                            <Eye className="h-3 w-3" />
+                            View on Map
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <ImagePreviewModal
-        isOpen={selectedImage !== null}
-        onClose={() => setSelectedImage(null)}
-        imageUrl={selectedImage?.url || ""}
-        complaintId={selectedImage?.complaintId || ""}
-      />
+      {/* ImagePreviewModal disabled - Feature Coming Soon */}
     </>
   );
 };

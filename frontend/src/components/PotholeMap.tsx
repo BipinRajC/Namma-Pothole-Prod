@@ -155,8 +155,8 @@ export const PotholeMap = ({
       mapInstance.panTo(marker.getPosition()!);
       mapInstance.setZoom(16);
 
-      // Temporarily change marker color
-      marker.setIcon(createMarkerIcon(MARKER_COLORS.selected, 12));
+      // Temporarily change marker color and size for selection
+      marker.setIcon(createMarkerIcon(MARKER_COLORS.selected, 1.5));
 
       // Reset after 3 seconds
       setTimeout(() => {
@@ -202,18 +202,14 @@ export const PotholeMap = ({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        
-
         {/* Map Container */}
         <div
           ref={mapRef}
           className={`w-full rounded-lg border bg-muted ${
-            isFullScreen 
-              ? "h-[calc(100vh-140px)]" 
-              : "h-96"
+            isFullScreen ? "h-[calc(100vh-140px)]" : "h-96"
           }`}
-          style={{ 
-            minHeight: isFullScreen ? "700px" : "400px" 
+          style={{
+            minHeight: isFullScreen ? "700px" : "400px",
           }}
         >
           {!isGoogleMapsLoaded() && !mapError && (

@@ -14,7 +14,7 @@ let googleMapsPromise: Promise<typeof google> | null = null;
 const GOOGLE_MAPS_CONFIG = {
   apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
   version: "weekly",
-  libraries: ["geometry", "places"] as const,
+  libraries: ["geometry", "places"] as ("geometry" | "places")[],
   region: "IN", // India
   language: "en",
   mapIds: [], // Add your Map IDs here if using custom styling
@@ -135,14 +135,15 @@ export const MARKER_COLORS = {
  */
 export const createMarkerIcon = (
   color: string,
-  scale: number = 8
+  scale: number = 1.2
 ): google.maps.Symbol => ({
-  path: google.maps.SymbolPath.CIRCLE,
+  path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
   scale,
   fillColor: color,
-  fillOpacity: 0.8,
+  fillOpacity: 0.9,
   strokeColor: "#ffffff",
-  strokeWeight: 2,
+  strokeWeight: 1.5,
+  anchor: new google.maps.Point(12, 24),
 });
 
 /**
@@ -156,9 +157,12 @@ export const createInfoWindowContent = (complaint: {
 }): string => `
   <div style="padding: 12px; max-width: 280px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     <div style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 14px;">Complaint ${complaint._id.slice(
-        -8
-      )}</strong>
+       <div style="font-size: 11px; color: black;">
+         <div style="font-weight: bold;">Complaint</div>
+         <div style="font-family: monospace; margin-top: 2px;">${
+           complaint._id
+         }</div>
+       </div>
       <span style="
         background: ${MARKER_COLORS[complaint.status]};
         color: white;
@@ -177,21 +181,7 @@ export const createInfoWindowContent = (complaint: {
         timeStyle: "short",
       })}
     </div>
-    <img 
-      src="${complaint.imageUrl}" 
-      alt="Pothole"
-      style="
-        width: 100%; 
-        height: 120px; 
-        object-fit: cover; 
-        border-radius: 6px; 
-        margin-top: 8px;
-        border: 1px solid #e5e7eb;
-      "
-      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-    />
     <div style="
-      display: none; 
       padding: 20px; 
       text-align: center; 
       color: #9ca3af; 
@@ -200,8 +190,9 @@ export const createInfoWindowContent = (complaint: {
       margin-top: 8px;
       border: 1px solid #e5e7eb;
       font-size: 12px;
+      font-weight: 500;
     ">
-      📷 Image unavailable
+      📷 Image Display Feature Coming Soon...
     </div>
   </div>
 `;

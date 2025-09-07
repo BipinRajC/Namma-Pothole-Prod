@@ -2,16 +2,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Users, 
-  Mail, 
-  Phone, 
-  Linkedin, 
-  Github, 
+import {
+  Users,
+  Mail,
+  Phone,
+  Linkedin,
+  Github,
   Globe,
   Heart,
   Code,
-  MapPin
+  MapPin,
 } from "lucide-react";
 
 interface Developer {
@@ -32,31 +32,31 @@ export const About = () => {
       name: "Sravan",
       email: "sravankarthikskt@gmail.com",
       linkedin: "https://in.linkedin.com/in/sravankarthik",
-      role: "Full Stack Developer",
-      bio: "Passionate about creating solutions that make a difference in urban infrastructure."
+      role: "Developer",
+      bio: "Passionate about creating solutions that make a difference in urban infrastructure.",
     },
     {
       name: "Amol",
-      email: "amol.vyas0630@gmail.com", 
+      email: "amol.vyas0630@gmail.com",
       linkedin: "https://www.linkedin.com/in/amol-vyas-918601293/",
-      role: "Frontend Developer",
-      bio: "Focused on building intuitive user interfaces and seamless user experiences."
+      role: "Developer",
+      bio: "Focused on building intuitive user interfaces and seamless user experiences.",
     },
     {
       name: "Bipin Raj C",
       email: "bipinraj.4604@gmail.com",
       linkedin: "https://www.linkedin.com/in/bipin-raj-c-b61670283/",
-      role: "Backend Developer", 
-      bio: "Specialized in robust backend systems and API development for scalable applications."
-    }
+      role: "Developer",
+      bio: "Specialized in robust backend systems and API development for scalable applications.",
+    },
   ];
 
   const openLinkedIn = (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const sendEmail = (email: string) => {
-    window.open(`mailto:${email}`, '_self');
+    window.open(`mailto:${email}`, "_self");
   };
 
   return (
@@ -67,10 +67,18 @@ export const About = () => {
           <div className="p-3 bg-primary/10 rounded-full">
             <MapPin className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-4xl font-bold text-foreground">About Namma Pothole</h1>
+          <h1 className="text-4xl font-bold text-foreground">
+            About Namma Pothole
+          </h1>
         </div>
         <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-          Namma Pothole is a government-registered civic technology service dedicated to improving urban road safety and infrastructure. Our organization empowers residents to report potholes and road hazards, facilitating prompt communication and actionable insights for local authorities. By streamlining the maintenance reporting process, we support municipal agencies in efficiently managing repairs and enhancing the quality of public roadways for all citizens.
+          Namma Pothole is a MSME government-registered civic technology service
+          dedicated to improving urban road safety and infrastructure. Our
+          organization empowers residents to report potholes and road hazards,
+          facilitating prompt communication and actionable insights for local
+          authorities. By streamlining the maintenance reporting process, we
+          support municipal agencies in efficiently managing repairs and
+          enhancing the quality of public roadways for all citizens.
         </p>
         <div className="flex items-center justify-center gap-2 mt-4">
           <Badge variant="secondary" className="flex items-center gap-1">
@@ -100,7 +108,10 @@ export const About = () => {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {developers.map((developer, index) => (
-            <Card key={index} className="hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
+            <Card
+              key={index}
+              className="hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20"
+            >
               <CardHeader className="text-center pb-4">
                 <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full mx-auto mb-4 flex items-center justify-center">
                   <span className="text-2xl font-bold text-primary">
@@ -120,7 +131,7 @@ export const About = () => {
                     {developer.bio}
                   </p>
                 )}
-                
+
                 <div className="space-y-3">
                   <Button
                     variant="outline"
@@ -131,7 +142,7 @@ export const About = () => {
                     <Mail className="h-4 w-4" />
                     Email
                   </Button>
-                  
+
                   <Button
                     variant="outline"
                     size="sm"
@@ -153,7 +164,9 @@ export const About = () => {
       {/* Business Information Section */}
       <div className="space-y-6">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-2">Business Information</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-2">
+            Business Information
+          </h2>
           <p className="text-muted-foreground">
             Official business details and registration information
           </p>
@@ -164,24 +177,27 @@ export const About = () => {
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Legal Business Name</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Legal Business Name
+                  </h3>
                   <p className="text-muted-foreground">Namma Pothole</p>
                 </div>
-                
+
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Business Address</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Business Address
+                  </h3>
                   <p className="text-muted-foreground">
-                    11, Lake City Layout<br/>
-                    6th cross road, Kodichikkanahalli<br/>
-                    Behind Janapriya Apts Phase2<br/>
                     Bengaluru, Karnataka, India
                   </p>
                 </div>
               </div>
-              
+
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Contact Information</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Contact Information
+                  </h3>
                   <div className="space-y-2">
                     <p className="text-muted-foreground flex items-center gap-2">
                       <Mail className="h-4 w-4" />
@@ -189,7 +205,7 @@ export const About = () => {
                     </p>
                     <p className="text-muted-foreground flex items-center gap-2">
                       <Phone className="h-4 w-4" />
-                      +91 7676795199
+                      +91 9108420079
                     </p>
                     <p className="text-muted-foreground flex items-center gap-2">
                       <MapPin className="h-4 w-4" />
@@ -197,11 +213,11 @@ export const About = () => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Business Type</h3>
                   <p className="text-muted-foreground">
-                    Government-registered civic technology service
+                    MSME government-registered civic technology service
                   </p>
                 </div>
               </div>
@@ -215,7 +231,9 @@ export const About = () => {
       {/* Contact Section */}
       <div className="space-y-6">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-2">Contact Us</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-2">
+            Contact Us
+          </h2>
           <p className="text-muted-foreground">
             Have questions, suggestions, or want to contribute? Reach out to us!
           </p>
@@ -236,7 +254,7 @@ export const About = () => {
                 <Button
                   variant="outline"
                   className="flex items-center gap-2 mx-auto"
-                  onClick={() => sendEmail('namma.pothole@gmail.com')}
+                  onClick={() => sendEmail("namma.pothole@gmail.com")}
                 >
                   <Mail className="h-4 w-4" />
                   namma.pothole@gmail.com
@@ -259,10 +277,10 @@ export const About = () => {
                 <Button
                   variant="outline"
                   className="flex items-center gap-2 mx-auto"
-                  onClick={() => window.open('tel:+917676795199')}
+                  onClick={() => window.open("tel:+919108420079")}
                 >
                   <Phone className="h-4 w-4" />
-                  +91 7676795199
+                  +91 9108420079
                 </Button>
               </div>
             </CardContent>
@@ -275,7 +293,9 @@ export const About = () => {
       {/* Project Information */}
       <div className="space-y-6">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-2">Project Mission</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-2">
+            Project Mission
+          </h2>
         </div>
 
         <Card>
@@ -287,21 +307,22 @@ export const About = () => {
                   Our Vision
                 </h3>
                 <p className="text-muted-foreground">
-                  To create a more responsive and efficient system for reporting and 
-                  resolving infrastructure issues in Bengaluru, leveraging technology 
-                  to bridge the gap between citizens and municipal authorities.
+                  To create a more responsive and efficient system for reporting
+                  and resolving infrastructure issues in Bengaluru, leveraging
+                  technology to bridge the gap between citizens and municipal
+                  authorities.
                 </p>
               </div>
-              
+
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold flex items-center gap-2">
                   <Heart className="h-5 w-5 text-primary" />
                   Community Impact
                 </h3>
                 <p className="text-muted-foreground">
-                  By enabling easy reporting through WhatsApp and providing transparent 
-                  tracking through this dashboard, we aim to improve road safety and 
-                  quality of life for all Bengaluru residents.
+                  By enabling easy reporting through WhatsApp and providing
+                  transparent tracking through this dashboard, we aim to improve
+                  road safety and quality of life for all Bengaluru residents.
                 </p>
               </div>
             </div>
@@ -316,37 +337,36 @@ export const About = () => {
           <div>
             <h3 className="font-semibold text-lg mb-2">Namma Pothole</h3>
             <p className="text-sm text-muted-foreground">
-              Government-registered civic technology service dedicated to improving urban road safety and infrastructure.
+              MSME government-registered civic technology service dedicated to
+              improving urban road safety and infrastructure.
             </p>
           </div>
-          
+
           {/* Contact Info */}
           <div>
             <h4 className="font-semibold mb-2">Contact Information</h4>
             <div className="space-y-1 text-sm text-muted-foreground">
               <p>namma.pothole@gmail.com</p>
-              <p>+91 7676795199</p>
+              <p>+91 9108420079</p>
             </div>
           </div>
-          
+
           {/* Address */}
           <div>
             <h4 className="font-semibold mb-2">Business Address</h4>
             <div className="text-sm text-muted-foreground">
-              <p>11, Lake City Layout</p>
-              <p>6th cross road, Kodichikkanahalli</p>
-              <p>Behind Janapriya Apts Phase2</p>
               <p>Bengaluru, Karnataka, India</p>
             </div>
           </div>
         </div>
-        
+
         <div className="text-center border-t pt-4">
           <p className="text-sm text-muted-foreground">
             © 2025 Namma Pothole. All rights reserved. Established August 2025.
           </p>
           <p className="text-xs text-muted-foreground mt-1">
-            Government-registered civic technology service supporting municipal infrastructure management.
+            MSME government-registered civic technology service supporting
+            municipal infrastructure management.
           </p>
         </div>
       </div>

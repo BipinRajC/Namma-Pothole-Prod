@@ -17,10 +17,11 @@ export const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-2">Namma Pothole</h3>
             <p className="text-sm text-muted-foreground">
-              Government-registered civic technology service dedicated to improving urban road safety and infrastructure.
+              MSME government-registered civic technology service dedicated to
+              improving urban road safety and infrastructure.
             </p>
           </div>
-          
+
           {/* Contact Information */}
           <div>
             <h4 className="font-semibold mb-2">Contact Information</h4>
@@ -31,33 +32,30 @@ export const Footer = () => {
               </p>
               <p className="flex items-center gap-2 justify-center md:justify-start">
                 <Phone className="h-4 w-4" />
-                +91 7676795199
+                +91 9108420079
               </p>
             </div>
           </div>
-          
+
           {/* Business Address */}
           <div>
             <h4 className="font-semibold mb-2">Business Address</h4>
             <div className="text-sm text-muted-foreground flex items-start gap-2 justify-center md:justify-start">
               <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
               <div>
-                <p>11, Lake City Layout</p>
-                <p>6th cross road, Kodichikkanahalli</p>
-                <p>Behind Janapriya Apts Phase2</p>
                 <p>Bengaluru, Karnataka, India</p>
               </div>
             </div>
           </div>
         </div>
-        
+
         <div className="text-center border-t pt-4 mt-6 space-y-3">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm">
             <Button
               variant="link"
               size="sm"
               className="h-auto p-0 text-muted-foreground hover:text-foreground"
-              onClick={() => navigate('/privacy')}
+              onClick={() => navigate("/privacy")}
             >
               Privacy Policy
             </Button>
@@ -66,7 +64,7 @@ export const Footer = () => {
               variant="link"
               size="sm"
               className="h-auto p-0 text-muted-foreground hover:text-foreground"
-              onClick={() => navigate('/terms')}
+              onClick={() => navigate("/terms")}
             >
               Terms of Service
             </Button>
@@ -75,7 +73,7 @@ export const Footer = () => {
               variant="link"
               size="sm"
               className="h-auto p-0 text-muted-foreground hover:text-foreground"
-              onClick={() => navigate('/data-processing')}
+              onClick={() => navigate("/data-processing")}
             >
               WhatsApp Data Terms
             </Button>
@@ -84,7 +82,8 @@ export const Footer = () => {
             © 2025 Namma Pothole. All rights reserved. Established August 2025.
           </p>
           <p className="text-xs text-muted-foreground">
-            Government-registered civic technology service supporting municipal infrastructure management.
+            MSME government-registered civic technology service supporting
+            municipal infrastructure management.
           </p>
         </div>
       </div>
