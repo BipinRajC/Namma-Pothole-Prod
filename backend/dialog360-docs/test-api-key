@@ -1,0 +1,739 @@
+
+---
+description: The document explains how to use our WhatsApp Sandbox Environment.
+---
+
+# Sandbox (Test API Key)
+
+## Introduction&#x20;
+
+We provide a developer-friendly test environment, for anyone that wants to explore the usage of our WhatsApp API. The WhatsApp API allows for direct-like access to the WhatsApp Business API. In the test environment, you can test sending messages and templates.
+
+{% hint style="info" %}
+**Sandbox Base Path:** `https://waba-sandbox.360dialog.io/`
+
+Because of security reasons, in the sandbox environment, each phone number has its own Test `API-KEY`, and you are able to test sending messages/templates only to your phone number.
+{% endhint %}
+
+## Limitations
+
+{% hint style="success" %}
+**What you can do in the Sandbox**&#x20;
+
+1. You can use the Test API-KEY to send `text` **messages** and `text` **templates** to your own phone number.&#x20;
+2. An **unlimited** amount of messages can be sent with the sandbox.
+3. Your phone number acts like a **user** and can send and receive messages.&#x20;
+4. The number can be a **landline number**, as long it is able to use WhatsApp.
+5. You can switch the **endpoint** at any time. If you don't have one yet you can use a free service like [RequestBin](https://requestbin.com/?gclid=EAIaIQobChMI2bzykoep6gIVkMmyCh2qjguJEAAYASAAEgLY5fD_BwE) to set up an endpoint.&#x20;
+6. Each **Sandbox API Key** is linked to one phone number and you can only send test messages to that phone number. If you wish to test messages with more than 1 number then it is advised to set up a test WhatsApp Business Account (Staging WABA) to use instead of the Sandbox.
+{% endhint %}
+
+{% hint style="danger" %}
+**What you can't do with the Sandbox**
+
+1. The Sandbox is a **test environment** only. You will not be able to use it to send messages to your clients. You can only send messages to your own phone number.&#x20;
+2. **Templates** messages can be sent a maximum of 10 times. You can choose between 2 predefined templates.&#x20;
+3. Messages and Templates can be sent only to your own **phone number**.
+4. We will only forward and trigger an **API** when your given number is involved.&#x20;
+5. We do not yet provide response information when you use the WhatsApp API.
+6. You only have access to the WhatsApp API.&#x20;
+7. Our Sandbox is available to test via the API, but any automated tests would have to be configured from your end.&#x20;
+8. The Sandbox number is hosted in the Cloud API, therefore, On-premise payloads won't work. If you require assistance, please reach out to our Support Team
+{% endhint %}
+
+## **1. Get a Test API Key**
+
+To get a test **`API-KEY`** you can:
+
+* Send a WhatsApp message from your phone to the phone number `4930609859535`  with the conten&#x74;**`START`**(**`START`**&#x6D;ust be in all UPPERCASE)
+* Use this link: [https://wa.me/4930609859535?text=START](https://wa.me/4930609859535?text=START)
+* Use this QR code:&#x20;
+
+<figure><img src="https://3527970750-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-M4sMxKjL6eJRvZn6jeG-887967055%2Fuploads%2FPqDcNTXq3zPggKCNIfve%2Fqr-code.png?alt=media&#x26;token=bc6a10a0-2a49-4413-b0b3-08e85b737e93" alt="" width="188"><figcaption></figcaption></figure>
+
+As a response, you will receive your Tes&#x74;**`APIKEY.`**&#x54;his **`API-KEY`**&#x69;s associated with your phone WhatsApp number. Now you are able to use the 360dialog WhatsApp API. You can set your own [Webhook](webhook) or [send an unlimited number of messages and limited (10) templates](messaging).
+
+## 2. Set your Sandbox Webhook URL
+
+## Set Webhook URL
+
+<mark style="color:green;">`POST`</mark> `https://waba-sandbox.360dialog.io/v1/configs/webhook`
+
+Inbound messages sent by you to your WhatsApp Phone Number will be sent to your Webhook. You can use an external service (such as requestbin.com) to test webhook responses, or you can create your own webhook server for tests. In the case you want to test with localhost, you may use an external service (such as ngrok). \
+\
+Use the API-KEY as authorization, with the value **D360-API-KEY**.
+
+#### Headers
+
+| Name         | Type   | Description      |
+| ------------ | ------ | ---------------- |
+| D360-API-KEY | string | 1234567\_sandbox |
+
+#### Request Body
+
+| Name | Type   | Description      |
+| ---- | ------ | ---------------- |
+| url  | string | Your webhook URL |
+
+{% tabs %}
+{% tab title="200 Webhook URL Set" %}
+```
+{
+    "url": "https://your-webhook-url"
+}
+```
+{% endtab %}
+{% endtabs %}
+
+## **3. Send a Message to the Sandbox**
+
+Now, send another message (any message) from your device to the Sandbox number: `4930609859535.`You will receive the Inbound Message Notification on your webhook 😀
+
+## **4. Respond using the Sandbox API**
+
+## Send response message
+
+<mark style="color:green;">`POST`</mark> `https://waba-sandbox.360dialog.io/v1/messages`
+
+You can send a response message (or a message template) to your phone WhatsApp number with the above request URL and the body parameters as described below. Use the API-KEY as authorization, with the value **D360-API-KEY.**\
+
+
+#### Headers
+
+| Name         | Type   | Description      |
+| ------------ | ------ | ---------------- |
+| D360-API-KEY | string | 1234567\_sandbox |
+
+#### Request Body
+
+| Name            | Type   | Description           |
+| --------------- | ------ | --------------------- |
+| recipient\_type | string | `individual`          |
+| to              | number | Your number           |
+| type            | string | `text` (default)      |
+| text            | object | contains `body` field |
+
+{% tabs %}
+{% tab title="201 Message Created Successfully" %}
+```bash
+{
+    "messages": [
+        {
+            "id": "message_id"
+        }
+    ],
+    "meta": {
+        "api_status": "stable",
+        "version": "2.31.5"
+    }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+#### Example Request Payload &#x20;
+
+```json
+{
+    "messaging_product": "whatsapp",
+    "recipient_type": "individual",
+    "to": "your-number",
+    "type": "text",
+    "text": {
+        "body": "Hello, dear customer!"
+    }
+}
+```
+
+## **5. Send a Template Message (optional)**
+
+There are 3 templates available to test in the Sandbox. There is no possibility to add or edit a Sandbox templates, you must use the predefined templates.\
+\
+**Templates are:**&#x20;
+
+* `disclaimer` \
+  Using this template will just send a regular text message, which can’t be edited.\
+
+* `first_welcome_messsage`  \
+  This is an example of a template with a personalization possibility (you can personalize the receiver's name). \
+
+* `interactive_template_sandbox`\
+  This template contains 2 buttons for which you can pass customer URLs.&#x20;
+
+
+
+## Send Template Message
+
+<mark style="color:green;">`POST`</mark> `https://waba-sandbox.360dialog.io/v1/messages`
+
+#### Headers
+
+| Name         | Type   | Description     |
+| ------------ | ------ | --------------- |
+| D360-API-KEY | string | Sandbox API KEY |
+
+#### Request Body
+
+| Name      | Type   | Description        |
+| --------- | ------ | ------------------ |
+| to        | number | Your number        |
+| type      | string | Message type       |
+| namespace | string | Template namespace |
+| language  | string | Template language  |
+| policy    | string | Delivery policy    |
+| code      | string | Language code      |
+| name      | string | Template name      |
+
+{% tabs %}
+{% tab title="201 " %}
+```
+{
+    "messages": [
+        {
+            "id": "message_id"
+        }
+    ],
+    "meta": {
+        "api_status": "stable",
+        "version": "2.35.4"
+    }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+**Example Request Payload**
+
+**`first_welcome_messsage`**
+
+```json
+{
+  "to": "1234567890",
+  "messaging_product": "whatsapp",
+  "type": "template",
+  "template": {
+    "name": "first_welcome_messsage",
+    "language": {
+      "code": "en"
+    },
+    "components": [
+      {
+        "type": "body",
+        "parameters": [
+          {
+            "type": "text",
+            "text": "Placeholder 1"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Note that this example covers `first_welcome_messsage` with personalization. In the case of the `disclaimer` template, the payload is similar but without the `components`object (it holds personalization parameters which are not used in `disclaimer`).\
+
+
+**`disclaimer`**
+
+```json
+{
+  "to": "1234567890",
+  "messaging_product": "whatsapp",
+  "type": "template",
+  "template": {
+    "name": "disclaimer",
+    "language": {
+      "code": "en"
+    },
+    "components": []
+  }
+}
+```
+
+
+
+**`interactive_template_sandbox`**
+
+```json
+{
+  "to": "1234567890",
+  "messaging_product": "whatsapp",
+  "type": "template",
+  "template": {
+    "name": "interactive_template_sandbox",
+    "language": {
+      "code": "en"
+    },
+    "components": [
+      {
+        "type": "button",
+        "sub_type": "quick_reply",
+        "index": 0,
+        "parameters": [
+          {
+            "type": "payload",
+            "payload": "aGlzIHRoaXMgaXMgY29vZHNhc2phZHdpcXdlMGZoIGFTIEZISUQgV1FEV0RT"
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "sub_type": "quick_reply",
+        "index": 1,
+        "parameters": [
+          {
+            "type": "payload",
+            "payload": "aGlzIHRoaXMgaXMgY29vZHNhc2phZHdpcXdlMGZoIGFTIEZISUQgV1FEV0RT"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+
+
+## Get new Sandbox API Key
+
+You may recreate / get a new Sandbox API Key at any time by re-sending a WhatsApp message with content `START` to number `4930609859535`. When you create a new API Key for your WhatsApp Number any existing Sandbox Keys associated with your number will be revoked.&#x20;
+
+## Code Examples For Developers
+
+### Python
+
+#### **Creating an API key**
+
+Send a WhatsApp message `START` to the number `4930609859535`. In the following examples, we assume your phone number is `49YOURNUMBER`. Save the D360-API-KEY (in the examples it is described as `YOUR_API_KEY`).
+
+#### **Setting your Callback URL (optional)**
+
+Use an external service (such as [requestbin.com](https://requestbin.com/)) to test webhook responses, or create your own webhook server for tests. In the case you want to test with localhost, you may use an external service (such as [ngrok](https://ngrok.com/)).
+
+```python
+#!/usr/bin/env python3
+# coding: utf-8
+import requests
+
+url = "https://waba-sandbox.360dialog.io/v1/configs/webhook"
+
+payload = '''
+    {
+        "url": "https://your-webhook-adress"
+    }
+'''
+
+headers = {
+    'D360-Api-Key': "YOUR_API_KEY",
+    'Content-Type': "application/json",
+}
+
+response = requests.post(url, data=payload, headers=headers)
+
+print(response.status_code)
+print(response.json())
+```
+
+Now you may send any messages to the number `4930609859535`. You will receive all webhooks as described in the [WhatsApp API Webhooks Page](https://developers.facebook.com/docs/whatsapp/api/webhooks).
+
+For example, when you send a message with content `abcd` you will receive a message:
+
+```bash
+{
+    "contacts": [
+        {
+            "profile": {
+                "name": "Your name"
+            },
+            "wa_id": "49YOURNUMBER"
+        }
+    ],
+    "messages": [
+        {
+            "from": "49YOURNUMBER",
+            "id": "ABGGSHggVwIvAhANFj5aqzEi_lbauSkLYDCO",
+            "text": {
+                "body": "abcd"
+            },
+            "timestamp": "1591955533",
+            "type": "text"
+        }
+    ]
+}
+
+```
+
+#### **Test sending messages**
+
+```python
+#!/usr/bin/env python3
+# coding: utf-8
+import requests
+
+url = "https://waba-sandbox.360dialog.io/v1/messages"
+
+payload = '''
+    {
+        "to": "49YOURNUMBER",
+        "type": "text",
+        "text": {
+            "body": "Any message you want..."
+        }
+    }
+'''
+
+headers = {
+    'D360-Api-Key': "YOUR_API_KEY",
+    'Content-Type': "application/json",
+}
+
+response = requests.post(url, data=payload, headers=headers)
+
+print(response.status_code)
+print(response.json())
+```
+
+In your webhook, you will receive messages about status updates. For example:
+
+```bash
+{
+    "statuses": [
+        {
+            "id": "gBGGSHggVwIvAgk4hwKJv9PdlG4",
+            "recipient_id": "49YOURNUMBER",
+            "status": "read",
+            "timestamp": "1591955668"
+        }
+    ]
+}
+```
+
+#### **Test sending templates**
+
+```python
+#!/usr/bin/env python3
+# coding: utf-8
+import requests
+
+url = "https://waba-sandbox.360dialog.io/v1/messages"
+
+payload = '''
+    {
+        "to": "49YOURNUMBER",
+        "type": "template",
+        "template": {
+            "namespace": "c8ae5f90_307a_ca4c_b8f6_d1e2a2573574",
+            "language": {
+                "policy": "deterministic",
+                "code": "de"
+            },
+            "name": "first_welcome_messsage",
+            "components": [{
+                    "type": "body",
+                    "parameters": [{
+                            "type": "text",
+                            "text": "YOUR NAME"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+'''
+
+headers = {
+    'D360-Api-Key': "YOUR_API_KEY",
+    'Content-Type': "application/json",
+}
+
+response = requests.post(url, data=payload, headers=headers)
+
+print(response.status_code)
+print(response.json())
+```
+
+Similarly to sending text messages, you will receive webhook calls with status updates.
+
+### &#x20;PHP
+
+#### **Creating an API key**
+
+Send a WhatsApp message `START` to the number `4930609859535`. In the following examples, we assume your phone number is `49YOURNUMBER`. Save API Key (in examples will be `YOUR_API_KEY`).
+
+**Setting your webhook (optional)**
+
+Use external service e.g. [requestbin.com](https://requestbin.com/) to test webhook answers. Or create your own webhook server for tests. In case if you want to test with localhost you may use e.g. external [ngrok.com](https://ngrok.com/) service.
+
+Then set your webhook:
+
+```php
+<?php
+
+$url = "https://waba-sandbox.360dialog.io/v1/configs/webhook";
+
+$payload = <<<'PAYLOAD'
+    {
+        "url": "https://your-webhook-adress"
+    }
+PAYLOAD;
+
+$headers = [
+    "Content-Type: application/json",
+    "D360-Api-Key: YOUR_API_KEY",
+];
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => $url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => $payload,
+    CURLOPT_HTTPHEADER => $headers,
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+    echo "curl error: " . $err;
+} else {
+    echo $response;
+}
+```
+
+Now you may send any messages to the number `4930609859535`. You will receive all webhooks as described in the [WhatsApp API Webhooks Page](https://developers.facebook.com/docs/whatsapp/api/webhooks).
+
+For example, when you send a message with content `abcd` you will receive a message:
+
+```bash
+{
+    "contacts": [
+        {
+            "profile": {
+                "name": "Your name"
+            },
+            "wa_id": "49YOURNUMBER"
+        }
+    ],
+    "messages": [
+        {
+            "from": "49YOURNUMBER",
+            "id": "ABGGSHggVwIvAhANFj5aqzEi_lbauSkLYDCO",
+            "text": {
+                "body": "abcd"
+            },
+            "timestamp": "1591955533",
+            "type": "text"
+        }
+    ]
+}
+
+```
+
+**Test sending messages**
+
+```php
+<?php
+
+$url = "https://waba-sandbox.360dialog.io/v1/messages";
+
+$payload = <<<'PAYLOAD'
+    {
+        "to": "49YOURNUMBER",
+        "type": "text",
+        "text": {
+        	"body": "Any message you want..."
+        }
+    }
+PAYLOAD;
+
+$headers = [
+    "Content-Type: application/json",
+    "D360-Api-Key: YOUR_API_KEY",
+];
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => $url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => $payload,
+    CURLOPT_HTTPHEADER => $headers,
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+    echo "curl error: " . $err;
+} else {
+    echo $response;
+}
+```
+
+In your webhook, you will receive messages about status updates. For example:
+
+```bash
+{
+    "statuses": [
+        {
+            "id": "gBGGSHggVwIvAgk4hwKJv9PdlG4",
+            "recipient_id": "49YOURNUMBER",
+            "status": "read",
+            "timestamp": "1591955668"
+        }
+    ]
+}
+```
+
+**Test sending templates**
+
+```php
+<?php
+
+$url = "https://waba-sandbox.360dialog.io/v1/messages";
+
+$payload = <<<'PAYLOAD'
+    {
+        "to": "49YOURNUMBER",
+        "type": "template",
+        "template": {
+            "language": {
+                "policy": "deterministic",
+                "code": "de"
+            },
+            "name": "first_welcome_messsage",
+            "components": [{
+                    "type": "body",
+                    "parameters": [{
+                            "type": "text",
+                            "text": "YOUR NAME"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+PAYLOAD;
+
+$headers = [
+    "Content-Type: application/json",
+    "D360-Api-Key: YOUR_API_KEY",
+];
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => $url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => $payload,
+    CURLOPT_HTTPHEADER => $headers,
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+    echo "curl error: " . $err;
+} else {
+    echo $response;
+}
+```
+
+Similarly to sending text messages you will receive webhook calls with status updates.
+
+### CURL
+
+**Creating API Key**&#x20;
+
+Send a WhatsApp message `START` to the number `4930609859535`. In the following examples, we assume your phone number is `49YOURNUMBER`. Save API Key (in the examples will be `YOUR_API_KEY`).
+
+**Setting your webhook (optional)**
+
+Use external service e.g. [requestbin.com](https://requestbin.com/) to test webhook answers, or create your own webhook server for tests. In the case you want to test with localhost you may use e.g. external [ngrok.com](https://ngrok.com/) service.
+
+Then set your webhook:
+
+```bash
+curl --request POST \
+  --url https://waba-sandbox.360dialog.io/v1/configs/webhook \
+  --header 'Content-Type: application/json' \
+  --header 'D360-Api-Key: YOUR_API_KEY' \
+  --data '{"url": "https://your-webhook-adress"}'
+```
+
+Now you may send any messages to the number `4930609859535`. You will receive all webhooks as described in WhatsApp API [https://developers.facebook.com/docs/whatsapp/api/webhooks](https://developers.facebook.com/docs/whatsapp/api/webhooks)
+
+For example, when you send a message with content `abcd` you will receive the message:
+
+```bash
+{
+    "contacts": [
+        {
+            "profile": {
+                "name": "Your name"
+            },
+            "wa_id": "49YOURNUMBER"
+        }
+    ],
+    "messages": [
+        {
+            "from": "49YOURNUMBER",
+            "id": "ABGGSHggVwIvAhANFj5aqzEi_lbauSkLYDCO",
+            "text": {
+                "body": "abcd"
+            },
+            "timestamp": "1591955533",
+            "type": "text"
+        }
+    ]
+}
+
+```
+
+**Test sending messages**
+
+```bash
+curl --request POST \
+  --url https://waba-sandbox.360dialog.io/v1/messages \
+  --header 'Content-Type: application/json' \
+  --header 'D360-Api-Key: YOUR_API_KEY' \
+  --data '{"to":"49YOURNUMBER","type":"text","text":{"body":"Any message you want..."}}'
+```
+
+In your webhook, you will receive messages about status updates. For example:
+
+```bash
+{
+    "statuses": [
+        {
+            "id": "gBGGSHggVwIvAgk4hwKJv9PdlG4",
+            "recipient_id": "49YOURNUMBER",
+            "status": "read",
+            "timestamp": "1591955668"
+        }
+    ]
+}
+```
+
+**Test sending templates**
+
+```bash
+curl --request POST \
+  --url https://waba-sandbox.360dialog.io/v1/messages \
+  --header 'Content-Type: application/json' \
+  --header 'D360-Api-Key: YOUR_API_KEY' \
+  --data '{"to": "1234567890", "messaging_product": "whatsapp", "type": "template", "template": { "name": "first_welcome_messsage", "language": { "code": "en" }, "components": [ { "type": "body", "parameters": [ { "type": "text", "text": "Placeholder 1"}'
+```
+
+Similarly to sending text messages, you will receive webhooks with status updates.

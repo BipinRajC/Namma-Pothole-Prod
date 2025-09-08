@@ -1,0 +1,476 @@
+
+# Template Messages
+
+A message template is required for the Business to start a new conversation with User. This is required if there was no interaction between the accounts previously or if the last message sent by the User has more than 24h. [See more information about this here](per-message-pricing).&#x20;
+
+Template messages must be submitted to Meta for approval before they are available to use. In addition, templates may be disabled automatically based on customer feedback. Once disabled, a template cannot be sent in a template message until its quality rating has improved or it no longer violates Meta's [business](https://www.whatsapp.com/legal/business-policy/?fbclid=IwAR0DjcZvVN560bFJibrVSmuB47tPI8xAZIe9izHNRLKWB5HlMAi7m1mHpDY) or [commerce](https://www.whatsapp.com/legal/commerce-policy/?fbclid=IwAR0QByMqqtYn7vRe-2WOOazn2DWzkVGR8XYofCBwKmp4JupfkjHnMdyB4eA) policies.
+
+Each WhatsApp Business Account can have up to 250 message templates. That means 250 message template names, and each of them can have multiple language translations. For example, a message template called `hello_world` translated into two languages counts as a single message template in regards to this limit.&#x20;
+
+## Create and Manage your Template Messages
+
+There are multiple ways to submit a Template Message for approval and manage your approved templates.
+
+### In the 360dialog Hub
+
+The Template Management feature in the 360dialog WABA Management UI supports both text and media templates. See our [Template Message Management ](../insights/template-management-ui)documentation.
+
+### In the API
+
+There are multiple ways to submit a Template Message for approval and manage your approved templates. Use the Create new WABA template endpoint to submit new template for approval.&#x20;
+
+You can also retrieve or delete template messages from a specific account.
+
+Some important things to note:
+
+{% hint style="warning" %}
+Ensure that your templates meet Facebook's strict [Message Template Guidelines](https://developers.facebook.com/docs/whatsapp/message-templates/guidelines).&#x20;
+{% endhint %}
+
+1. We support **create** and **delete** for templates. Editing a template is not yet available.
+2. The **Create** API call allows you to add a message template in a specific language.
+3. The **Delete** API call allows you to delete all translations of a message template you specify by name.&#x20;
+4. When you create a message template, make sure to be consistent when providing translations.
+   * If you don't do that, you might see a `structure unavailable` error and notifications won't be delivered.
+   * See the [Why am I seeing 'structure unavailable' errors in my callback or my oncall pager group?](https://developers.facebook.com/docs/whatsapp/faq/#faq_259315284718276) FAQ for more information about this.
+5. Every template has to be approved by Facebook.&#x20;
+   * You can use your template, as soon as its status changes to `approved`
+     * This can take up to 48h. If your template is still in status `submitted` after two days, please contact [Help and Support](https://docs.360dialog.com/useful/help-and-support).
+     * You can include **`allow_category_change=true`** in your API request to avoid template rejection due to miscategorization. Including this parameter and value will allow Meta to assign whatever category they determine to be appropriate.
+
+To see the different elements that can be used in a Template Message, read [Template Elements](broken-reference).
+
+## Create a template&#x20;
+
+<mark style="color:green;">`POST`</mark> `https://waba-v2.360dialog.io/v1/configs/templates`&#x20;
+
+#### Headers
+
+| Name         | Type   | Description |
+| ------------ | ------ | ----------- |
+| D360-API-KEY | string |             |
+
+{% tabs %}
+{% tab title="200 " %}
+```json
+{
+    "category": "MARKETING",
+    "components": [
+        {
+            "text": "Lorem ipsum dolor sit amet",
+            "type": "BODY"
+        },
+        {
+            "format": "TEXT",
+            "text": "Lorem ipsum",
+            "type": "HEADER"
+        },
+        {
+            "text": "Lorem ipsum",
+            "type": "FOOTER"
+        },
+        {
+            "buttons": [
+                {
+                    "phone_number": "+1(650) 555-1111",
+                    "text": "Lorem ipsum",
+                    "type": "PHONE_NUMBER"
+                },
+                {
+                    "example": [
+                        "https://www.website.com/dynamic-url-example"
+                    ],
+                    "text": "your-url-button-text",
+                    "type": "URL",
+                    "url": "https://www.website.com/dynamic-url-example"
+                }
+            ],
+            "type": "BUTTONS"
+        }
+    ],
+    "language": "en_US",
+    "name": "template_test_123",
+    "namespace": "f65cda29_76cb_af89_cee6_f7f5b2a4006a",
+    "rejected_reason": null,
+    "status": "submitted"
+}
+```
+{% endtab %}
+{% endtabs %}
+
+## Get template list
+
+<mark style="color:blue;">`GET`</mark> `https://waba-v2.360dialog.io/v1/configs/templates`
+
+#### Path Parameters
+
+| Name    | Type    | Description                                                                                                                                                                                 |
+| ------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| limit   | integer | default: `1000`                                                                                                                                                                             |
+| offset  | integer | default: `0`                                                                                                                                                                                |
+| sort    | string  | Allowed Values: `id`, `name`, `status`                                                                                                                                                      |
+| filters | string  | <p>A JSON object of params and their expected values.<br><br><code>id</code>  <code>partner_id</code>  <code>business_templates.name</code>  <code>status</code>  <code>category</code></p> |
+
+#### Headers
+
+| Name         | Type   | Description |
+| ------------ | ------ | ----------- |
+| D360-API-KEY | string |             |
+
+{% tabs %}
+{% tab title="200 " %}
+```json
+{
+  "count": 0,
+  "filters": [],
+  "limit": 1000,
+  "offset": 0,
+  "sort": ["id"],
+  "total": 0,
+  "waba_templates": [
+    {
+      "category": "string",
+      "components": [
+        {
+          "format": "string",
+          "type": "string"
+        },
+        {
+          "text": "string",
+          "type": "string"
+        }
+      ],
+      "external id": "string",
+      "language": "string",
+      "name": "string",
+      "namespace": "string",
+      "rejected_reason": "string",
+      "status": "string"
+    }
+  ]
+}
+```
+{% endtab %}
+{% endtabs %}
+
+## Delete a template
+
+<mark style="color:red;">`DELETE`</mark> `https://waba-v2.360dialog.io/v1/configs/templates/{template_name}`
+
+#### Path Parameters
+
+| Name           | Type   | Description |
+| -------------- | ------ | ----------- |
+| template\_name | string |             |
+
+#### Headers
+
+| Name         | Type   | Description |
+| ------------ | ------ | ----------- |
+| D360-API-KEY | string |             |
+
+{% tabs %}
+{% tab title="200 This class of status code indicates that the client's request was successfully received, understood, and accepted." %}
+```json
+{
+    "meta": {
+        "developer_message": "template name=`<template_name>` was deleted",
+        "http_code": 200,
+        "success": true
+    }
+}
+```
+{% endtab %}
+
+{% tab title="400  The 400 Bad Request Error is an HTTP response status code that indicates that the server was unable to process the request sent by the client due to invalid syntax." %}
+```
+object {API Response}
+meta object optional
+    success boolean optional
+    developer_message string optional
+    http_code integer optional
+```
+{% endtab %}
+{% endtabs %}
+
+Some things to keep in mind before deleting a message template:
+
+* If that message template name exists in multiple languages, all languages will be deleted.
+* Messages that have been sent but not delivered (e.g., if the customer's device is offline) will attempt to be delivered for 30 days.&#x20;
+* If a message from an approved message template is sent 30 days after deletion, you will receive a "Structure Unavailable" error and the customer will not receive the message.
+* Once deleted, the name of an approved template cannot be used again for 30 days. Use a different name to create future templates.
+
+## Edit  WABA template
+
+<mark style="color:green;">`POST`</mark> `https://waba-v2.360dialog.io/v1/configs/templates/{external_id}`
+
+**Request example**
+
+`curl --request POST`\
+`--url https://waba.360dialog.io/v1/configs/templates/{external_id}`\
+`--header 'D360-API-KEY: '`\
+`--header 'Content-Type: application/json'`
+
+#### Path Parameters
+
+| Name                                           | Type   | Description                                                      |
+| ---------------------------------------------- | ------ | ---------------------------------------------------------------- |
+| external\_id<mark style="color:red;">\*</mark> | string | external id (can be fetched with the get WABA templates request) |
+
+#### Headers
+
+| Name                                           | Type   | Description |
+| ---------------------------------------------- | ------ | ----------- |
+| D360-API-KEY<mark style="color:red;">\*</mark> | string |             |
+
+## Template Categories
+
+A template message can have three different categories:
+
+* `UTILITY`
+* `MARKETING`
+* `AUTHENTICATION`
+
+### Utility templates <a href="#utility-templates" id="utility-templates"></a>
+
+Utility templates are typically triggered by a user action or request. They must include specificity about the active or ongoing transaction, account, subscription, or interaction to which they relate. For example, an order confirmation must contain an order number.
+
+{% hint style="info" %}
+Any template that has a mix of utility and marketing content will be classified as a marketing template.
+{% endhint %}
+
+<table><thead><tr><th width="210.33333333333331">Message Objective</th><th>Business Goal</th><th>Example Templates</th></tr></thead><tbody><tr><td><strong>Opt-In Management on WhatsApp</strong></td><td>Confirm opt-in for receiving messages on WhatsApp as a follow-up to opt-in collected via other channels (e.g., website, email). Also confirm opt-out.</td><td><ul><li>"Thanks for confirming opt-in! You’re in. You’ll now receive notifications via WhatsApp."</li><li>"Thank you for confirming your opt-out preference. You will no longer receive messages from us on WhatsApp.'"</li></ul></td></tr><tr><td><strong>Order Management</strong></td><td>Confirm, update, or cancel an order or transaction with a customer using specific order or transaction details in the body of your message.</td><td><ul><li>"Thank you! Your order {{1}} is confirmed. We will let you know once your package is on its way."</li><li>"Hooray! Your package from order {{1}} is on its way. Your tracking number is {{2}} and expected delivery date is {{3}}."</li><li>"Unfortunately, one item from your order {{1}} is backordered. We will follow up with an estimated ship date. If you wish to cancel and receive a refund, please click here: {{2}}"</li><li>"We have received your item from order {{1}}. Your refund for {{2}} has been processed. Thank you for your business."</li></ul></td></tr><tr><td><strong>Account Alerts or Updates</strong></td><td><p>Send important account updates, including time-sensitive alerts, safety information, payment reminders, and other information relevant to already-purchased or subscribed products and services.</p><p>These messages should not intend to upsell or cross-sell new products or services.</p></td><td><ul><li>"Daily update for account ending in {{1}}: Your balance is {{2}}."</li><li>"Reminder: Your monthly payment for your subscription to {{1}} will be billed on {{2}} to the card you have saved on file."</li><li>"To finish setting up your profile, you need to upload a photo. Please click here to upload: {{1}}."</li><li>"The product you ordered {{1}} on {{2}} has been recalled. Please click here {{3}} to learn more."</li><li>"There is a tornado alert in your area. We recommend you remain indoors until {{1}} o'clock today."</li></ul></td></tr><tr><td><strong>Feedback Surveys</strong></td><td><p>Collect feedback on previous orders, interactions or ongoing relationships with customers.</p><p>These messages should not be about requesting feedback related to potential upsell or cross-sell opportunities.</p></td><td><ul><li>"We have delivered your order {{1}}! Please let us know if there was any issue by reaching out here: {{2}}."</li><li>"Your feedback ensures we continually improve. Please click here {{1}} to share your thoughts on your recent visit at our {{2}} location. Thank you in advance!"</li><li>"You chatted with us online recently about order {{1}}. How was your experience? Click to fill out a short survey: {{2}}."</li></ul></td></tr><tr><td><strong>Continue a Conversation on WhatsApp</strong></td><td><p>Send a message to start an interaction on WhatsApp that began in another channel.</p><p>These messages should not be initiated without a user having requested the conversation to be moved to WhatsApp.</p></td><td><ul><li>"Hi! I see you requested support via our online chat. I am the virtual assistant on WhatsApp. How can I help?"</li><li>"Hi {{1}}, we are following up on your call with customer service on {{2}}. Your case has progressed to the next step. Please log into your account to continue: {{3}}."</li></ul></td></tr></tbody></table>
+
+
+
+### Authentication templates <a href="#authentication-templates" id="authentication-templates"></a>
+
+Authentication templates enable businesses to authenticate users with one-time passcodes (usually 4-8 digit alphanumeric codes), potentially at multiple steps in the login process (e.g., account verification, account recovery, integrity challenges).
+
+For a template to be classified as authentication, a business must:
+
+* Use WhatsApp’s preset authentication message templates, which include optional add-ons like security disclaimers and expiry warnings.&#x20;
+* Configure a one-time password button (copy-code or one-tap)
+* Follow content restrictions: URLs, media, and emojis are not allowed for authentication template content or parameters. Additional length restrictions of 15 characters also apply to parameters.
+
+See [Authentication Templates](template-messaging/authentication-templates) documentation for the specific requirements.
+
+<table><thead><tr><th width="381">Definition</th><th>Examples</th></tr></thead><tbody><tr><td>Provide an authentication code to the user</td><td><ul><li>"{{1}} is your verification code."</li><li>"{{1}} is your verification code. For your security, do not share this code."</li><li>"{{1}} is your verification code. This code expires in 15 minutes."</li></ul></td></tr></tbody></table>
+
+
+
+### Marketing templates <a href="#marketing-templates" id="marketing-templates"></a>
+
+Marketing templates are the most flexible – they do not relate to a specific, agreed-upon transaction and instead may relate to the business and/or its products/services. These templates may include promotions or offers; welcoming / closing messages; updates, invitations or recommendations; or requests to respond or complete a new transaction.
+
+{% hint style="info" %}
+Any template that has a mix of utility and marketing content will be classified as a marketing template.
+{% endhint %}
+
+<table><thead><tr><th width="177.33333333333331">Objective</th><th>Business Goal</th><th>Example Templates</th></tr></thead><tbody><tr><td><strong>Awareness</strong></td><td>Generate awareness of your business, products, or services among customers who have subscribed to receive messages from your business on WhatsApp.</td><td><ul><li>"Did you know? We installed a new tower in your area so you can enjoy a better network experience. To learn more, visit our site {{1}}."</li><li>"Diwali is around the corner! Join us at {{1}} on October 24 to celebrate with friends and family. For more details about our event, click {{2}}."</li><li>"Looking for a getaway this fall? Our newest resort just opened in {{1}}: the perfect place to relax and unwind. Learn more here: {{2}}"</li></ul></td></tr><tr><td><strong>Sales</strong></td><td>Send general promotional offers to customers related to sales events, coupons or other content intended to drive sales.</td><td><ul><li>"As a thank you for your last order, please enjoy 15% off your next order. Use code LOYAL15 at checkout. Visit our site here {{1}}."</li><li>"Refer → save! Use code FRIEND so you both earn $10 off your next order."</li><li>"Upgrade to our Premium cabin to enjoy more benefits, like additional legroom and priority boarding. Click {{1}} or log into our app to upgrade."</li><li>"You have been pre-approved for our credit card! Enjoy an introductory offer of {{1}} if you apply via your personalized link: {{2}}."</li><li>"Don’t forget! Today only, get double points on your purchases. Visit your nearest store and use your phone number at check-out."</li></ul></td></tr><tr><td><strong>Retargeting</strong></td><td>Promote relevant offers or other call-to-actions to customers who may have visited your website, used your app, or engaged with your products and services.</td><td><ul><li>"Don't miss out on your favorite shows! Re-subscribe now: {{1}}"</li><li>"You left items in your cart! Don’t worry, we saved them for you. Click here to checkout now: {{1}}."</li><li>"Thank you for visiting our site. You can secure your health insurance in a few easy clicks – continue here: {{1}}."</li><li>"You didn’t finish your application! Please log into your profile here to pick up where you left off: {{1}}."</li><li>"We miss you! Join us for an afternoon or evening of fun with your family. Click here to book with a special rate: {{1}}."</li></ul></td></tr><tr><td><strong>App Promotion</strong></td><td>Request customers to install or take a specific action with your app.</td><td><ul><li>"Did you know? You can now checkout in our app. Download it here {{1}} to check out our streamlined experience."</li><li>"Thank you for using our app. We noticed you have not used our latest feature, {{1}}. Click here {{2}} to learn more about how this benefits you!"</li><li>"In-app only: 20% off this week! Use code SUMMER20 to save on select styles. To download our app, click here: {{1}}."</li><li>"Hi {{1}}, your friend {{2}} recently joined our community. Send them a welcome message today: {{1}}"</li></ul></td></tr><tr><td><strong>Build Customer Relationships</strong></td><td>Strengthen customer relationships through personalized messages or by prompting new conversations.</td><td><ul><li>"{{1}}, did you think we’d forget? No way! Happy birthday! We wish you the best in the year ahead."</li><li>"As we approach the end of the year, we reflect on what drives us: You. Thank you for being a valued customer. We look forward to continuing to serve you"</li><li>"Hello, I am the new virtual assistant. I can help you discover products or provide support. Please reach out if I can help!"</li></ul></td></tr></tbody></table>
+
+
+
+
+
+## Template Statuses
+
+Once a Template Message is created and approved, it can have the following statuses:
+
+* **In-Review**: Indicates that the template is still under review. The review process is done by Meta and it can take up to 24 hours.
+* **Rejected**: The template has been rejected during our review process or violates one or more of [Meta's Policies](https://developers.facebook.com/docs/whatsapp/overview/policy-enforcement).&#x20;
+* **Active - Quality pending**: The message template has yet to receive quality feedback from customers. Message templates with this status can be sent to customers and will be monitored for rating. See [Quality Rating](../../waba-management/capacity-quality-rating-and-messaging-limits#quality-rating).
+* **Active - High Quality**: The template has received little or no negative customer feedback. Message templates with this status can be sent to customers. See [Quality Rating](../../waba-management/capacity-quality-rating-and-messaging-limits#quality-rating).
+* **Active - Medium Quality**: The template has received negative feedback from multiple customers but may soon become paused or disabled. Message templates with this status can be sent to customers. See [Quality Rating](../../waba-management/capacity-quality-rating-and-messaging-limits#quality-rating).
+* **Active - Low Quality**: The template has received negative feedback from multiple customers. Message templates with this status can be sent to customers but are in danger of being paused or disabled soon, so it is recommended that you address the issues that customers are reporting. See [Quality Rating](../../waba-management/capacity-quality-rating-and-messaging-limits#quality-rating).
+* **Paused**: The template has been paused due to recurring negative feedback from customers. Message templates with this status cannot be sent to customers. See [Template Pausing](#template-pausing).
+* **Disabled**: The template has been disabled due to recurring negative feedback from customers. Message templates with this status cannot be sent to customers.&#x20;
+* **Appeal Requested**: Indicates that an appeal has been requested. See [Appeals](#appeals).
+
+You can see the exact payload of every status when received via webhook [here](https://developers.facebook.com/docs/whatsapp/business-management-api/webhooks/components#message-template-updates).
+
+
+
+## Template Approval Process
+
+Each template must be reviewed and approved by Meta, before you can send them to customers.
+
+### Category Validation <a href="#category-validation" id="category-validation"></a>
+
+When you send a template creation request, Meta immediately validate its category using the [template categorization](#templates-categories) guidelines.
+
+* **If Meta agrees** with the category you selected, the template status is set to `PENDING`; the template will then go through template review. \
+
+* **If Meta disagrees** with your designation, the template will be created, but its `status` is set to `REJECTED` . This will trigger a message template status update webhook with `reason` set to `INCORRECT_CATEGORY` and the  `rejected_reason` field will have the value `TAG_CONTENT_MISMATCH.`We recommend including the `allow_category_change` property set to `true` in your template creation request. This will prevent your template from being rejected due to miscategorization and ensure it continues to template review process. See Appeals.
+
+In both cases, the template's initial status is returned as part of the API response with `template ID`, `status`, and `category`. For example:
+
+#### Example Response <a href="#example-response" id="example-response"></a>
+
+```json
+{
+    "id": "572279198452421",
+    "status": "PENDING",
+    "category": "MARKETING"
+}
+```
+
+### Template Review <a href="#template-review" id="template-review"></a>
+
+Templates with a status of `PENDING` are undergoing template review. Meta reviews the contents of each newly created or edited template to make sure it adheres to their content guidelines and policies.&#x20;
+
+The review process can take up to 24 hours. In case you encounter any delays with the approval process, please reach out to our Support Team.&#x20;
+
+Based upon the outcome of this review, it will automatically change its status to `APPROVED` or `REJECTED`, which triggers a message template status update webhook, that can have one of the listed statuses below.&#x20;
+
+### Monitoring Status Changes <a href="#monitoring-status-changes" id="monitoring-status-changes"></a>
+
+Based on the outcome of category validation and template review, Meta will set or change the template's `status` to one of the following values:
+
+* `APPROVED` — The template has passed template review and been approved, and can now[ be sent in template messages.](messaging)
+* `PENDING` — The template passed category validation and is undergoing template review.
+* `REJECTED` — The template failed category validation or template review.&#x20;
+
+Businesses can only send templates with an **Active** status. You receive the template status by the  `template_message_update` webhook
+
+## Template Rejection
+
+Submissions are commonly rejected for the following reasons, so make sure you avoid these mistakes.
+
+Parameter Formatting
+
+* Avoid starting or ending a template with parameters.
+* Avoid having 2 parameters next to each other.
+* Variable parameters are missing or have mismatched curly braces. The correct format is `{{1}}`.
+* Variable parameters contain special characters such as a `#`, `$`, or `%`.
+* Variable parameters are not sequential. For example, `{{1}}`, `{{2}}`, `{{4}}`, `{{5}}` are defined but `{{3}}` does not exist.
+* Template contains too many variable parameters relative to the message length. You need to decrease the number of variable parameters or increase the message length.
+* The message template cannot start or end with a parameter i.e. dangling parameters are not allowed.
+
+Content and Policy Violations
+
+* The message template contains content that violates WhatsApp’s Commerce Policy: When you offer goods or services for sale, we consider all messages and media related to your goods or services, including any descriptions, prices, fees, taxes and/or any required legal disclosures, to constitute transactions. Transactions must comply with the [WhatsApp Commerce Policy](https://www.whatsapp.com/legal/commerce-policy/).
+* The message template contains content that violates the [WhatsApps Business Policy](https://www.whatsapp.com/legal/business-policy): Do not request sensitive identifiers from users. For example, do not ask people to share full length individual payment card numbers, financial account numbers, National Identification numbers, or other sensitive identifiers. This also includes not requesting documents from users that might contain sensitive identifiers. Requesting partial identifiers (ex: last 4 digits of their Social Security number) is OK.
+* The content contains potentially abusive or threatening content, such as threatening a customer with legal action or threatening to publicly shame them.
+
+Character Limits and Text Format
+
+* The body component will have different character limits depending on the format and tag of the template. The number of emojis allowed in the body component may also be limited.
+
+Duplication
+
+* The message template is a duplicate of an existing template. If a template is submitted with the same wording in the body and footer of an existing template, the duplicate template will be rejected.
+
+
+
+If your template is rejected, you have the following options:
+
+1. **Correct the error and re-submit:** Edit the template so they align with Meta guidelines, and resubmit to review. You can do this from the 360dialog Hub, or via WhatsApp Business Manager.&#x20;
+2. **Request review via Account Quality:** Appeal the rejection directly through Business Manager. Go to  Account Quality >  ‘Rejected message templates’, check the rejected template, and select Request review
+3. **Create a new template:** Create a new template via [API, 360dialog Hub](#create-and-manage-template-messages) or WhatsApp Manager to submit to the approval process. Make sure to create it with different name and content, otherwise it will be rejected immediately.&#x20;
+
+<figure><img src="https://3527970750-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-M4sMxKjL6eJRvZn6jeG-887967055%2Fuploads%2Fj77KlK276rgoEoYAd6zE%2Fimage.png?alt=media&#x26;token=2806f0e7-a540-448b-b2cc-c6ff8e3c6ec1" alt=""><figcaption></figcaption></figure>
+
+## Template Pausing <a href="#template-pausing" id="template-pausing"></a>
+
+If a message template reaches the lowest quality rating (a status of **Active - Low quality**), it will automatically be paused for a period of time. Pausing durations are as follows:
+
+* 1st Instance: **Paused** for 3 hours
+* 2nd Instance: **Paused** for 6 hours
+* 3rd Instance: **Disabled**
+
+When a message template is paused (status of **Paused**) it can't be sent to customers, so you should suspend any automated messaging campaigns that rely on that template. Although you won't be charged for attempting to send a paused message template to a customer, and the attempt won't count against your [messaging limit](../waba-management/capacity-quality-rating-and-messaging-limits), the API will reject such attempts. You should only resume these campaigns once the template's status has been changed back to **Active**.
+
+<figure><img src="https://3527970750-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-M4sMxKjL6eJRvZn6jeG-887967055%2Fuploads%2FMfQ8WCqdXNKSMEhP3C87%2FScreenshot%202024-02-19%20at%2013.18.11%20(1).png?alt=media&#x26;token=b8c7bdff-37c2-478d-8b94-e36f794b7d69" alt=""><figcaption></figcaption></figure>
+
+You may wish to edit a paused template if you feel that editing its content will reduce the amount of negative feedback it may receive. Keep in mind, however, that once you edit a message template and resubmit it for approval, its status will change to **In Review** and it can't be sent to customers again until it has been re-approved and the status set back to **Active**.&#x20;
+
+Having Paused Templates won't impact the WABA from which the message template was sent, or cause the Messaging Limit to decrease. Other high-quality message templates can continue to be sent from the phone number. However, if a business consistently sends message templates that reach a **Low quality** status, the WhatsApp Business Account may eventually be impacted. See [WABA Policy Enforcement](../waba-basics/waba-policy-enforcement).
+
+#### Unpausing <a href="#unpausing" id="unpausing"></a>
+
+A template will unpause on its own after satisfying the pause duration outlined above. Once unpaused, the template's status will be set to **Active** and you may begin sending it to customers again. If you haven't suspended any automated messaging campaigns that relied on a paused template, they should start working again. However, we recommend that you hold any campaigns that rely on a template that has been paused until it is unpaused, because the API will reject your requests anyway.
+
+The template's quality rating will also be reset to a value based on the most recent customer feedback the template has received.
+
+Similar to pause notifications, Meta will notify you by WhatsApp Manager notification, email, and webhook once the template's status has been set to **Active**.&#x20;
+
+<details>
+
+<summary>Unpausing through the WhatsApp Manager </summary>
+
+You can unpause any paused template through the WhatsApp Manager by clicking the ‘manually unpause it’ link highlighted in the screenshots below:
+
+![](https://3527970750-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-M4sMxKjL6eJRvZn6jeG-887967055%2Fuploads%2FeMQTvrkdQGyt2BEQzVWd%2Fimage.png?alt=media\&token=c83e18b0-9a8b-4985-b3fb-a7fc17007a58)
+
+_Note that templates paused during Template Pacing must be manually unpaused before they can be used again._
+
+</details>
+
+
+
+## Template Read Rates
+
+{% hint style="info" %}
+Beginning April 1, 2024, Meta is including templates read rates as a key factor in determining the quality of [Marketing Message Templates](#marketing-templates), as an addition to traditional metrics like blocks and reports. This means that Meta will [temporarily pause marketing message](#template-pausing) campaigns with low read rates, giving businesses time to iterate/edit the templates with the lowest engagement before scaling volume. Use the `message_template_status_change` webhook for information and template statuses changes.&#x20;
+{% endhint %}
+
+#### How to track template message read rates?
+
+In the WhatsApp Manager, you can monitor message read rates in real time via a dedicated dashboard with message template metrics.
+
+Go to WhatsApp Business Manager > Left side menu in "Account Tools" > Template messages.
+
+&#x20;Select any message template, then click the template Insights tab to see additional metrics, including “Messages Read”. You also receive a read event webhook for each message (if the user has turned the “read receipts” setting on) via the messages webhook.  See [Webhook Events and Notifications](broken-reference).&#x20;
+
+<figure><img src="https://3527970750-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-M4sMxKjL6eJRvZn6jeG-887967055%2Fuploads%2FcUHtiq2VzPuHQ4srl5sI%2FScreenshot%202024-02-21%20at%2013.05.28%20(1).png?alt=media&#x26;token=8e57dc31-09ad-46ac-944a-2214b68a4277" alt="" width="375"><figcaption></figcaption></figure>
+
+
+
+Note that Meta system accounts for variations in user availability, analyzing read rate trends over an appropriate period, instead of solely relying on immediate response times, for example, in cases where the user may not check messages during work hours, which could result in low read rates. This ensures a fair and realistic assessment of message engagement.
+
+#### How to improve template messages read rates?
+
+Here are some strategies to improve template messages read rates:&#x20;
+
+**Audience:** Tailor your messages to specific user segments for more relevant communication.
+
+**Timing:** To maximize chances of engagement with your templates, consider not sending on days when many businesses are competing for your customers’ attention, such as weekends or seasonal peaks.
+
+**Frequency of Messages:** Monitor how many marketing conversations a customer receives per day and week to avoid overloading the customer.&#x20;
+
+**Cool downs:** Give customers that have stopped engaging with your templates a break. Always include the option to opt-out of marketing conversations on WhatsApp.
+
+**Relevance of the Message:** Make sure the subject line or preview text clearly indicates the message's relevance. Similarly, if previous interactions have been negative, this may discourage people from reading messages.&#x20;
+
+**Optimize the first 60-65 characters:** This is what people see first in their message preview on WhatsApp. Make it engaging, convey the main point, personalize it, and test different approaches to see what works best.
+
+
+
+## Template Appeals
+
+You can submit Template Appeals from the WhatsApp Business Manager. Meta's team reviews the case against the appealed violation and decides the outcome, which typically takes 24 to 48 hours. The appealed violation will either remain **Unchanged**, or be set as **Reversed.**\
+\
+See our documentation for [WABA Policy Enforcement](../../waba-basics/waba-policy-enforcement#appeal-template).
+
+
+
+
+
+
+
+### Official Meta Developer Documentation <a href="#message-templates" id="message-templates"></a>
+
+{% embed url="https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-message-templates" %}
+Message Templates for Cloud API
+{% endembed %}
+
+{% embed url="https://developers.facebook.com/docs/whatsapp/message-templates/guidelines" %}
+Message Template Guidelines
+{% endembed %}
+
+### **Cost of WhatsApp Conversations**
+
+{% embed url="https://developers.facebook.com/docs/whatsapp/pricing" %}
+Cost of sending Template Messages / Conversations
+{% endembed %}
