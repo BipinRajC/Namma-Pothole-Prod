@@ -1,4 +1,5 @@
 import { createClient } from "redis";
+import { getHashedPhoneNumber } from './phoneHasher.js';
 // Create Redis client with environment-based configuration
 const redisClient = createClient({
   url: process.env.REDIS_URL || "redis://localhost:6379",
@@ -17,9 +18,11 @@ export const connectToRedis = async () => {
   }
 };
 
-export const getSession = async (sessionId) => {
+export const getSession = async (phoneNumber) => {
   try {
-    const session = await redisClient.get(`session:${sessionId}`);
+    // Hash the phone number to create session key
+    const hashedPhoneNumber = getHashedPhoneNumber(phoneNumber);
+    const session = await redisClient.get(`session:${hashedPhoneNumber}`);
     if (!session) {
       return null;
     }
@@ -30,10 +33,12 @@ export const getSession = async (sessionId) => {
   }
 };
 
-export const setSession = async (sessionId, sessionData) => {
+export const setSession = async (phoneNumber, sessionData) => {
   try {
-    await redisClient.set(`session:${sessionId}`, JSON.stringify(sessionData), {
-      EX: 60,
+    // Hash the phone number to create session key
+    const hashedPhoneNumber = getHashedPhoneNumber(phoneNumber);
+    await redisClient.set(`session:${hashedPhoneNumber}`, JSON.stringify(sessionData), {
+      EX: 180, // Session expires in 60 seconds
     });
     return true;
   } catch (err) {
