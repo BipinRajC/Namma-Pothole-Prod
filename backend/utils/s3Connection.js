@@ -212,3 +212,86 @@ export async function uploadMediaFromTwilio(mediaUrl, complaintId) {
     return null;
   }
 }
+
+// Upload media from WAPI URL to S3 with compression
+export async function uploadMediaFromWAPI(mediaUrl, complaintId) {
+  try {
+    console.log(`Starting image download and compression from WAPI for complaint: ${complaintId}`);
+    
+    // Download image from WAPI URL (no authentication needed for WAPI media URLs)
+    const response = await fetch(mediaUrl);
+
+    if (!response.ok) {
+      throw new Error(`Failed to download image from WAPI: ${response.statusText}`);
+    }
+
+    const originalImageBuffer = await response.buffer();
+    console.log(`Original image size: ${(originalImageBuffer.length / 1024 / 1024).toFixed(2)}MB`);
+    
+    // Compress image to ensure it's under 1MB
+    let compressedImageBuffer = originalImageBuffer;
+    let quality = 85; // Start with 85% quality
+    const maxSizeBytes = 1024 * 1024; // 1MB limit
+    
+    // If original image is already under 1MB, try mild compression for optimization
+    if (originalImageBuffer.length <= maxSizeBytes) {
+      compressedImageBuffer = await sharp(originalImageBuffer)
+        .jpeg({ quality: 90, progressive: true })
+        .resize(1920, 1080, { fit: 'inside', withoutEnlargement: true })
+        .toBuffer();
+    } else {
+      // Aggressive compression for large images
+      while (compressedImageBuffer.length > maxSizeBytes && quality > 20) {
+        compressedImageBuffer = await sharp(originalImageBuffer)
+          .jpeg({ quality: quality, progressive: true })
+          .resize(1600, 1200, { fit: 'inside', withoutEnlargement: true })
+          .toBuffer();
+        
+        console.log(`Compressed to ${(compressedImageBuffer.length / 1024 / 1024).toFixed(2)}MB at ${quality}% quality`);
+        
+        if (compressedImageBuffer.length > maxSizeBytes) {
+          quality -= 10;
+        }
+      }
+      
+      // If still too large, resize more aggressively
+      if (compressedImageBuffer.length > maxSizeBytes) {
+        compressedImageBuffer = await sharp(originalImageBuffer)
+          .jpeg({ quality: 60, progressive: true })
+          .resize(1200, 900, { fit: 'inside', withoutEnlargement: true })
+          .toBuffer();
+      }
+    }
+    
+    const finalSizeMB = (compressedImageBuffer.length / 1024 / 1024).toFixed(2);
+    console.log(`Final compressed image size: ${finalSizeMB}MB`);
+    
+    // Generate unique file name
+    const fileName = `potholes/${complaintId}-${Date.now()}.jpg`;
+    
+    // Upload compressed image to S3
+    const command = new PutObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET,
+      Key: fileName,
+      Body: compressedImageBuffer,
+      ContentType: 'image/jpeg',
+      Metadata: {
+        'original-size': (originalImageBuffer.length / 1024 / 1024).toFixed(2) + 'MB',
+        'compressed-size': finalSizeMB + 'MB',
+        'complaint-id': complaintId,
+        'upload-source': 'wapi'
+      }
+    });
+
+    await s3Client.send(command);
+    console.log(`Image uploaded successfully to S3: ${fileName}`);
+    
+    // Get public URL
+    const url = await getObjectURL(fileName);
+    return url;
+    
+  } catch (err) {
+    console.error("Error uploading media from WAPI:", err);
+    return null;
+  }
+}

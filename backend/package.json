@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch index-dialog360.js",
-    "prod": "node index.js",
+    "dev": "node --watch index-wapi.js",
+    "prod": "node index-wapi.js",
     "tunnel": "node ngrok-setup.js",
-    "dev:tunnel": "concurrently \"npm run dev\" \"npm run tunnel\"",
-    "test": "node --check index.js"
+    "dev:tunnel": "concurrently \"npm run dev\" \"npm run tunnel\""
   },
   "keywords": [],
   "author": "",
