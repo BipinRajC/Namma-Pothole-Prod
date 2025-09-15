@@ -107,7 +107,7 @@ export const getTodayComplaintCount = async (phoneNumber) => {
 };
 
 // Check for duplicate potholes within 50m radius
-export const checkDuplicateLocation = async (latitude, longitude, radiusMeters = 50) => {
+export const checkDuplicateLocation = async (latitude, longitude, radiusMeters = 5) => {
   try {
     // Simple distance calculation using Haversine formula
     // For small distances (50m), we can use a simple approximation

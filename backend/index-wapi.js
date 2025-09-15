@@ -79,14 +79,6 @@ const STATES = {
   AWAITING_IMAGE: 'awaiting_image'
 };
 
-// Template names for WAPI
-const TEMPLATES = {
-  WELCOME_LANGUAGE_SELECT: 'welcomekannada', // Language selection (only one template)
-  LOCATION_REQUEST_EN: 'location_request_english',    // Location request English
-  LOCATION_REQUEST_KN: 'location_request_kannada',    // Location request Kannada
-  IMAGE_CHOICE_EN: 'image_choice_english',            // Image choice English
-  IMAGE_CHOICE_KN: 'image_choice_kannada'             // Image choice Kannada
-};
 
 // Main WhatsApp webhook endpoint for WAPI
 app.post("/whatsapp", async (req, res) => {
@@ -193,28 +185,22 @@ async function handleWAPIMessage(contact, message, whatsappPayload) {
   }
 }
 
-// Send template message using WAPI
-async function sendTemplateMessage(phoneNumber, templateName, languageCode = 'en', parameters = []) {
+// Send media message using WAPI
+async function sendMediaMessage(phoneNumber, messageBody, mediaUrl, mediaType = 'image', caption = null) {
   try {
     const payload = {
       from_phone_number_id: WAPI_PHONE_NUMBER_ID,
       phone_number: phoneNumber,
-      template_name: templateName,
-      template_language: languageCode
+      media_type: mediaType, 
+      media_url: mediaUrl,
+      caption: caption || messageBody
     };
 
-    // Add parameters if provided
-    if (parameters.length > 0) {
-      parameters.forEach((param, index) => {
-        payload[`field_${index + 1}`] = param;
-      });
-    }
-
-    const response = await wapiClient.post(`/${WAPI_VENDOR_UID}/contact/send-template-message`, payload);
-    console.log('Template message sent successfully:', response.data);
+    const response = await wapiClient.post(`/${WAPI_VENDOR_UID}/contact/send-media-message`, payload);
+    console.log('Media message sent successfully:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Error sending template message:', error.response?.data || error.message);
+    console.error('Error sending media message:', error.response?.data || error.message);
     throw error;
   }
 }
@@ -237,16 +223,9 @@ async function sendWAPIMessage(phoneNumber, messageBody) {
   }
 }
 
-// Send language selection using template message
+// Send language selection using normal text message
 async function sendLanguageSelection(phoneNumber) {
-  try {
-    // Use template message for language selection
-    await sendTemplateMessage(phoneNumber, TEMPLATES.WELCOME_LANGUAGE_SELECT, 'kn');
-  } catch (error) {
-    console.error('Error sending language selection template:', error);
-    // Fallback to normal message
-    await sendWAPIMessage(phoneNumber, `🙏 ನಮಸ್ಕಾರ!\n\nWelcome to *Namma Bengaluru Pothole Reporter*! 🛣️\n\nHelp make our city's roads better by reporting potholes to BBMP.\n\nಭಾಷೆ ಆಯ್ಕೆ ಮಾಡಿ / Choose your language:\n\n1️⃣ English\n2️⃣ ಕನ್ನಡ (Kannada)\n\n_Type the number or language name_`);
-  }
+  await sendWAPIMessage(phoneNumber, `🙏 ನಮಸ್ಕಾರ!\n\nWelcome to *Namma Bengaluru Pothole Reporter*! 🛣️\n\nHelp make our city's roads better by reporting potholes to BBMP.\n\nಭಾಷೆ ಆಯ್ಕೆ ಮಾಡಿ / Choose your language:\n\n1️⃣ English\n2️⃣ ಕನ್ನಡ (Kannada)\n\n_Type the number or language name_`);
 }
 
 // Handle language selection
@@ -291,22 +270,24 @@ async function handleLanguageSelection(session, phoneNumber, response) {
   }
 }
 
-// Request location using template message
+// Request location using media message with helper image
 async function requestLocation(phoneNumber, language) {
-  try {
-    if (language === 'kannada') {
-      await sendTemplateMessage(phoneNumber, TEMPLATES.LOCATION_REQUEST_KN, 'kn');
-    } else {
-      await sendTemplateMessage(phoneNumber, TEMPLATES.LOCATION_REQUEST_EN, 'en');
-    }
-  } catch (error) {
-    console.error('Error sending location request template:', error);
-    // Fallback to normal message
-    if (language === 'kannada') {
-      await sendWAPIMessage(phoneNumber, `🛣️ *ನಮ್ಮ ಬೆಂಗಳೂರು ಗಂಡಿ ವರದಿ*\n\n📍 ದಯವಿಟ್ಟು ಗಂಡಿಯ ಸ್ಥಳವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ:\n\n🔹 WhatsApp ನಲ್ಲಿ 📎 *Attach* ಐಕಾನ್ ಟ್ಯಾಪ್ ಮಾಡಿ\n🔹 *Location* ಆಯ್ಕೆ ಮಾಡಿ\n🔹 *Send your current location* ಕ್ಲಿಕ್ ಮಾಡಿ\n🔹 ಗಂಡಿಯ ನಿಖರ ಸ್ಥಳಕ್ಕೆ ಮಾರ್ಕರ್ ಸರಿಸಿ\n\n⚠️ _ಬೆಂಗಳೂರಿನ ಒಳಗಿನ ಸ್ಥಳಗಳು ಮಾತ್ರ ಸ್ವೀಕಾರ_`);
-    } else {
-      await sendWAPIMessage(phoneNumber, `🛣️ *Namma Bengaluru Pothole Report*\n\n📍 Please share the pothole location:\n\n🔹 Tap the 📎 *Attach* icon in WhatsApp\n🔹 Select *Location*\n🔹 Click *Send your current location*\n🔹 Move the marker to exact pothole spot\n\n⚠️ _Only locations within Bengaluru city limits accepted_\n\n🏛️ Your report will be sent to BBMP for action.`);
-    }
+  const imageUrl = process.env.LOCATION_HELP_IMAGE_URL;
+  
+  if (language === 'kannada') {
+    await sendMediaMessage(
+      phoneNumber,
+      `🛣️ *ನಮ್ಮ ಬೆಂಗಳೂರು ಗಂಡಿ ವರದಿ*\n\n📍 ದಯವಿಟ್ಟು ಗಂಡಿಯ ಸ್ಥಳವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ:\n\n🔹 WhatsApp ನಲ್ಲಿ 📎 *Attach* ಐಕಾನ್ ಟ್ಯಾಪ್ ಮಾಡಿ\n🔹 *Location* ಆಯ್ಕೆ ಮಾಡಿ\n🔹 *Send your current location* ಕ್ಲಿಕ್ ಮಾಡಿ\n🔹 ಗಂಡಿಯ ನಿಖರ ಸ್ಥಳಕ್ಕೆ ಮಾರ್ಕರ್ ಸರಿಸಿ\n\n⚠️ _ಬೆಂಗಳೂರಿನ ಒಳಗಿನ ಸ್ಥಳಗಳು ಮಾತ್ರ ಸ್ವೀಕಾರ_`,
+      imageUrl,
+      'image'
+    );
+  } else {
+    await sendMediaMessage(
+      phoneNumber,
+      `🛣️ *Namma Bengaluru Pothole Report*\n\n📍 Please share the pothole location:\n\n🔹 Tap the 📎 *Attach* icon in WhatsApp\n🔹 Select *Location*\n🔹 Click *Send your current location*\n🔹 Move the marker to exact pothole spot\n\n⚠️ _Only locations within Bengaluru city limits accepted_\n\n🏛️ Your report will be sent to BBMP for action.`,
+      imageUrl,
+      'image'
+    );
   }
 }
 
@@ -353,22 +334,12 @@ async function handleLocationInput(session, phoneNumber, latitude, longitude) {
   }
 }
 
-// Request image choice using template message
+// Request image choice using normal text message
 async function requestImageChoice(phoneNumber, language) {
-  try {
-    if (language === 'kannada') {
-      await sendTemplateMessage(phoneNumber, TEMPLATES.IMAGE_CHOICE_KN, 'kn');
-    } else {
-      await sendTemplateMessage(phoneNumber, TEMPLATES.IMAGE_CHOICE_EN, 'en');
-    }
-  } catch (error) {
-    console.error('Error sending image choice template:', error);
-    // Fallback to normal message
-    if (language === 'kannada') {
-      await sendWAPIMessage(phoneNumber, `📸 *ಗಂಡಿಯ ಫೋಟೋ*\n\nದಯವಿಟ್ಟು ಗಂಡಿಯ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಬಯಸುತ್ತೀರಾ?\n\n✅ *1 - ಹೌದು* (ಶಿಫಾರಸು)\n❌ *2 - ಬೇಡ*\n\n💡 _ಫೋಟೋ ಇರುವುದರಿಂದ BBMP ಗೆ ಹೆಚ್ಚು ಸಹಾಯಕವಾಗುತ್ತದೆ_\n\n_Type 1 or 2_`);
-    } else {
-      await sendWAPIMessage(phoneNumber, `📸 *Pothole Photo*\n\nWould you like to upload a photo of the pothole?\n\n✅ *1 - Yes* (Recommended)\n❌ *2 - No*\n\n💡 _Photos help BBMP assess the severity better_\n\n_Type 1 or 2_`);
-    }
+  if (language === 'kannada') {
+    await sendWAPIMessage(phoneNumber, `📸 *ಗಂಡಿಯ ಫೋಟೋ*\n\nದಯವಿಟ್ಟು ಗಂಡಿಯ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಬಯಸುತ್ತೀರಾ?\n\n✅ *1 - ಹೌದು* (ಶಿಫಾರಸು)\n❌ *2 - ಬೇಡ*\n\n💡 _ಫೋಟೋ ಇರುವುದರಿಂದ BBMP ಗೆ ಹೆಚ್ಚು ಸಹಾಯಕವಾಗುತ್ತದೆ_\n\n_Type 1 or 2_`);
+  } else {
+    await sendWAPIMessage(phoneNumber, `📸 *Pothole Photo*\n\nWould you like to upload a photo of the pothole?\n\n✅ *1 - Yes* (Recommended)\n❌ *2 - No*\n\n💡 _Photos help BBMP assess the severity better_\n\n_Type 1 or 2_`);
   }
 }
 
