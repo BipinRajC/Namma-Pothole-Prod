@@ -62,7 +62,7 @@ const wapiClient = axios.create({
     'Connection': 'keep-alive',
     'Cache-Control': 'no-cache',
   },
-  timeout: 4000, // Reduced timeout
+  timeout: 6000, // Reduced timeout
   maxRedirects: 1, // Limit redirects
   httpsAgent: httpsAgent,
   // Additional performance settings
@@ -458,7 +458,7 @@ async function requestLocation(phoneNumber, language) {
   } else {
     return sendMediaMessage(
       phoneNumber,
-      `🛣️ *Namma Pothole Bengaluru*\n\n📍 Please share the pothole location:\n\n🔹 Tap the 📎 *Attach* icon in WhatsApp\n🔹 Select *Location*\n🔹 Click *Send your current location*\n🔹 Move the marker to exact pothole spot\n\n⚠️ _Only locations within Bengaluru city limits accepted_\n\n🏛️ Your report will be sent to BBMP for action.`,
+      `🛣️ *Namma Pothole Bengaluru*\n\n📍 Please share the pothole location:\n\n🔹 Tap the 📎 *Attach* icon in WhatsApp\n🔹 Select *Location*\n🔹 Click *Send your current location*\n🔹 Move the marker to exact pothole spot\n\n⚠️ _Only locations within Bengaluru city limits accepted_\n\n🏛️ Your report will be sent to Authorities for action.`,
       imageUrl,
       'image'
     );
@@ -487,9 +487,9 @@ async function handleLocationInput(session, phoneNumber, latitude, longitude) {
     
     if (duplicateCheck.isDuplicate) {
       if (session.language === 'kannada') {
-        await sendWAPIMessage(phoneNumber, `⚠️ *ಡುಪ್ಲಿಕೇಟ್ ರಿಪೋರ್ಟ್*\n\nಈ ಸ್ಥಳದಲ್ಲಿ ಈಗಾಗಲೇ ಗುಂಡಿ ವರದಿಯಾಗಿದೆ!\n\n📍 ದೂರ: ${duplicateCheck.distance} ಮೀಟರ್\n🆔 ಅಸ್ತಿತ್ವದ ದೂರು: \`${duplicateCheck.existingComplaint.complaintId}\`\n\n🔄 ಬೇರೆ ಗುಂಡಿ ವರದಿ ಮಾಡಲು "Hi" ಟೈಪ್ ಮಾಡಿ\n\n🙏 _BBMP ಈಗಾಗಲೇ ಈ ವರದಿಯನ್ನು ಪರಿಗಣಿಸುತ್ತಿದೆ_`);
+        await sendWAPIMessage(phoneNumber, `⚠️ *ಡುಪ್ಲಿಕೇಟ್ ರಿಪೋರ್ಟ್*\n\nಈ ಸ್ಥಳದಲ್ಲಿ ಈಗಾಗಲೇ ಗುಂಡಿ ವರದಿಯಾಗಿದೆ!\n\n📍 ದೂರ: ${duplicateCheck.distance} ಮೀಟರ್\n🆔 ಅಸ್ತಿತ್ವದ ದೂರು: \`${duplicateCheck.existingComplaint.complaintId}\`\n\n🔄 ಬೇರೆ ಗುಂಡಿ ವರದಿ ಮಾಡಲು "Hi" ಟೈಪ್ ಮಾಡಿ\n\n🙏 ಅಧಿಕಾರಿಗಳು ಈಗಾಗಲೇ ಈ ವರದಿಯನ್ನು ಪರಿಗಣಿಸುತ್ತಿದೆ_`);
       } else {
-        await sendWAPIMessage(phoneNumber, `⚠️ *Duplicate Report Detected*\n\nPothole already reported at this location!\n\n📍 Distance: ${duplicateCheck.distance}m away\n🆔 Existing complaint: \`${duplicateCheck.existingComplaint.complaintId}\`\n\n🔄 Type "Hi" to report a different pothole\n\n🙏 _BBMP is already working on this report_`);
+        await sendWAPIMessage(phoneNumber, `⚠️ *Duplicate Report Detected*\n\nPothole already reported at this location!\n\n📍 Distance: ${duplicateCheck.distance}m away\n🆔 Existing complaint: \`${duplicateCheck.existingComplaint.complaintId}\`\n\n🔄 Type "Hi" to report a different pothole\n\n🙏 _Authorities are already working on this report_`);
       }
       
       // Reset to language selection for new report
@@ -515,9 +515,9 @@ async function setSessionLocation(phoneNumber, session, lat, lng) {
 // Request image choice using normal text message
 async function requestImageChoice(phoneNumber, language) {
   if (language === 'kannada') {
-    return sendWAPIMessage(phoneNumber, `📸 *ಗುಂಡಿಯ ಫೋಟೋ*\n\nದಯವಿಟ್ಟು ಗುಂಡಿಯ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಬಯಸುತ್ತೀರಾ?\n\n✅ *1 - ಹೌದು* (ಶಿಫಾರಸು)\n❌ *2 - ಬೇಡ*\n\n💡 _ಫೋಟೋ ಇರುವುದರಿಂದ BBMP ಗೆ ಹೆಚ್ಚು ಸಹಾಯಕವಾಗುತ್ತದೆ_\n\n_Type 1 or 2_`);
+    return sendWAPIMessage(phoneNumber, `📸 *ಗುಂಡಿಯ ಫೋಟೋ*\n\nದಯವಿಟ್ಟು ಗುಂಡಿಯ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಬಯಸುತ್ತೀರಾ?\n\n✅ *1 - ಹೌದು* (ಶಿಫಾರಸು)\n❌ *2 - ಬೇಡ*\n\n💡 _ಫೋಟೋ ಇರುವುದರಿಂದ ಅಧಿಕಾರಿಗಳು ಗೆ ಹೆಚ್ಚು ಸಹಾಯಕವಾಗುತ್ತದೆ_\n\n_Type 1 or 2_`);
   } else {
-    return sendWAPIMessage(phoneNumber, `📸 *Pothole Photo*\n\nWould you like to upload a photo of the pothole?\n\n✅ *1 - Yes* (Recommended)\n❌ *2 - No*\n\n💡 _Photos help BBMP assess the severity better_\n\n_Type 1 or 2_`);
+    return sendWAPIMessage(phoneNumber, `📸 *Pothole Photo*\n\nWould you like to upload a photo of the pothole?\n\n✅ *1 - Yes* (Recommended)\n❌ *2 - No*\n\n💡 _Photos help Authorities assess the severity better_\n\n_Type 1 or 2_`);
   }
 }
 
@@ -570,9 +570,9 @@ async function submitComplaintWithoutImage(session, phoneNumber) {
     ]);
     
     if (session.language === 'kannada') {
-      return sendWAPIMessage(phoneNumber, `✅ *ಗುಂಡಿ ವರದಿ ಸಫಲವಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!*\n\n🆔 ದೂರು ಐಡಿ: \`${complaint.complaintId}\`\n📍 ಸ್ಥಳ: ${session.latitude.toFixed(6)}, ${session.longitude.toFixed(6)}\n\n🏛️ ನಿಮ್ಮ ವರದಿಯನ್ನು BBMP ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ\n\n🙏 ನಮ್ಮ ಬೆಂಗಳೂರನ್ನು ಉತ್ತಮಗೊಳಿಸಿದ್ದಕ್ಕಾಗಿ ಧನ್ಯವಾದಗಳು!\n\n🔄 ಮತ್ತೊಂದು ವರದಿ ಮಾಡಲು "Hi" ಟೈಪ್ ಮಾಡಿ`, true);
+      return sendWAPIMessage(phoneNumber, `✅ *ಗುಂಡಿ ವರದಿ ಸಫಲವಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!*\n\n🆔 ದೂರು ಐಡಿ: \`${complaint.complaintId}\`\n📍 ಸ್ಥಳ: ${session.latitude.toFixed(6)}, ${session.longitude.toFixed(6)}\n\n🏛️ ನಿಮ್ಮ ವರದಿಯನ್ನು ಅಧಿಕಾರಿಗಳು ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ\n\n🙏 ನಮ್ಮ ಬೆಂಗಳೂರನ್ನು ಉತ್ತಮಗೊಳಿಸಿದ್ದಕ್ಕಾಗಿ ಧನ್ಯವಾದಗಳು!\n\n🔄 ಮತ್ತೊಂದು ವರದಿ ಮಾಡಲು "Hi" ಟೈಪ್ ಮಾಡಿ`, true);
     } else {
-      return sendWAPIMessage(phoneNumber, `✅ *Pothole Report Submitted Successfully!*\n\n🆔 Complaint ID: \`${complaint.complaintId}\`\n📍 Location: ${session.latitude.toFixed(6)}, ${session.longitude.toFixed(6)}\n\n🏛️ Your report has been sent to BBMP\n\n🙏 Thank you for helping improve Namma Bengaluru!\n\n🔄 Type "Hi" to submit another report`, true);
+      return sendWAPIMessage(phoneNumber, `✅ *Pothole Report Submitted Successfully!*\n\n🆔 Complaint ID: \`${complaint.complaintId}\`\n📍 Location: ${session.latitude.toFixed(6)}, ${session.longitude.toFixed(6)}\n\n🏛️ Your report has been sent to Authorities\n\n🙏 Thank you for helping improve Namma Bengaluru!\n\n🔄 Type "Hi" to submit another report`, true);
     }
     
   } catch (error) {
@@ -621,9 +621,9 @@ async function handleImageInput(session, phoneNumber, mediaUrl, mediaType) {
       const complaint = await newComplaint(complaintData);
       
       if (session.language === 'kannada') {
-        return sendWAPIMessage(phoneNumber, `✅ *ಗುಂಡಿ ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!*\n\n🆔 ದೂರು ಐಡಿ: \`${complaint.complaintId}\`\n📍 ಸ್ಥಳ: ${session.latitude.toFixed(6)}, ${session.longitude.toFixed(6)}\n📸 ಫೋಟೋ: ಸಫಲವಾಗಿ ಅಪ್‌ಲೋಡ್ ಆಗಿದೆ\n\n🏛️ ನಿಮ್ಮ ವರದಿಯನ್ನು BBMP ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ\n\n🙏 ನಮ್ಮ ಬೆಂಗಳೂರನ್ನು ಉತ್ತಮಗೊಳಿಸಿದ್ದಕ್ಕಾಗಿ ಧನ್ಯವಾದಗಳು!\n\n🔄 ಮತ್ತೊಂದು ವರದಿ ಮಾಡಲು "Hi" ಟೈಪ್ ಮಾಡಿ`, true);
+        return sendWAPIMessage(phoneNumber, `✅ *ಗುಂಡಿ ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!*\n\n🆔 ದೂರು ಐಡಿ: \`${complaint.complaintId}\`\n📍 ಸ್ಥಳ: ${session.latitude.toFixed(6)}, ${session.longitude.toFixed(6)}\n📸 ಫೋಟೋ: ಸಫಲವಾಗಿ ಅಪ್‌ಲೋಡ್ ಆಗಿದೆ\n\n🏛️ ನಿಮ್ಮ ವರದಿಯನ್ನು ಅಧಿಕಾರಿಗಳು ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ\n\n🙏 ನಮ್ಮ ಬೆಂಗಳೂರನ್ನು ಉತ್ತಮಗೊಳಿಸಿದ್ದಕ್ಕಾಗಿ ಧನ್ಯವಾದಗಳು!\n\n🔄 ಮತ್ತೊಂದು ವರದಿ ಮಾಡಲು "Hi" ಟೈಪ್ ಮಾಡಿ`, true);
       } else {
-        return sendWAPIMessage(phoneNumber, `✅ *Pothole Report Submitted Successfully!*\n\n🆔 Complaint ID: \`${complaint.complaintId}\`\n📍 Location: ${session.latitude.toFixed(6)}, ${session.longitude.toFixed(6)}\n📸 Photo: Successfully uploaded & compressed\n\n🏛️ Your report has been sent to BBMP\n\n🙏 Thank you for helping improve Namma Bengaluru!\n\n🔄 Type "Hi" to submit another report`, true);
+        return sendWAPIMessage(phoneNumber, `✅ *Pothole Report Submitted Successfully!*\n\n🆔 Complaint ID: \`${complaint.complaintId}\`\n📍 Location: ${session.latitude.toFixed(6)}, ${session.longitude.toFixed(6)}\n📸 Photo: Successfully uploaded & compressed\n\n🏛️ Your report has been sent to Authorities\n\n🙏 Thank you for helping improve Namma Bengaluru!\n\n🔄 Type "Hi" to submit another report`, true);
       }
       
     } catch (error) {
