@@ -78,17 +78,14 @@ app.post("/whatsapp", async (req, res) => {
       ProfileName: profileName
     } = req.body;
 
-    // Extract phone number without whatsapp: prefix
+    // Extract and process phone number from Twilio webhook
     const phoneNumber = from.replace('whatsapp:', '');
     
-    // Get or create session
     let session = await getSession(phoneNumber);
     if (!session) {
       session = { 
         language: null, 
         state: 'language_selection',
-        phoneNumber: phoneNumber,
-        profileName: profileName || 'User'
       };
       await setSession(phoneNumber, session);
     }

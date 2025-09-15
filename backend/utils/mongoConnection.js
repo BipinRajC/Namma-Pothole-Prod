@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from 'uuid';
+import { getHashedPhoneNumber } from './phoneHasher.js';
 
 export const connectToMongoDB = async () => {
   try {
@@ -21,6 +22,7 @@ const complaintSchema = new mongoose.Schema({
   phoneNumber: {
     type: String,
     required: true,
+    // Stores SHA-1 hashed phone number for privacy
     // Removed unique constraint - users can report multiple potholes
   },
   latitude: {
@@ -60,7 +62,13 @@ const Complaint = mongoose.model("Complaint", complaintSchema);
 
 export const newComplaint = async (data) => {
   try {
-    const complaint = await Complaint.create(data);
+    // Hash the phone number before storing
+    const hashedData = {
+      ...data,
+      phoneNumber: getHashedPhoneNumber(data.phoneNumber)
+    };
+    
+    const complaint = await Complaint.create(hashedData);
     return complaint;
   } catch (err) {
     console.error("Error creating complaint:", err);
@@ -71,12 +79,15 @@ export const newComplaint = async (data) => {
 // Check rate limiting - max 15 reports per day per user
 export const checkRateLimit = async (phoneNumber) => {
   try {
+    // Hash the phone number for lookup
+    const hashedPhoneNumber = getHashedPhoneNumber(phoneNumber);
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayTimestamp = Math.floor(today.getTime() / 1000);
     
     const todayComplaints = await Complaint.countDocuments({
-      phoneNumber: phoneNumber,
+      phoneNumber: hashedPhoneNumber,
       timestamp: { $gte: todayTimestamp }
     });
     
@@ -90,12 +101,15 @@ export const checkRateLimit = async (phoneNumber) => {
 // Get today's complaint count for a user
 export const getTodayComplaintCount = async (phoneNumber) => {
   try {
+    // Hash the phone number for lookup
+    const hashedPhoneNumber = getHashedPhoneNumber(phoneNumber);
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayTimestamp = Math.floor(today.getTime() / 1000);
     
     const count = await Complaint.countDocuments({
-      phoneNumber: phoneNumber,
+      phoneNumber: hashedPhoneNumber,
       timestamp: { $gte: todayTimestamp }
     });
     

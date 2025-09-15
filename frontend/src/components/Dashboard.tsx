@@ -121,20 +121,17 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-dashboard-bg">
+    <div className="min-h-screen bg-dashboard-bg flex flex-col">
       <div
-        className={`container mx-auto px-4 md:px-6 py-4 md:py-6 space-y-4 md:space-y-6`}
+        className={`container mx-auto px-4 md:px-6 py-4 md:py-6 space-y-4 md:space-y-6 flex-grow`}
       >
         {/* Header */}
         <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
           <div className="min-w-0 flex-1">
             <h1 className="text-2xl md:text-3xl font-bold text-foreground truncate">
-              Namma Pothole - Pothole Management Dashboard
+              Namma Pothole
             </h1>
-            <p className="text-sm md:text-base text-muted-foreground mt-1">
-              MSME government-registered civic technology service - Monitor and
-              manage pothole complaints across Bengaluru
-            </p>
+            
           </div>
           <div className="flex flex-wrap items-center gap-2 lg:flex-nowrap">
             <Button

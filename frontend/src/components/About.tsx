@@ -20,6 +20,7 @@ interface Developer {
   linkedin: string;
   role?: string;
   bio?: string;
+  image?: string;
 }
 
 /**
@@ -34,6 +35,7 @@ export const About = () => {
       linkedin: "https://in.linkedin.com/in/sravankarthik",
       role: "Developer",
       bio: "Passionate about creating solutions that make a difference in urban infrastructure.",
+      image: "/Sravan-Image.jpeg",
     },
     {
       name: "Amol",
@@ -41,6 +43,7 @@ export const About = () => {
       linkedin: "https://www.linkedin.com/in/amol-vyas-918601293/",
       role: "Developer",
       bio: "Focused on building intuitive user interfaces and seamless user experiences.",
+      image: "/Amol-Image.jpeg",
     },
     {
       name: "Bipin Raj C",
@@ -48,6 +51,15 @@ export const About = () => {
       linkedin: "https://www.linkedin.com/in/bipin-raj-c-b61670283/",
       role: "Developer",
       bio: "Specialized in robust backend systems and API development for scalable applications.",
+      image: "/Bipin-Image.jpeg",
+    },
+    {
+      name: "Pratheek",
+      email: "Pratheekbichagal75@gmail.com",
+      linkedin: "https://www.linkedin.com/in/pratheek-bichagal-aa3178275/",
+      role: "Operations",
+      bio: "Managing operations and ensuring smooth coordination across all project activities.",
+      image: "/Pratheek-Image.jpeg",
     },
   ];
 
@@ -106,17 +118,28 @@ export const About = () => {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {developers.map((developer, index) => (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
+          {/* First row - 3 cards */}
+          {developers.slice(0, 3).map((developer, index) => (
             <Card
               key={index}
               className="hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20"
             >
               <CardHeader className="text-center pb-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-primary">
-                    {developer.name.charAt(0)}
-                  </span>
+                <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden">
+                  {developer.image ? (
+                    <img
+                      src={developer.image}
+                      alt={`${developer.name} profile`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                      <span className="text-2xl font-bold text-primary">
+                        {developer.name.charAt(0)}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <CardTitle className="text-xl">{developer.name}</CardTitle>
                 {developer.role && (
@@ -155,6 +178,66 @@ export const About = () => {
                 </div>
               </CardContent>
             </Card>
+          ))}
+          
+          {/* Second row - Pratheek's card centered */}
+          {developers.slice(3).map((developer, index) => (
+            <div key={index + 3} className="lg:col-start-2 lg:col-end-3">
+              <Card className="hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
+                <CardHeader className="text-center pb-4">
+                  <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden">
+                    {developer.image ? (
+                      <img
+                        src={developer.image}
+                        alt={`${developer.name} profile`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-primary">
+                          {developer.name.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <CardTitle className="text-xl">{developer.name}</CardTitle>
+                  {developer.role && (
+                    <Badge variant="secondary" className="w-fit mx-auto">
+                      {developer.role}
+                    </Badge>
+                  )}
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {developer.bio && (
+                    <p className="text-sm text-muted-foreground text-center">
+                      {developer.bio}
+                    </p>
+                  )}
+
+                  <div className="space-y-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full flex items-center gap-2"
+                      onClick={() => sendEmail(developer.email)}
+                    >
+                      <Mail className="h-4 w-4" />
+                      Email
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      onClick={() => openLinkedIn(developer.linkedin)}
+                    >
+                      <Linkedin className="h-4 w-4" />
+                      LinkedIn
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           ))}
         </div>
       </div>
@@ -330,46 +413,6 @@ export const About = () => {
         </Card>
       </div>
 
-      {/* Footer */}
-      <div className="py-8 border-t space-y-4">
-        <div className="grid gap-6 md:grid-cols-3 text-center md:text-left">
-          {/* Business Name & Description */}
-          <div>
-            <h3 className="font-semibold text-lg mb-2">Namma Pothole</h3>
-            <p className="text-sm text-muted-foreground">
-              MSME government-registered civic technology service dedicated to
-              improving urban road safety and infrastructure.
-            </p>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h4 className="font-semibold mb-2">Contact Information</h4>
-            <div className="space-y-1 text-sm text-muted-foreground">
-              <p>namma.pothole@gmail.com</p>
-              <p>+91 9108420079</p>
-            </div>
-          </div>
-
-          {/* Address */}
-          <div>
-            <h4 className="font-semibold mb-2">Business Address</h4>
-            <div className="text-sm text-muted-foreground">
-              <p>Bengaluru, Karnataka, India</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center border-t pt-4">
-          <p className="text-sm text-muted-foreground">
-            © 2025 Namma Pothole. All rights reserved. Established August 2025.
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            MSME government-registered civic technology service supporting
-            municipal infrastructure management.
-          </p>
-        </div>
-      </div>
     </div>
   );
 };

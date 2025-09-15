@@ -8,8 +8,8 @@ const DataProcessingPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-dashboard-bg">
-      <div className="container mx-auto p-6">
+    <div className="min-h-screen bg-dashboard-bg flex flex-col">
+      <div className="container mx-auto p-6 flex-grow">
         {/* Back to Dashboard Button */}
         <div className="mb-6">
           <div className="flex items-center gap-2">

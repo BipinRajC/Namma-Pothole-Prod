@@ -1,5 +1,6 @@
 import { About } from "@/components/About";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
+import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +12,7 @@ export const AboutPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <div className="border-b bg-card">
         <div className="container mx-auto px-4 py-4">
@@ -43,9 +44,12 @@ export const AboutPage = () => {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 flex-grow">
         <About />
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
