@@ -34,9 +34,11 @@ services:
       MONGODB_URI: ${MONGODB_URI}
       REDIS_URL: redis://redis:6379
       
-      # Twilio configuration (add your credentials)
-      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
-      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      # WAPI configuration (add your credentials)
+      WAPI_VENDOR_UID: ${WAPI_VENDOR_UID}
+      WAPI_BEARER_TOKEN: ${WAPI_BEARER_TOKEN}
+      WAPI_PHONE_NUMBER_ID: ${WAPI_PHONE_NUMBER_ID}
+      LOCATION_HELP_IMAGE_URL: ${LOCATION_HELP_IMAGE_URL}
       
       # AWS S3 configuration (add your credentials)
       AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}

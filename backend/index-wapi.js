@@ -484,60 +484,62 @@ async function sendErrorMessage(phoneNumber, language) {
 
 // Health check endpoint
 app.get("/health", (req, res) => {
-  res.status(200).json({ 
+  res.json({ 
     status: "OK", 
-    service: "WAPI WhatsApp Bot",
-    timestamp: new Date().toISOString() 
+    message: "Namma Pothole WhatsApp Bot is running",
+    timestamp: new Date().toISOString()
   });
 });
 
-// Root endpoint
-app.get("/", (req, res) => {
-  res.status(200).json({ 
-    message: "WAPI WhatsApp Bot Server is running!",
-    endpoints: {
-      webhook: "/whatsapp",
-      health: "/health"
-    }
-  });
-});
+// Test endpoint for Redis sessions
+app.get("/redisTest", async (req, res) => {
+  const sessionId = req.query.sessionId;
+  const session = await getSession(sessionId);
+  if (session) {
+    return res.json({ session, message: "Session Found" });
+  }
 
-// API endpoints for frontend
-app.get("/api/complaints", async (req, res) => {
-  try {
-    await connectToMongoDB();
-    const complaints = await getAllComplaints();
-    res.json(complaints);
-  } catch (error) {
-    console.error("Error fetching complaints:", error);
-    res.status(500).json({ error: "Internal server error" });
+  const sessionData = { language: "Kannada", state: 0 };
+  if (!setSession(sessionId, sessionData)) {
+    return res.json({ error: "Failed to set session" });
+  } else {
+    return res.json({ session: sessionData, message: "new session set" });
   }
 });
 
-// Connect to databases on startup
-connectToMongoDB().then(() => {
-  console.log('Connected to MongoDB');
-}).catch(console.error);
+async function startServer() {
+  await connectToMongoDB();
+  await connectToRedis();
+  app.listen(3000, () => {
+    console.log("Server is running on http://localhost:3000");
+  });
 
-connectToRedis().then(() => {
-  console.log('Connected to Redis');
-}).catch(console.error);
+  // const url = await putObject("test-image.jpeg", "test-image.jpeg");
+  // const complaint = {
+  //   phoneNumber: "1234567890",
+  //   latitude: 12.9716,
+  //   longitude: 77.5946,
+  //   imageUrl: url,
+  // };
+  // const createdComplaint = await newComplaint(complaint);
+  // console.log(createdComplaint);
+}
+app.get("/complaints", async (req, res) => {
+  try {
+    const complaints = await getAllComplaints();
+    res.json({
+      success: true,
+      data: complaints,
+      count: complaints.length,
+    });
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`WAPI WhatsApp Bot server is running on port ${PORT}`);
-  console.log(`Webhook endpoint: http://localhost:${PORT}/whatsapp`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
-});
+  } catch (error) {
+    console.error("Error fetching complaints:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch complaints",
+    });
+  }
+})
 
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('Shutting down WAPI WhatsApp Bot server...');
-  process.exit(0);
-});
-
-process.on('SIGTERM', () => {
-  console.log('Shutting down WAPI WhatsApp Bot server...');
-  process.exit(0);
-});
+startServer();

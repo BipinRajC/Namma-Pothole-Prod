@@ -34,7 +34,7 @@ echo "🔍 Checking environment variables..."
 source .env
 
 # Validate required environment variables
-required_vars=("MONGODB_URI" "AWS_ACCESS_KEY" "AWS_SECRET_KEY" "AWS_S3_BUCKET" "VITE_GOOGLE_MAPS_API_KEY")
+required_vars=("MONGODB_URI" "AWS_ACCESS_KEY" "AWS_SECRET_KEY" "AWS_S3_BUCKET" "VITE_GOOGLE_MAPS_API_KEY" "WAPI_VENDOR_UID" "WAPI_BEARER_TOKEN" "WAPI_PHONE_NUMBER_ID")
 
 for var in "${required_vars[@]}"; do
     if [ -z "${!var}" ]; then
@@ -112,6 +112,6 @@ echo "   docker-compose up -d                     # Start all services"
 echo ""
 echo "🔒 Don't forget to:"
 echo "   1. Point your domain DNS to this server's IP"
-echo "   2. Configure your Twilio webhook to: https://nammapothole.com/api/whatsapp"
+echo "   2. Configure your WAPI webhook to: https://nammapothole.com/api/whatsapp"
 echo "   3. Monitor logs for any issues"
 echo ""
