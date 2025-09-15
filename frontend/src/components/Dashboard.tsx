@@ -242,7 +242,7 @@ export const Dashboard = () => {
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      {complaints.slice(0, 5).map((complaint) => (
+                      {complaints.slice(0, 8).map((complaint) => (
                         <div
                           key={complaint._id}
                           className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
@@ -279,7 +279,7 @@ export const Dashboard = () => {
               {/* Map Preview */}
               {!complaintsLoading && (
                 <PotholeMap
-                  complaints= {complaints} // Show limited markers for overview
+                  complaints= {complaints.slice(0,10)} // Show limited markers for overview
                   selectedComplaint={selectedComplaint}
                   onComplaintSelect={setSelectedComplaint}
                   isLoading={complaintsLoading}
