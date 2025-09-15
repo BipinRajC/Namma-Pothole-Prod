@@ -282,7 +282,7 @@ export const Dashboard = () => {
               {/* Map Preview */}
               {!complaintsLoading && (
                 <PotholeMap
-                  complaints={complaints.slice(0, 10)} // Show limited markers for overview
+                  complaints= {complaints} // Show limited markers for overview
                   selectedComplaint={selectedComplaint}
                   onComplaintSelect={setSelectedComplaint}
                   isLoading={complaintsLoading}
