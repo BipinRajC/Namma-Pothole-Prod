@@ -76,12 +76,12 @@ export const Contact = () => {
               For urgent matters and technical assistance
             </p>
             <Button
-              onClick={() => makeCall("+919108420079")}
+              onClick={() => makeCall("+919611379776")}
               variant="outline"
               className="w-full"
             >
               <Phone className="h-4 w-4 mr-2" />
-              +91 9108420079
+              +91 9611379776
             </Button>
           </CardContent>
         </Card>

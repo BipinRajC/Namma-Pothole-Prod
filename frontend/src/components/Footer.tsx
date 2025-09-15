@@ -32,7 +32,7 @@ export const Footer = () => {
               </p>
               <p className="flex items-center gap-2 justify-center md:justify-start">
                 <Phone className="h-4 w-4" />
-                +91 9108420079
+                +91 9611379776
               </p>
             </div>
           </div>
