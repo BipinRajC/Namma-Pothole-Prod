@@ -288,7 +288,7 @@ export const About = () => {
                     </p>
                     <p className="text-muted-foreground flex items-center gap-2">
                       <Phone className="h-4 w-4" />
-                      +91 9108420079
+                      +91 9611379776
                     </p>
                     <p className="text-muted-foreground flex items-center gap-2">
                       <MapPin className="h-4 w-4" />
@@ -360,10 +360,10 @@ export const About = () => {
                 <Button
                   variant="outline"
                   className="flex items-center gap-2 mx-auto"
-                  onClick={() => window.open("tel:+919108420079")}
+                  onClick={() => window.open("tel:+919611379776")}
                 >
                   <Phone className="h-4 w-4" />
-                  +91 9108420079
+                  +91 9611379776
                 </Button>
               </div>
             </CardContent>
