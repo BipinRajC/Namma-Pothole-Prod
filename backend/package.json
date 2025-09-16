@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch index-wapi-complete-optimized.js",
-    "prod": "node index-wapi.js",
+    "dev": "node --watch index-waba.js",
+    "prod": "node index-waba.js",
     "tunnel": "node ngrok-setup.js",
     "dev:tunnel": "concurrently \"npm run dev\" \"npm run tunnel\""
   },

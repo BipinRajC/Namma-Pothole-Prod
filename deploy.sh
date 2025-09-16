@@ -34,7 +34,7 @@ echo "🔍 Checking environment variables..."
 source .env
 
 # Validate required environment variables
-required_vars=("MONGODB_URI" "AWS_ACCESS_KEY" "AWS_SECRET_KEY" "AWS_S3_BUCKET" "VITE_GOOGLE_MAPS_API_KEY" "WAPI_VENDOR_UID" "WAPI_BEARER_TOKEN" "WAPI_PHONE_NUMBER_ID")
+required_vars=("MONGODB_URI" "AWS_ACCESS_KEY" "AWS_SECRET_KEY" "AWS_S3_BUCKET" "VITE_GOOGLE_MAPS_API_KEY" "WABA_LICENSE_NUMBER" "WABA_API_KEY")
 
 for var in "${required_vars[@]}"; do
     if [ -z "${!var}" ]; then

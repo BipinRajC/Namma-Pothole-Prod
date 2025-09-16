@@ -34,10 +34,9 @@ services:
       MONGODB_URI: ${MONGODB_URI}
       REDIS_URL: redis://redis:6379
       
-      # WAPI configuration (add your credentials)
-      WAPI_VENDOR_UID: ${WAPI_VENDOR_UID}
-      WAPI_BEARER_TOKEN: ${WAPI_BEARER_TOKEN}
-      WAPI_PHONE_NUMBER_ID: ${WAPI_PHONE_NUMBER_ID}
+      # WABA configuration (add your credentials)
+      WABA_LICENSE_NUMBER: ${WABA_LICENSE_NUMBER}
+      WABA_API_KEY: ${WABA_API_KEY}
       LOCATION_HELP_IMAGE_URL: ${LOCATION_HELP_IMAGE_URL}
       
       # AWS S3 configuration (add your credentials)
