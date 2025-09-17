@@ -49,7 +49,7 @@ export const TermsOfService = () => {
             <strong>Contact Email:</strong> namma.pothole@gmail.com
           </p>
           <p>
-            <strong>Contact Phone:</strong> +91 9611379776
+            <strong>Contact Phone:</strong> +91 9108420079
           </p>
           <p>
             <strong>Business Description:</strong> Namma Pothole is a MSME
@@ -371,7 +371,7 @@ export const TermsOfService = () => {
               <strong>Email:</strong> namma.pothole@gmail.com
             </p>
             <p>
-              <strong>Phone:</strong> +91 9611379776
+              <strong>Phone:</strong> +91 9108420079
             </p>
             <p>
               <strong>Address:</strong> Bengaluru, Karnataka, India

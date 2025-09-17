@@ -47,7 +47,7 @@ export const PrivacyPolicy = () => {
             <strong>Contact Email:</strong> namma.pothole@gmail.com
           </p>
           <p>
-            <strong>Contact Phone:</strong> +91 9611379776
+            <strong>Contact Phone:</strong> +91 9108420079
           </p>
           <p>
             <strong>Business Type:</strong> MSME government-registered civic
@@ -302,7 +302,7 @@ export const PrivacyPolicy = () => {
               <strong>Email:</strong> namma.pothole@gmail.com
             </p>
             <p>
-              <strong>Phone:</strong> +91 9611379776
+              <strong>Phone:</strong> +91 9108420079
             </p>
             <p>
               <strong>Address:</strong> Bengaluru, Karnataka, India

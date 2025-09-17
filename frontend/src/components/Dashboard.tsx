@@ -244,13 +244,13 @@ export const Dashboard = () => {
                     <div className="space-y-3">
                       {complaints.slice(0, 8).map((complaint) => (
                         <div
-                          key={complaint._id}
+                          key={complaint.complaintId}
                           className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
                           onClick={() => handleViewOnMap(complaint)}
                         >
                           <div className="flex items-center gap-3">
                             <div className="text-xs font-mono text-muted-foreground">
-                              {complaint._id.slice(-8)}
+                              {complaint.complaintId.slice(-8)}
                             </div>
                             <div className="text-sm text-muted-foreground">
                               {formatCoordinates(

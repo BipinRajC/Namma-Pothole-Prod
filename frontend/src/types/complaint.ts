@@ -2,7 +2,7 @@
  * Complaint data structure from MongoDB database
  */
 export interface Complaint {
-  _id: string; // MongoDB ObjectId
+  complaintId: string; // MongoDB ObjectId
   latitude: number;
   longitude: number;
   imageUrl: string;

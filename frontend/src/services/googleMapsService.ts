@@ -150,7 +150,7 @@ export const createMarkerIcon = (
  * Create an info window content for a complaint
  */
 export const createInfoWindowContent = (complaint: {
-  _id: string;
+  complaintId: string;
   status: "reported" | "acknowledged" | "resolved";
   timestamp: string;
   imageUrl: string;
@@ -160,7 +160,7 @@ export const createInfoWindowContent = (complaint: {
        <div style="font-size: 11px; color: black;">
          <div style="font-weight: bold;">Complaint</div>
          <div style="font-family: monospace; margin-top: 2px;">${
-           complaint._id
+           complaint.complaintId
          }</div>
        </div>
       <span style="

@@ -90,7 +90,7 @@ export const PotholeMap = ({
       const marker = new google.maps.Marker({
         position: { lat: complaint.latitude, lng: complaint.longitude },
         map: mapInstance,
-        title: `Complaint ${complaint._id.slice(-8)}`,
+        title: `Complaint ${complaint.complaintId.slice(-8)}`,
         icon: createMarkerIcon(MARKER_COLORS[complaint.status]),
       });
 

@@ -81,7 +81,7 @@ export const Contact = () => {
               className="w-full"
             >
               <Phone className="h-4 w-4 mr-2" />
-              +91 9611379776
+              +91 9108420079
             </Button>
           </CardContent>
         </Card>
@@ -95,9 +95,6 @@ export const Contact = () => {
           <h2 className="text-3xl font-bold text-foreground mb-2">
             Business Information
           </h2>
-          <p className="text-muted-foreground">
-            Official details for Meta Business verification and legal compliance
-          </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">

@@ -73,7 +73,7 @@ export const ComplaintsTable = ({
     // Fields to search in
     keys: [
       {
-        name: '_id',
+        name: 'complaintId',
         weight: 0.3
       },
       {
@@ -97,7 +97,7 @@ export const ComplaintsTable = ({
       ...complaint,
       coordinates: formatCoordinates(complaint.latitude, complaint.longitude),
       formattedDate: formatDateTime(complaint.timestamp),
-      shortId: complaint._id.slice(-8)
+      shortId: complaint.complaintId.slice(-8)
     }));
   }, [complaints]);
 
@@ -239,12 +239,12 @@ export const ComplaintsTable = ({
                   ) : (
                     filteredComplaints.map((complaint) => (
                       <TableRow
-                        key={complaint._id}
+                        key={complaint.complaintId}
                         className="hover:bg-muted/50"
                       >
                         <TableCell className="font-mono text-xs">
                           <Badge variant="outline" className="font-mono">
-                            {complaint._id.slice(-8)}
+                            {complaint.complaintId.slice(-8)}
                           </Badge>
                         </TableCell>
                         <TableCell>
