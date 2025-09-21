@@ -13,6 +13,7 @@ import {
   BarChart3,
   Info,
   Mail,
+  MessageCircle,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -127,7 +128,12 @@ export const Dashboard = () => {
       >
         {/* Header */}
         <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 flex items-center gap-3">
+            <img 
+              src="/profile-image.png" 
+              alt="Namma Pothole Logo" 
+              className="h-10 w-10 object-contain"
+            />
             <h1 className="text-2xl md:text-3xl font-bold text-foreground truncate">
               Namma Pothole
             </h1>
@@ -165,6 +171,15 @@ export const Dashboard = () => {
                 }`}
               />
               <span className="hidden sm:inline">Refresh Data</span>
+            </Button>
+            <Button
+              onClick={() => window.open("https://wa.me/919108420079?text=Hi", "_blank")}
+              size="sm"
+              variant="outline"
+              className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600"
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span className="hidden sm:inline">Chat with Bot</span>
             </Button>
           </div>
         </div>

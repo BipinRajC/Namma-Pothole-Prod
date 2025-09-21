@@ -87,15 +87,20 @@ export const PrivacyPolicy = () => {
           <div>
             <h4 className="font-semibold mb-2">WhatsApp Communication Data</h4>
             <p className="text-muted-foreground">
-              When you use our WhatsApp service, we collect:
+              When you use our WhatsApp service, our WhatsApp Business API provider collects:
             </p>
             <ul className="list-disc list-inside text-muted-foreground ml-4 space-y-1 mt-2">
               <li>Your phone number (automatically provided by WhatsApp)</li>
               <li>Your WhatsApp profile name</li>
               <li>Messages and responses you send to our service</li>
+              <li>Complete chat history and conversation logs</li>
               <li>Consent preferences and opt-out status</li>
               <li>Interaction timestamps for service improvement</li>
+              <li>Media files (photos, videos) shared in conversations</li>
             </ul>
+            <p className="text-muted-foreground mt-3 text-sm">
+              <strong>Important:</strong> Our WhatsApp Business API provider stores and maintains complete chat history for service delivery, compliance, and quality assurance purposes. This data is processed in accordance with WhatsApp's Business Data Processing Terms and their Privacy Policy.
+            </p>
           </div>
 
           <div>
@@ -124,8 +129,10 @@ export const PrivacyPolicy = () => {
             <p className="text-muted-foreground">
               Namma Pothole acts as the data controller, while WhatsApp
               LLC/WhatsApp Ireland Limited acts as the data processor for
-              messages sent through their platform. This relationship is
-              governed by WhatsApp's Business Data Processing Terms.
+              messages sent through their platform. Our WhatsApp Business API provider 
+              also stores and processes complete chat history, including all messages, 
+              media, and interaction data. This relationship is governed by WhatsApp's 
+              Business Data Processing Terms.
             </p>
           </div>
 
@@ -135,8 +142,13 @@ export const PrivacyPolicy = () => {
               <li>Your phone number (for message delivery)</li>
               <li>Profile information you choose to share</li>
               <li>Messages and media you send to our service</li>
+              <li>Complete chat history and conversation logs</li>
               <li>Location data when voluntarily shared</li>
+              <li>Timestamps and metadata of all interactions</li>
             </ul>
+            <p className="text-muted-foreground mt-3 text-sm">
+              <strong>Note:</strong> Our WhatsApp Business API provider retains complete chat history for operational, security, and compliance purposes as outlined in their terms of service.
+            </p>
           </div>
 
           <div>
