@@ -34,7 +34,6 @@ export const About = () => {
       email: "sravankarthikskt@gmail.com",
       linkedin: "https://in.linkedin.com/in/sravankarthik",
       role: "Developer",
-      bio: "Passionate about creating solutions that make a difference in urban infrastructure.",
       image: "/Sravan-Image.jpeg",
     },
     {
@@ -42,7 +41,6 @@ export const About = () => {
       email: "amol.vyas0630@gmail.com",
       linkedin: "https://www.linkedin.com/in/amol-vyas-918601293/",
       role: "Developer",
-      bio: "Focused on building intuitive user interfaces and seamless user experiences.",
       image: "/Amol-Image.jpeg",
     },
     {
@@ -50,7 +48,6 @@ export const About = () => {
       email: "bipinraj.4604@gmail.com",
       linkedin: "https://www.linkedin.com/in/bipin-raj-c-b61670283/",
       role: "Developer",
-      bio: "Specialized in robust backend systems and API development for scalable applications.",
       image: "/Bipin-Image.jpeg",
     },
     {
@@ -58,9 +55,22 @@ export const About = () => {
       email: "Pratheekbichagal75@gmail.com",
       linkedin: "https://www.linkedin.com/in/pratheek-bichagal-aa3178275/",
       role: "Operations",
-      bio: "Managing operations and ensuring smooth coordination across all project activities.",
       image: "/Pratheek-Image.jpeg",
     },
+    {
+      name: "Joel T Thomas",
+      email: "joeljoef1417@gmail.com",
+      linkedin: "https://www.linkedin.com/in/joel-t-thomas-5862aa289?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      role: "Social Media Manager",
+      image: "/Joel-Image.jpeg",
+    },
+    {
+      name: "Varun Joshi",
+      email: "varunjoshi032@gmail.com",
+      linkedin: "https://www.linkedin.com/in/varun-joshi-558416264/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
+      role: "Social Media Manager",
+      image: "/Varun-Image.jpeg",
+    }
   ];
 
   const openLinkedIn = (url: string) => {
@@ -114,125 +124,81 @@ export const About = () => {
             Meet the Team
           </h2>
           <p className="text-muted-foreground">
-            The passionate developers behind this initiative
+            The passionate team behind this initiative
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
-          {/* First row - 3 cards */}
-          {developers.slice(0, 3).map((developer, index) => (
-            <Card
+        {/* Dynamic responsive flexbox layout */}
+        <div className="flex flex-wrap justify-center gap-6">
+          {developers.map((developer, index) => (
+            <div
               key={index}
-              className="hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20"
+              className="group relative transform transition-all duration-300 hover:scale-105 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] xl:w-[calc(33.333%-16px)] 2xl:w-[calc(25%-18px)] min-w-[280px] max-w-[350px]"
             >
-              <CardHeader className="text-center pb-4">
-                <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden">
-                  {developer.image ? (
-                    <img
-                      src={developer.image}
-                      alt={`${developer.name} profile`}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                      <span className="text-2xl font-bold text-primary">
-                        {developer.name.charAt(0)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <CardTitle className="text-xl">{developer.name}</CardTitle>
-                {developer.role && (
-                  <Badge variant="secondary" className="w-fit mx-auto">
-                    {developer.role}
-                  </Badge>
-                )}
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {developer.bio && (
-                  <p className="text-sm text-muted-foreground text-center">
-                    {developer.bio}
-                  </p>
-                )}
-
-                <div className="space-y-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full flex items-center gap-2"
-                    onClick={() => sendEmail(developer.email)}
-                  >
-                    <Mail className="h-4 w-4" />
-                    Email
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                    onClick={() => openLinkedIn(developer.linkedin)}
-                  >
-                    <Linkedin className="h-4 w-4" />
-                    LinkedIn
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-          
-          {/* Second row - Pratheek's card centered */}
-          {developers.slice(3).map((developer, index) => (
-            <div key={index + 3} className="lg:col-start-2 lg:col-end-3">
-              <Card className="hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
-                <CardHeader className="text-center pb-4">
-                  <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden">
+              <Card className="h-full hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/30 group-hover:bg-gradient-to-br group-hover:from-primary/5 group-hover:to-secondary/5 backdrop-blur-sm">
+                <CardHeader className="text-center pb-4 relative">
+                  {/* Decorative elements */}
+                  <div className="absolute top-2 right-2 w-4 h-4 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute top-2 left-2 w-2 h-2 bg-gradient-to-br from-secondary/20 to-primary/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75"></div>
+                  
+                  {/* Profile image with enhanced styling */}
+                  <div className="relative w-24 h-24 lg:w-28 lg:h-28 rounded-full mx-auto mb-4 overflow-hidden group-hover:ring-4 group-hover:ring-primary/20 transition-all duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
                     {developer.image ? (
                       <img
                         src={developer.image}
                         alt={`${developer.name} profile`}
-                        className="w-full h-full object-cover"
+                        className="relative w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                        <span className="text-2xl font-bold text-primary">
+                      <div className="relative w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                        <span className="text-3xl font-bold text-primary group-hover:scale-110 transition-transform duration-300">
                           {developer.name.charAt(0)}
                         </span>
                       </div>
                     )}
                   </div>
-                  <CardTitle className="text-xl">{developer.name}</CardTitle>
+                  
+                  <CardTitle className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent group-hover:from-primary group-hover:to-secondary transition-all duration-300">
+                    {developer.name}
+                  </CardTitle>
+                  
                   {developer.role && (
-                    <Badge variant="secondary" className="w-fit mx-auto">
+                    <Badge 
+                      variant="secondary" 
+                      className="w-fit mx-auto mt-2 group-hover:bg-primary/10 group-hover:text-primary group-hover:border-primary/20 transition-all duration-300"
+                    >
                       {developer.role}
                     </Badge>
                   )}
                 </CardHeader>
-                <CardContent className="space-y-4">
+                
+                <CardContent className="space-y-4 flex-1 flex flex-col justify-between">
                   {developer.bio && (
-                    <p className="text-sm text-muted-foreground text-center">
+                    <p className="text-sm text-muted-foreground text-center leading-relaxed">
                       {developer.bio}
                     </p>
                   )}
 
-                  <div className="space-y-3">
+                  <div className="space-y-3 mt-auto">
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full flex items-center gap-2"
+                      className="w-full flex items-center gap-2 group-hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
                       onClick={() => sendEmail(developer.email)}
                     >
-                      <Mail className="h-4 w-4" />
-                      Email
+                      <Mail className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
+                      <span className="truncate">Email</span>
                     </Button>
 
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      className="w-full flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/20 hover:border-blue-300 transition-all duration-300"
                       onClick={() => openLinkedIn(developer.linkedin)}
                     >
-                      <Linkedin className="h-4 w-4" />
-                      LinkedIn
+                      <Linkedin className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
+                      <span className="truncate">LinkedIn</span>
                     </Button>
                   </div>
                 </CardContent>
