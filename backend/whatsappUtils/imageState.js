@@ -1,117 +1,8 @@
-import {
-  sendWABAButtonMessage,
-  sendWABATextMessage,
-} from "../utils/wabaHelperFns.js";
+import { sendWABATextMessage } from "../utils/wabaHelperFns.js";
 import { setSession } from "../utils/redisUtils.js";
 import { v4 as uuidv4 } from "uuid";
 import { uploadMediaFromWABA } from "../utils/s3Utils.js";
 import { newComplaint } from "../utils/mongoUtils.js";
-
-// Request image choice (Yes/No for uploading image)
-async function requestImageChoice(phoneNumber, language) {
-  try {
-    let message;
-    let buttons;
-
-    if (language === "kannada") {
-      message = `📸 ಗುಂಡಿಯ ಫೋಟೋ\n\nದಯವಿಟ್ಟು ಗುಂಡಿಯ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಬಯಸುತ್ತೀರಾ?\n\n💡 ಫೋಟೋ ಇರುವುದರಿಂದ ನಮಗೆ ಹೆಚ್ಚು ಸಹಾಯಕವಾಗುತ್ತದೆ`;
-      buttons = ["ಹೌದು (ಶಿಫಾರಸು)", "ಬೇಡ"];
-    } else {
-      message = `📸 Pothole Photo\n\nWould you like to upload a photo of the pothole?\n\n💡 Photos help us assess the severity better`;
-      buttons = ["Yes (Recommended)", "No"];
-    }
-
-    await sendWABAButtonMessage(phoneNumber, message, buttons);
-  } catch (error) {
-    console.error("❌ Error sending image choice buttons:", error);
-  }
-}
-
-// Handle image choice
-async function handleImageChoice(session, phoneNumber, response) {
-  try {
-    if (
-      response.toLowerCase().includes("yes") ||
-      response.toLowerCase().includes("ಹೌದು")
-    ) {
-      session.state = "awaiting_image";
-      await setSession(phoneNumber, session);
-      return requestImage(phoneNumber, session.language);
-    } else if (
-      response.toLowerCase().includes("no") ||
-      response.toLowerCase().includes("ಬೇಡ")
-    ) {
-      // Skip image upload and save complaint without image
-      return submitComplaintWithoutImage(session, phoneNumber);
-    } else {
-      return requestImageChoice(phoneNumber, session.language);
-    }
-  } catch (error) {
-    console.error("Error in handleImageChoice:", error);
-    if (session.language === "kannada") {
-      await sendWABATextMessage(
-        phoneNumber,
-        'ದಯವಿಟ್ಟು "Hi" ಟೈಪ್ ಮಾಡಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.'
-      );
-    } else {
-      await sendWABATextMessage(
-        phoneNumber,
-        'Something went wrong. Please type "Hi" to start again.'
-      );
-    }
-  }
-}
-
-// Submit complaint without image
-async function submitComplaintWithoutImage(session, phoneNumber) {
-  try {
-    const complaintId = uuidv4();
-
-    const complaintData = {
-      complaintId: complaintId,
-      phoneNumber: phoneNumber,
-      latitude: session.latitude,
-      longitude: session.longitude,
-      imageUrl: null, // No image uploaded
-      language: session.language,
-    };
-
-    const complaint = await newComplaint(complaintData);
-
-    // Reset session
-    session.state = "language_selection";
-    await setSession(phoneNumber, session);
-
-    let message;
-    if (session.language === "kannada") {
-      message = `✅ * ಗುಂಡಿ ವರದಿ ಸಫಲವಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!*\n\n🆔 ದೂರು ಐಡಿ: \`${
-        complaint.complaintId
-      }\`\n📍 ಸ್ಥಳ: ${session.latitude.toFixed(6)}, ${session.longitude.toFixed(
-        6
-      )}\n\n🏛️ ನಿಮ್ಮ ವರದಿಯನ್ನು ಅಧಿಕಾರಿಗಳಿಗೆ ಕಳುಹಿಸಲಾಗಿದೆ\n\n🙏 ನಮ್ಮ ಬೆಂಗಳೂರನ್ನು ಉತ್ತಮಗೊಳಿಸಿದ್ದಕ್ಕಾಗಿ ಧನ್ಯವಾದಗಳು!\n\n🔄 ಮತ್ತೊಂದು ವರದಿ ಮಾಡಲು "Hi" ಟೈಪ್ ಮಾಡಿ`;
-    } else {
-      message = `✅ *Pothole Report Submitted Successfully!*\n\n🆔 Complaint ID: \`${
-        complaint.complaintId
-      }\`\n📍 Location: ${session.latitude.toFixed(
-        6
-      )}, ${session.longitude.toFixed(
-        6
-      )}\n\n🏛️ Your report has been sent to Authorities\n\n🙏 Thank you for helping improve Namma Bengaluru!\n\n🔄 Type "Hi" to submit another report`;
-    }
-
-    await sendWABATextMessage(phoneNumber, message);
-  } catch (error) {
-    console.error("Error submitting complaint without image:", error);
-    let message;
-    if (session.language === "kannada") {
-      message =
-        '❌ ತಾಂತ್ರಿಕ ದೋಷ ಸಂಭವಿಸಿದೆ. ದಯವಿಟ್ಟು "Hi" ಟೈಪ್ ಮಾಡಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
-    } else {
-      message = '❌ Technical error occurred. Please type "Hi" to try again.';
-    }
-    await sendWABATextMessage(phoneNumber, message);
-  }
-}
 
 // Request image with improved instructions
 async function requestImage(phoneNumber, language) {
@@ -222,10 +113,4 @@ async function handleImageInput(
     await sendWABATextMessage(phoneNumber, message);
   }
 }
-export {
-  handleImageChoice,
-  requestImageChoice,
-  submitComplaintWithoutImage,
-  requestImage,
-  handleImageInput,
-};
+export { requestImage, handleImageInput };

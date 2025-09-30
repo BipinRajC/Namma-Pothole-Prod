@@ -4,7 +4,7 @@ import {
   sendWABAMediaMessage,
 } from "../utils/wabaHelperFns.js";
 import { checkDuplicateLocation } from "../utils/mongoUtils.js";
-import { requestImageChoice } from "./imageState.js";
+import { requestImage } from "./imageState.js";
 import { isWithinBangalore } from "../utils/geoUtils.js";
 
 // Request location with improved Bangalore-centric messaging
@@ -71,10 +71,10 @@ async function handleLocationInput(
     // Store location in session
     session.latitude = lat;
     session.longitude = lng;
-    session.state = "awaiting_image_choice";
+    session.state = "awaiting_image";
     await setSession(phoneNumber, session);
 
-    return requestImageChoice(phoneNumber, session.language);
+    return requestImage(phoneNumber, session.language);
   } else {
     return requestLocation(phoneNumber, session.language);
   }

@@ -4,7 +4,7 @@ import {
   handleLanguageSelection,
 } from "./languageState.js";
 import { handleLocationInput } from "./locationState.js";
-import { handleImageChoice, handleImageInput } from "./imageState.js";
+import { handleImageInput } from "./imageState.js";
 
 // Handle WhatsApp message flow
 async function handleWhatsAppMessage(session, phoneNumber, messageData) {
@@ -43,10 +43,6 @@ async function handleWhatsAppMessage(session, phoneNumber, messageData) {
         longitude,
         messageType
       );
-      break;
-
-    case "awaiting_image_choice":
-      await handleImageChoice(session, phoneNumber, buttonText || body);
       break;
 
     case "awaiting_image":
