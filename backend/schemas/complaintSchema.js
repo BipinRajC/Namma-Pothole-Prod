@@ -36,12 +36,17 @@ const complaintSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["reported", "acknowledged", "resolved"],
+    enum: ["reported", "in_progress", "resolved"],
     default: "reported",
   },
   reportCount: {
     type: Number,
     default: 1,
+  },
+  evidenceUrl: {
+    type: String,
+    required: false,
+    default: null,
   },
 });
 

@@ -90,11 +90,11 @@ export const fetchDashboardStats = async (): Promise<DashboardStats> => {
       (acc, complaint) => {
         acc.total++;
         if (complaint.status === "reported") acc.reported++;
-        else if (complaint.status === "acknowledged") acc.acknowledged++;
+        else if (complaint.status === "in_progress") acc.inProgress++;
         else if (complaint.status === "resolved") acc.resolved++;
         return acc;
       },
-      { total: 0, reported: 0, acknowledged: 0, resolved: 0 }
+      { total: 0, reported: 0, inProgress: 0, resolved: 0 }
     );
 
     return stats;

@@ -13,10 +13,10 @@ const statusConfig = {
     variant: "destructive" as const,
     className: "bg-destructive text-destructive-foreground",
   },
-  acknowledged: {
-    label: "Acknowledged",
+  in_progress: {
+    label: "In Progress",
     variant: "default" as const,
-    className: "bg-warning text-warning-foreground",
+    className: "bg-yellow-500 text-white",
   },
   resolved: {
     label: "Resolved",

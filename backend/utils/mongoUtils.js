@@ -151,3 +151,116 @@ export const getAllComplaints = async () => {
     return [];
   }
 };
+
+/**
+ * Get complaint by ID
+ * @param {string} complaintId
+ * @returns {Object|null} - Complaint object or null
+ */
+export const getComplaintById = async (complaintId) => {
+  try {
+    const complaint = await Complaint.findOne(
+      { complaintId },
+      { phoneNumber: 0 }
+    );
+    return complaint;
+  } catch (err) {
+    console.error("Error fetching complaint by ID:", err);
+    return null;
+  }
+};
+
+/**
+ * Update complaint status
+ * @param {string} complaintId
+ * @param {string} newStatus - "reported" | "in_progress" | "resolved"
+ * @returns {Object} - Updated complaint or error
+ */
+export const updateComplaintStatus = async (complaintId, newStatus) => {
+  try {
+    const validStatuses = ["reported", "in_progress", "resolved"];
+    if (!validStatuses.includes(newStatus)) {
+      return { success: false, error: "Invalid status value" };
+    }
+
+    const complaint = await Complaint.findOneAndUpdate(
+      { complaintId },
+      { status: newStatus },
+      { new: true, select: { phoneNumber: 0 } }
+    );
+
+    if (!complaint) {
+      return { success: false, error: "Complaint not found" };
+    }
+
+    return { success: true, data: complaint };
+  } catch (err) {
+    console.error("Error updating complaint status:", err);
+    return { success: false, error: err.message };
+  }
+};
+
+/**
+ * Update complaint evidence URL
+ * @param {string} complaintId
+ * @param {string} evidenceUrl
+ * @returns {Object} - Updated complaint or error
+ */
+export const updateComplaintEvidence = async (complaintId, evidenceUrl) => {
+  try {
+    const complaint = await Complaint.findOneAndUpdate(
+      { complaintId },
+      { evidenceUrl },
+      { new: true, select: { phoneNumber: 0 } }
+    );
+
+    if (!complaint) {
+      return { success: false, error: "Complaint not found" };
+    }
+
+    return { success: true, data: complaint };
+  } catch (err) {
+    console.error("Error updating complaint evidence:", err);
+    return { success: false, error: err.message };
+  }
+};
+
+/**
+ * Update complaint status and evidence URL together
+ * @param {string} complaintId
+ * @param {string} newStatus
+ * @param {string} evidenceUrl
+ * @returns {Object} - Updated complaint or error
+ */
+export const updateComplaintStatusAndEvidence = async (
+  complaintId,
+  newStatus,
+  evidenceUrl
+) => {
+  try {
+    const validStatuses = ["reported", "in_progress", "resolved"];
+    if (!validStatuses.includes(newStatus)) {
+      return { success: false, error: "Invalid status value" };
+    }
+
+    const updateData = { status: newStatus };
+    if (evidenceUrl) {
+      updateData.evidenceUrl = evidenceUrl;
+    }
+
+    const complaint = await Complaint.findOneAndUpdate(
+      { complaintId },
+      updateData,
+      { new: true, select: { phoneNumber: 0 } }
+    );
+
+    if (!complaint) {
+      return { success: false, error: "Complaint not found" };
+    }
+
+    return { success: true, data: complaint };
+  } catch (err) {
+    console.error("Error updating complaint:", err);
+    return { success: false, error: err.message };
+  }
+};

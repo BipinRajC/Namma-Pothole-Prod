@@ -14,6 +14,7 @@ import {
   Info,
   Mail,
   MessageCircle,
+  ShieldCheck,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -111,7 +112,7 @@ export const Dashboard = () => {
   const stats = statsData || {
     total: 0,
     reported: 0,
-    acknowledged: 0,
+    inProgress: 0,
     resolved: 0,
   };
   const hasError = complaintsError || statsError;
@@ -157,6 +158,15 @@ export const Dashboard = () => {
             >
               <Mail className="h-4 w-4" />
               <span className="hidden sm:inline">Contact</span>
+            </Button>
+            <Button
+              onClick={() => navigate("/admin/login")}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2 border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-950"
+            >
+              <ShieldCheck className="h-4 w-4" />
+              <span className="hidden sm:inline">Admin Login</span>
             </Button>
             <DarkModeToggle />
             <Button

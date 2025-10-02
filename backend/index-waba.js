@@ -6,6 +6,7 @@ import cors from "cors";
 import { WABA_LICENSE_NUMBER, WABA_API_KEY } from "./utils/constants.js";
 import { handleWhatsAppMessage } from "./whatsappUtils/initialState.js";
 import complaintsRouter from "./routes/complaintsRoutes.js";
+import adminRouter from "./routes/adminRoutes.js";
 
 const app = express();
 
@@ -136,6 +137,9 @@ app.get("/health", (req, res) => {
 
 // Complaints endpoint
 app.use("/complaints", complaintsRouter);
+
+// Admin endpoints
+app.use("/admin", adminRouter);
 
 async function startServer() {
   await connectToMongoDB();
