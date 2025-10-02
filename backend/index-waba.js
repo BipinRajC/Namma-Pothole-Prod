@@ -6,6 +6,8 @@ import cors from "cors";
 import { WABA_LICENSE_NUMBER, WABA_API_KEY } from "./utils/constants.js";
 import { handleWhatsAppMessage } from "./whatsappUtils/initialState.js";
 import complaintsRouter from "./routes/complaintsRoutes.js";
+import authRouter from "./routes/authRoutes.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -23,6 +25,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cookieParser());
 
 // Middleware to parse URL-encoded data (for WABA webhooks)
 app.use(express.urlencoded({ extended: false }));
@@ -136,6 +139,8 @@ app.get("/health", (req, res) => {
 
 // Complaints endpoint
 app.use("/complaints", complaintsRouter);
+// Auth endpoint
+app.use("/auth", authRouter);
 
 async function startServer() {
   await connectToMongoDB();
