@@ -1,4 +1,3 @@
-import { BANGALORE_BOUNDARIES } from "./constants.js";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -16,16 +15,6 @@ try {
 } catch (error) {
   console.error("Error loading map.geojson:", error);
   zonesGeoJSON = null;
-}
-
-// Check if coordinates are within Bangalore
-function isWithinBangalore(lat, lng) {
-  return (
-    lat >= BANGALORE_BOUNDARIES.south &&
-    lat <= BANGALORE_BOUNDARIES.north &&
-    lng >= BANGALORE_BOUNDARIES.west &&
-    lng <= BANGALORE_BOUNDARIES.east
-  );
 }
 
 /**
@@ -63,6 +52,12 @@ function getZoneFromCoordinates(lat, lng) {
 
   // Point is not within any zone
   return null;
+}
+
+// Check if coordinates are within Bangalore
+function isWithinBangalore(lat, lng) {
+  const retVal = getZoneFromCoordinates(lat, lng);
+  return retVal !== null;
 }
 
 export { isWithinBangalore, getZoneFromCoordinates };
