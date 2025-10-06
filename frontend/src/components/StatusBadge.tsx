@@ -13,8 +13,8 @@ const statusConfig = {
     variant: "destructive" as const,
     className: "bg-destructive text-destructive-foreground",
   },
-  acknowledged: {
-    label: "Acknowledged",
+  in_progress: {
+    label: "In Progress",
     variant: "default" as const,
     className: "bg-warning text-warning-foreground",
   },
@@ -30,7 +30,7 @@ const statusConfig = {
  */
 export const StatusBadge = ({ status, className }: StatusBadgeProps) => {
   const config = statusConfig[status];
-
+  console.log("StatusBadge Stauts: ", status);
   return (
     <Badge variant={config.variant} className={cn(config.className, className)}>
       {config.label}
