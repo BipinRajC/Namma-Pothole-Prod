@@ -15,7 +15,7 @@ let zonesGeoJSON = null;
  */
 function loadZonesGeoJSON() {
   if (!zonesGeoJSON) {
-    const geoJSONPath = path.join(__dirname, "../../map.geojson");
+    const geoJSONPath = path.join(__dirname, "./map.geojson");
     const geoJSONData = fs.readFileSync(geoJSONPath, "utf8");
     zonesGeoJSON = JSON.parse(geoJSONData);
   }
@@ -123,4 +123,3 @@ export function isValidZoneId(zoneId) {
 export function isValidZoneName(zoneName) {
   return Object.values(ZONE_MAPPING).includes(zoneName);
 }
-
