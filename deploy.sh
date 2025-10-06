@@ -48,6 +48,7 @@ echo "✅ Environment variables validated"
 # Stop existing containers if running
 echo "🛑 Stopping existing containers..."
 docker-compose down --remove-orphans || true
+docker system prune -a -f
 
 # Remove old images to ensure fresh build
 echo "🧹 Cleaning up old images..."

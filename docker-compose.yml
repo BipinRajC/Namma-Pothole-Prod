@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # Redis for session management
@@ -19,10 +19,9 @@ services:
     networks:
       - namma-network
 
-
   # Backend API server
   backend:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: namma-pothole-backend
@@ -33,21 +32,27 @@ services:
       # Database connections
       MONGODB_URI: ${MONGODB_URI}
       REDIS_URL: redis://redis:6379
-      
+
       # WABA configuration (add your credentials)
       WABA_LICENSE_NUMBER: ${WABA_LICENSE_NUMBER}
       WABA_API_KEY: ${WABA_API_KEY}
       LOCATION_HELP_IMAGE_URL: ${LOCATION_HELP_IMAGE_URL}
-      
+
       # AWS S3 configuration (add your credentials)
       AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
       AWS_SECRET_KEY: ${AWS_SECRET_KEY}
       AWS_S3_BUCKET: ${AWS_S3_BUCKET}
       AWS_S3_BUCKET_REGION: ${AWS_S3_BUCKET_REGION}
-      
+
       # Frontend URL for CORS
       FRONTEND_URL: https://nammapothole.com
-      
+
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+
       # Node environment
       NODE_ENV: production
     depends_on:
@@ -61,7 +66,7 @@ services:
 
   # Frontend React application with Nginx
   frontend:
-    build: 
+    build:
       context: ./frontend
       dockerfile: Dockerfile
       args:
