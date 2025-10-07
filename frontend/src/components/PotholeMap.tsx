@@ -5,6 +5,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { MapPin, AlertTriangle, Loader2 } from "lucide-react";
 import { Complaint } from "@/types/complaint";
 import { StatusBadge } from "./StatusBadge";
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import {
   loadGoogleMaps,
   isGoogleMapsLoaded,
@@ -39,6 +40,8 @@ export const PotholeMap = ({
   const mapRef = useRef<HTMLDivElement>(null);
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+  const [markerClusterer, setMarkerClusterer] =
+    useState<MarkerClusterer | null>(null);
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(
     null
   );
@@ -78,18 +81,25 @@ export const PotholeMap = ({
   useEffect(() => {
     if (!mapInstance || !infoWindow) return;
 
+    // Clear existing marker clusterer
+    if (markerClusterer) {
+      markerClusterer.clearMarkers();
+    }
+
     // Clear existing markers
     markers.forEach((marker) => marker.setMap(null));
-    setMarkers([]);
 
-    if (complaints.length === 0) return;
+    if (complaints.length === 0) {
+      setMarkers([]);
+      setMarkerClusterer(null);
+      return;
+    }
 
     const newMarkers: google.maps.Marker[] = [];
 
     complaints.forEach((complaint) => {
       const marker = new google.maps.Marker({
         position: { lat: complaint.latitude, lng: complaint.longitude },
-        map: mapInstance,
         title: `Complaint ${complaint.complaintId.slice(-8)}`,
         icon: createMarkerIcon(MARKER_COLORS[complaint.status]),
       });
@@ -114,7 +124,14 @@ export const PotholeMap = ({
       newMarkers.push(marker);
     });
 
+    // Create marker clusterer to manage markers
+    const clusterer = new MarkerClusterer({
+      markers: newMarkers,
+      map: mapInstance,
+    });
+
     setMarkers(newMarkers);
+    setMarkerClusterer(clusterer);
 
     // Fit map to show all markers
     if (newMarkers.length > 0) {
@@ -136,6 +153,9 @@ export const PotholeMap = ({
         }
       );
     }
+    // We intentionally omit markers and markerClusterer from dependencies
+    // as they are being set within this effect
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapInstance, complaints, infoWindow, onComplaintSelect]);
 
   // Highlight selected complaint
@@ -230,7 +250,7 @@ export const PotholeMap = ({
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-warning"></div>
-            <span>Acknowledged</span>
+            <span>In Progress</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-success"></div>

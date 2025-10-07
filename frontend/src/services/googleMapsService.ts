@@ -125,7 +125,7 @@ export const getDefaultMapConfig = (): google.maps.MapOptions => ({
  */
 export const MARKER_COLORS = {
   reported: "#ef4444", // red-500
-  acknowledged: "#f59e0b", // amber-500
+  in_progress: "#f59e0b", // amber-500
   resolved: "#22c55e", // green-500
   selected: "#3b82f6", // blue-500
 } as const;
@@ -151,7 +151,7 @@ export const createMarkerIcon = (
  */
 export const createInfoWindowContent = (complaint: {
   complaintId: string;
-  status: "reported" | "acknowledged" | "resolved";
+  status: "reported" | "in_progress" | "resolved";
   timestamp: string;
   imageUrl: string;
 }): string => `
