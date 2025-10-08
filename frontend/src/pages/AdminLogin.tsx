@@ -42,10 +42,10 @@ export default function AdminLogin() {
         navigate("/admin/dashboard");
       } else {
         setError(response.error || "Login failed. Please try again.");
+        setIsLoading(false);
       }
     } catch (err: any) {
       setError(err.message || "Login failed. Please try again.");
-    } finally {
       setIsLoading(false);
     }
   };
@@ -88,7 +88,18 @@ export default function AdminLogin() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                <Button
+                  type="button"
+                  variant="link"
+                  className="p-0 h-auto text-xs"
+                  onClick={() => navigate("/admin/forgot-password")}
+                  disabled={isLoading}
+                >
+                  Forgot password?
+                </Button>
+              </div>
               <Input
                 id="password"
                 type="password"

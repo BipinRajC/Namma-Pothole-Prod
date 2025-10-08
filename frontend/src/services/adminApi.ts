@@ -45,7 +45,9 @@ adminApi.interceptors.request.use(
 adminApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    // Only redirect on 401 if it's NOT the login endpoint
+    // (to allow login errors to be displayed properly)
+    if (error.response?.status === 401 && !error.config?.url?.includes('/login')) {
       // Token expired or invalid - clear storage and redirect to login
       localStorage.removeItem("adminToken");
       localStorage.removeItem("adminUser");
@@ -247,6 +249,102 @@ export const getAdminStats = async (): Promise<{
     console.error("Error fetching admin stats:", error);
     throw new Error(
       error.response?.data?.error || "Failed to fetch statistics"
+    );
+  }
+};
+
+/**
+ * Request password reset
+ * Sends a password reset email to the provided email address
+ */
+export const requestPasswordReset = async (
+  email: string
+): Promise<{
+  success: boolean;
+  message: string;
+  resetUrl?: string; // Only in dev mode
+}> => {
+  try {
+    const response = await axios.post(
+      `${getApiBaseUrl()}/admin/forgot-password`,
+      { email },
+      {
+        timeout: 10000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error("Password reset request error:", error);
+    throw new Error(
+      error.response?.data?.error ||
+        "Failed to process password reset request"
+    );
+  }
+};
+
+/**
+ * Verify password reset token
+ * Checks if the token is valid before allowing password reset
+ */
+export const verifyResetToken = async (
+  token: string
+): Promise<{
+  success: boolean;
+  email?: string;
+  error?: string;
+}> => {
+  try {
+    const response = await axios.post(
+      `${getApiBaseUrl()}/admin/verify-reset-token`,
+      { token },
+      {
+        timeout: 10000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error("Token verification error:", error);
+    return {
+      success: false,
+      error: error.response?.data?.error || "Invalid or expired token",
+    };
+  }
+};
+
+/**
+ * Reset password using token
+ * Updates the password for the user associated with the token
+ */
+export const resetPassword = async (
+  token: string,
+  newPassword: string
+): Promise<{
+  success: boolean;
+  message?: string;
+  error?: string;
+}> => {
+  try {
+    const response = await axios.post(
+      `${getApiBaseUrl()}/admin/reset-password`,
+      { token, newPassword },
+      {
+        timeout: 10000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error("Password reset error:", error);
+    throw new Error(
+      error.response?.data?.error || "Failed to reset password"
     );
   }
 };

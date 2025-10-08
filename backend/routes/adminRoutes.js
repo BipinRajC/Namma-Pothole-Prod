@@ -4,6 +4,9 @@ import {
   getAdminUserByEmail,
   verifyPassword,
   createAuditLog,
+  createPasswordResetToken,
+  verifyPasswordResetToken,
+  updateAdminPassword,
 } from "../utils/supabaseUtils.js";
 import {
   generateToken,
@@ -19,6 +22,10 @@ import {
 import { getZoneFromCoordinates, getAllZones } from "../utils/zoneUtils.js";
 import { uploadMediaFromBuffer } from "../utils/s3Utils.js";
 import { v4 as uuidv4 } from "uuid";
+import {
+  sendPasswordResetEmail,
+  sendPasswordChangedEmail,
+} from "../utils/emailUtils.js";
 
 const router = express.Router();
 
@@ -99,6 +106,169 @@ router.post("/login", async (req, res) => {
     res.status(500).json({
       success: false,
       error: "Login failed. Please try again.",
+    });
+  }
+});
+
+/**
+ * POST /admin/forgot-password
+ * Request password reset - sends email with reset token
+ */
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        error: "Email is required",
+      });
+    }
+
+    // Create reset token
+    const result = await createPasswordResetToken(email);
+
+    if (!result.success) {
+      // Don't reveal if user exists or not for security
+      return res.json({
+        success: true,
+        message:
+          "If an account exists with this email, you will receive a password reset link.",
+      });
+    }
+
+    // Get user details for email
+    const user = await getAdminUserByEmail(email);
+
+    // Send password reset email
+    const emailResult = await sendPasswordResetEmail(
+      email,
+      result.token,
+      user?.name
+    );
+
+    if (!emailResult.success) {
+      console.error("Failed to send reset email:", emailResult.error);
+    }
+
+    // Always return success to prevent email enumeration
+    res.json({
+      success: true,
+      message:
+        "If an account exists with this email, you will receive a password reset link.",
+      // Include reset URL in response for testing (remove in production)
+      ...(process.env.NODE_ENV !== "production" && {
+        resetUrl: emailResult.resetUrl,
+      }),
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to process password reset request",
+    });
+  }
+});
+
+/**
+ * POST /admin/reset-password
+ * Reset password using token
+ */
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        error: "Token and new password are required",
+      });
+    }
+
+    // Validate password strength
+    if (newPassword.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: "Password must be at least 8 characters long",
+      });
+    }
+
+    // Verify token
+    const tokenVerification = await verifyPasswordResetToken(token);
+
+    if (!tokenVerification.success) {
+      return res.status(400).json({
+        success: false,
+        error: tokenVerification.error || "Invalid or expired reset token",
+      });
+    }
+
+    // Update password
+    const updateResult = await updateAdminPassword(
+      tokenVerification.userId,
+      newPassword,
+      tokenVerification.tokenId
+    );
+
+    if (!updateResult.success) {
+      return res.status(500).json({
+        success: false,
+        error: "Failed to update password",
+      });
+    }
+
+    // Get user details for confirmation email
+    const user = await getAdminUserByEmail(tokenVerification.email);
+
+    // Send confirmation email
+    await sendPasswordChangedEmail(tokenVerification.email, user?.name);
+
+    res.json({
+      success: true,
+      message: "Password has been reset successfully. You can now log in.",
+    });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to reset password",
+    });
+  }
+});
+
+/**
+ * POST /admin/verify-reset-token
+ * Verify if a reset token is valid (used by frontend to check before showing reset form)
+ */
+router.post("/verify-reset-token", async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: "Token is required",
+      });
+    }
+
+    const verification = await verifyPasswordResetToken(token);
+
+    if (!verification.success) {
+      return res.status(400).json({
+        success: false,
+        error: verification.error || "Invalid or expired token",
+      });
+    }
+
+    res.json({
+      success: true,
+      email: verification.email,
+    });
+  } catch (error) {
+    console.error("Verify token error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to verify token",
     });
   }
 });

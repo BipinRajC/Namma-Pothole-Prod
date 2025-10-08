@@ -28,6 +28,7 @@
     "mongoose": "^8.18.0",
     "multer": "^2.0.2",
     "node-fetch": "^3.3.2",
+    "nodemailer": "^7.0.9",
     "redis": "^5.8.2",
     "sharp": "^0.34.3",
     "twilio": "^5.8.2",

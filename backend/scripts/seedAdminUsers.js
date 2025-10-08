@@ -51,6 +51,17 @@ async function seedAdminUsers() {
       zoneId: null,
     });
 
+    // MASTER TEST CREDENTIAL - For testing password reset functionality
+    // Replace 'YOUR_EMAIL_HERE' with your actual email address
+    adminUsers.push({
+      email: process.env.MASTER_TEST_EMAIL || "test.admin@nammapothole.com",
+      password: "TestMaster@2025", // Initial password - can be reset via forgot password
+      name: "Master Test Admin",
+      role: "superintendent_engineer",
+      zone: null,
+      zoneId: null,
+    });
+
     // Create all users
     console.log("Creating admin users...\n");
     
@@ -75,7 +86,10 @@ async function seedAdminUsers() {
     console.log("\n📋 Summary:");
     console.log("   - 10 Chief Engineers (one per zone)");
     console.log("   - 1 Superintendent Engineer");
+    console.log("   - 1 Master Test Admin (for testing password reset)");
     console.log("\n📧 Login credentials printed above. Save them securely!");
+    console.log("\n🔐 Password Reset Testing:");
+    console.log(`   Use the Master Test Admin account (${process.env.MASTER_TEST_EMAIL || "test.admin@nammapothole.com"}) to test the forgot password feature.`);
     
   } catch (error) {
     console.error("❌ Error seeding admin users:", error);

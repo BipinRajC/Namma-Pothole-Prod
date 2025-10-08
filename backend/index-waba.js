@@ -13,6 +13,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:8080", // Development frontend
   "http://localhost:3001", // Development frontend alternative
+  "http://localhost:5173", // Vite development server
   process.env.FRONTEND_URL || "https://nammapothole.com", // Production frontend
 ];
 
