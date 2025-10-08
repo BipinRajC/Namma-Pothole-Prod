@@ -50,4 +50,4 @@ const complaintSchema = new mongoose.Schema({
   },
 });
 
-export const Complaint = mongoose.model("Complaint", complaintSchema);
+export const Complaint = mongoose.model("Newcomplaint", complaintSchema);
