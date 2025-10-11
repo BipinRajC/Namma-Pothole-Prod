@@ -24,7 +24,6 @@ export default function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [resetUrl, setResetUrl] = useState(""); // For dev mode
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,11 +35,6 @@ export default function ForgotPassword() {
 
       if (response.success) {
         setSuccess(true);
-        // In dev mode (when EMAIL not configured), the response includes the reset URL
-        // This will not be shown once you configure EMAIL_USER and EMAIL_PASSWORD
-        if (response.resetUrl) {
-          setResetUrl(response.resetUrl);
-        }
       } else {
         setError("Failed to send reset email. Please try again.");
       }
@@ -70,8 +64,7 @@ export default function ForgotPassword() {
             <Alert>
               <Mail className="h-4 w-4" />
               <AlertDescription>
-                If an account exists with <strong>{email}</strong>, you will
-                receive a password reset link shortly.
+                You will receive a password reset link shortly on <strong>{email}</strong>
               </AlertDescription>
             </Alert>
 
@@ -80,20 +73,6 @@ export default function ForgotPassword() {
               <p>⏰ The link will expire in 1 hour</p>
               <p>📁 Don't forget to check your spam folder</p>
             </div>
-
-            {resetUrl && (
-              <Alert className="mt-4">
-                <AlertDescription>
-                  <p className="font-semibold mb-2">Development Mode - Reset Link:</p>
-                  <a
-                    href={resetUrl}
-                    className="text-blue-600 hover:text-blue-800 underline break-all"
-                  >
-                    {resetUrl}
-                  </a>
-                </AlertDescription>
-              </Alert>
-            )}
 
             <div className="pt-4 space-y-2">
               <Button
@@ -111,7 +90,6 @@ export default function ForgotPassword() {
                 onClick={() => {
                   setSuccess(false);
                   setEmail("");
-                  setResetUrl("");
                 }}
               >
                 Send another email

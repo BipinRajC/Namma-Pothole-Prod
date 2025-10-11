@@ -26,7 +26,7 @@ export async function sendPasswordResetEmail(email, resetToken, recipientName) {
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
           .header { background-color: #2563eb; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
           .content { background-color: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
-          .button { display: inline-block; background-color: #2563eb; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+          .button { display: inline-block; background-color: #2563eb; color: #ffffff !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; font-weight: bold; }
           .footer { text-align: center; margin-top: 20px; color: #6b7280; font-size: 12px; }
           .warning { background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin: 15px 0; }
         </style>
@@ -44,7 +44,7 @@ export async function sendPasswordResetEmail(email, resetToken, recipientName) {
             <p>Click the button below to reset your password:</p>
             
             <div style="text-align: center;">
-              <a href="${resetUrl}" class="button">Reset Password</a>
+              <a href="${resetUrl}" class="button" style="display: inline-block; background-color: #2563eb; color: #ffffff !important; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; font-weight: bold;">Reset Password</a>
             </div>
             
             <p>Or copy and paste this link into your browser:</p>
@@ -137,6 +137,7 @@ Namma Pothole Team
     return {
       success: true,
       message: 'Password reset email sent successfully',
+      resetUrl, // Include for testing purposes
     };
   } catch (error) {
     console.error('Error sending password reset email:', error);

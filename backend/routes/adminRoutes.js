@@ -129,11 +129,10 @@ router.post("/forgot-password", async (req, res) => {
     const result = await createPasswordResetToken(email);
 
     if (!result.success) {
-      // Don't reveal if user exists or not for security
-      return res.json({
-        success: true,
-        message:
-          "If an account exists with this email, you will receive a password reset link.",
+      // Return error if email doesn't exist in database
+      return res.status(404).json({
+        success: false,
+        error: "Invalid email. Please contact the administrator if you need access.",
       });
     }
 
@@ -149,17 +148,16 @@ router.post("/forgot-password", async (req, res) => {
 
     if (!emailResult.success) {
       console.error("Failed to send reset email:", emailResult.error);
+      return res.status(500).json({
+        success: false,
+        error: "Failed to send reset email. Please try again later.",
+      });
     }
 
-    // Always return success to prevent email enumeration
+    // Return success
     res.json({
       success: true,
-      message:
-        "If an account exists with this email, you will receive a password reset link.",
-      // Include reset URL in response for testing (remove in production)
-      ...(process.env.NODE_ENV !== "production" && {
-        resetUrl: emailResult.resetUrl,
-      }),
+      message: `You will receive a password reset link shortly on ${email}`,
     });
   } catch (error) {
     console.error("Forgot password error:", error);
