@@ -24,7 +24,8 @@ export async function getObjectURL(key) {
   });
 
   const url = getSignedUrl(s3Client, command);
-  return url;
+  const cleanUrl = url.split('?')[0];
+  return cleanUrl;
 }
 
 export async function putObject(fileName, filePath) {

@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Fuse from "fuse.js";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -10,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Dialog,
@@ -35,6 +37,7 @@ import {
   Map as MapIcon,
   TrendingUp,
   Activity,
+  Search,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -254,6 +257,7 @@ export default function AdminDashboard() {
   const [previewComplaintId, setPreviewComplaintId] = useState("");
   const [activeTab, setActiveTab] = useState<"overview" | "complaints" | "map">("overview");
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const adminUser = getCurrentAdmin();
 
@@ -304,6 +308,84 @@ export default function AdminDashboard() {
     refetchOnWindowFocus: false,
     enabled: !!adminUser,
   });
+
+  // Utility functions for search
+  const formatDateTime = (timestamp: string) => {
+    const timestampMs = parseInt(timestamp) * 1000;
+    return new Date(timestampMs).toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const formatCoordinates = (lat: number, lng: number) => {
+    return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  };
+
+  const clearSearch = () => {
+    setSearchTerm("");
+  };
+
+  // Fuse.js configuration for fuzzy search
+  const fuseOptions = useMemo(() => ({
+    threshold: 0.4,
+    minMatchCharLength: 1,
+    includeScore: true,
+    includeMatches: true,
+    keys: [
+      {
+        name: 'complaintId',
+        weight: 0.3
+      },
+      {
+        name: 'status',
+        weight: 0.2
+      },
+      {
+        name: 'coordinates',
+        weight: 0.3
+      },
+      {
+        name: 'formattedDate',
+        weight: 0.2
+      },
+      {
+        name: 'zone',
+        weight: 0.1
+      }
+    ]
+  }), []);
+
+  // Prepare search data with additional searchable fields
+  const searchableComplaints = useMemo(() => {
+    if (!complaintsData?.data) return [];
+    return complaintsData.data.map(complaint => ({
+      ...complaint,
+      coordinates: formatCoordinates(complaint.latitude, complaint.longitude),
+      formattedDate: formatDateTime(complaint.timestamp),
+      shortId: complaint.complaintId.slice(-8)
+    }));
+  }, [complaintsData?.data]);
+
+  // Initialize Fuse instance
+  const fuse = useMemo(() => {
+    return new Fuse(searchableComplaints, fuseOptions);
+  }, [searchableComplaints, fuseOptions]);
+
+  // Filter complaints based on search term
+  const filteredComplaints = useMemo(() => {
+    if (!complaintsData?.data) return [];
+    if (!searchTerm.trim()) {
+      return complaintsData.data;
+    }
+    
+    const results = fuse.search(searchTerm);
+    return results.map(result => result.item);
+  }, [searchTerm, fuse, complaintsData?.data]);
 
   // Status update mutation
   const statusUpdateMutation = useMutation({
@@ -618,14 +700,52 @@ export default function AdminDashboard() {
           <TabsContent value="complaints" className="space-y-6">
             <Card>
           <CardHeader>
-            <CardTitle>Complaints</CardTitle>
-            <CardDescription>
-              {complaintsData?.zone === "all"
-                ? "All zones"
-                : `Zone: ${adminUser.zone}`}
-              {" • "}
-              {complaintsData?.data.length || 0} complaints
-            </CardDescription>
+            <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+              <div>
+                <CardTitle>Complaints</CardTitle>
+                <CardDescription>
+                  {complaintsData?.zone === "all"
+                    ? "All zones"
+                    : `Zone: ${adminUser.zone}`}
+                  {" • "}
+                  <span className="font-medium">
+                    {filteredComplaints.length} of {complaintsData?.data.length || 0}
+                  </span>
+                  {" complaints"}
+                </CardDescription>
+              </div>
+              
+              {/* Search Bar */}
+              <div className="relative w-full lg:w-80">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Input
+                  placeholder="Search complaints..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 pr-10"
+                />
+                {searchTerm && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearSearch}
+                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-muted"
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                )}
+              </div>
+            </div>
+            
+            {/* Search Results Summary */}
+            {searchTerm && (
+              <div className="mt-2 text-sm text-muted-foreground">
+                {filteredComplaints.length === 0 
+                  ? `No results for "${searchTerm}"` 
+                  : `Showing ${filteredComplaints.length} result${filteredComplaints.length === 1 ? '' : 's'} for "${searchTerm}"`
+                }
+              </div>
+            )}
           </CardHeader>
           <CardContent>
             {complaintsLoading ? (
@@ -636,14 +756,18 @@ export default function AdminDashboard() {
                   </div>
                 ))}
               </div>
-            ) : complaintsData?.data.length === 0 ? (
+            ) : filteredComplaints.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
                 <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>No complaints found in your zone</p>
+                <p>
+                  {searchTerm 
+                    ? `No complaints found matching "${searchTerm}"` 
+                    : "No complaints found in your zone"}
+                </p>
               </div>
             ) : (
               <div className="space-y-4">
-                {complaintsData?.data.map((complaint) => (
+                {filteredComplaints.map((complaint) => (
                   <Card key={complaint.complaintId} className="border-2">
                     <CardContent className="pt-6">
                       <div className="flex flex-col md:flex-row gap-4">

@@ -181,19 +181,41 @@ export const createInfoWindowContent = (complaint: {
         timeStyle: "short",
       })}
     </div>
-    <div style="
-      padding: 20px; 
-      text-align: center; 
-      color: #9ca3af; 
-      background: #f9fafb; 
-      border-radius: 6px; 
-      margin-top: 8px;
-      border: 1px solid #e5e7eb;
-      font-size: 12px;
-      font-weight: 500;
-    ">
-      📷 Image Display Feature Coming Soon...
-    </div>
+    ${
+      complaint.imageUrl
+        ? `<div style="
+          margin-top: 8px;
+          border-radius: 6px; 
+          overflow: hidden;
+          border: 1px solid #e5e7eb;
+        ">
+          <img 
+            src="${complaint.imageUrl}" 
+            alt="Pothole image" 
+            style="
+              width: 100%; 
+              height: auto; 
+              max-height: 200px; 
+              object-fit: cover;
+              display: block;
+            "
+            onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\'padding: 20px; text-align: center; color: #9ca3af; background: #f9fafb; font-size: 12px;\\'>📷 Image unavailable</div>';"
+          />
+        </div>`
+        : `<div style="
+          padding: 20px; 
+          text-align: center; 
+          color: #9ca3af; 
+          background: #f9fafb; 
+          border-radius: 6px; 
+          margin-top: 8px;
+          border: 1px solid #e5e7eb;
+          font-size: 12px;
+          font-weight: 500;
+        ">
+          📷 No image available
+        </div>`
+    }
   </div>
 `;
 
