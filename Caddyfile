@@ -2,11 +2,6 @@
 # Handles HTTPS automatically with Let's Encrypt
 
 nammapothole.com {
-    # Frontend - serve React app
-    handle / {
-        reverse_proxy frontend:80
-    }
-    
     # Backend API routes
     handle /api/* {
         uri strip_prefix /api
@@ -15,6 +10,11 @@ nammapothole.com {
     
     # Health check endpoint
     handle /health {
+        reverse_proxy frontend:80
+    }
+    
+    # Frontend - proxy to nginx container
+    handle /* {
         reverse_proxy frontend:80
     }
     
@@ -31,7 +31,7 @@ nammapothole.com {
         Referrer-Policy "strict-origin-when-cross-origin"
         
         # Content Security Policy
-        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://maps.googleapis.com; frame-src 'none'; object-src 'none';"
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://maps.googleapis.com https://nammapothole.com; frame-src 'none'; object-src 'none';"
     }
     
     # Gzip compression

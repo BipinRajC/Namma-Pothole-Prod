@@ -14,7 +14,7 @@ let googleMapsPromise: Promise<typeof google> | null = null;
 const GOOGLE_MAPS_CONFIG = {
   apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
   version: "weekly",
-  libraries: ["geometry", "places"] as const,
+  libraries: ["geometry", "places"] as ("geometry" | "places")[],
   region: "IN", // India
   language: "en",
   mapIds: [], // Add your Map IDs here if using custom styling
@@ -125,7 +125,7 @@ export const getDefaultMapConfig = (): google.maps.MapOptions => ({
  */
 export const MARKER_COLORS = {
   reported: "#ef4444", // red-500
-  acknowledged: "#f59e0b", // amber-500
+  in_progress: "#f59e0b", // amber-500
   resolved: "#22c55e", // green-500
   selected: "#3b82f6", // blue-500
 } as const;
@@ -135,30 +135,34 @@ export const MARKER_COLORS = {
  */
 export const createMarkerIcon = (
   color: string,
-  scale: number = 8
+  scale: number = 1.2
 ): google.maps.Symbol => ({
-  path: google.maps.SymbolPath.CIRCLE,
+  path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
   scale,
   fillColor: color,
-  fillOpacity: 0.8,
+  fillOpacity: 0.9,
   strokeColor: "#ffffff",
-  strokeWeight: 2,
+  strokeWeight: 1.5,
+  anchor: new google.maps.Point(12, 24),
 });
 
 /**
  * Create an info window content for a complaint
  */
 export const createInfoWindowContent = (complaint: {
-  _id: string;
-  status: "reported" | "acknowledged" | "resolved";
+  complaintId: string;
+  status: "reported" | "in_progress" | "resolved";
   timestamp: string;
   imageUrl: string;
 }): string => `
   <div style="padding: 12px; max-width: 280px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     <div style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-      <strong style="font-size: 14px;">Complaint ${complaint._id.slice(
-        -8
-      )}</strong>
+       <div style="font-size: 11px; color: black;">
+         <div style="font-weight: bold;">Complaint</div>
+         <div style="font-family: monospace; margin-top: 2px;">${
+           complaint.complaintId
+         }</div>
+       </div>
       <span style="
         background: ${MARKER_COLORS[complaint.status]};
         color: white;
@@ -172,37 +176,46 @@ export const createInfoWindowContent = (complaint: {
       </span>
     </div>
     <div style="margin-bottom: 8px; font-size: 12px; color: #666;">
-      ${new Date(complaint.timestamp).toLocaleString("en-IN", {
+      ${new Date(parseInt(complaint.timestamp) * 1000).toLocaleString("en-IN", {
         dateStyle: "short",
         timeStyle: "short",
       })}
     </div>
-    <img 
-      src="${complaint.imageUrl}" 
-      alt="Pothole"
-      style="
-        width: 100%; 
-        height: 120px; 
-        object-fit: cover; 
-        border-radius: 6px; 
-        margin-top: 8px;
-        border: 1px solid #e5e7eb;
-      "
-      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-    />
-    <div style="
-      display: none; 
-      padding: 20px; 
-      text-align: center; 
-      color: #9ca3af; 
-      background: #f9fafb; 
-      border-radius: 6px; 
-      margin-top: 8px;
-      border: 1px solid #e5e7eb;
-      font-size: 12px;
-    ">
-      📷 Image unavailable
-    </div>
+    ${
+      complaint.imageUrl
+        ? `<div style="
+          margin-top: 8px;
+          border-radius: 6px; 
+          overflow: hidden;
+          border: 1px solid #e5e7eb;
+        ">
+          <img 
+            src="${complaint.imageUrl}" 
+            alt="Pothole image" 
+            style="
+              width: 100%; 
+              height: auto; 
+              max-height: 200px; 
+              object-fit: cover;
+              display: block;
+            "
+            onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\'padding: 20px; text-align: center; color: #9ca3af; background: #f9fafb; font-size: 12px;\\'>📷 Image unavailable</div>';"
+          />
+        </div>`
+        : `<div style="
+          padding: 20px; 
+          text-align: center; 
+          color: #9ca3af; 
+          background: #f9fafb; 
+          border-radius: 6px; 
+          margin-top: 8px;
+          border: 1px solid #e5e7eb;
+          font-size: 12px;
+          font-weight: 500;
+        ">
+          📷 No image available
+        </div>`
+    }
   </div>
 `;
 

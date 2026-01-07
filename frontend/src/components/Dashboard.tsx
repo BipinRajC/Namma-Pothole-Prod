@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,9 @@ import {
   AlertTriangle,
   BarChart3,
   Info,
+  Mail,
+  MessageCircle,
+  ShieldCheck,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -21,17 +25,18 @@ import { ComplaintsTable } from "./ComplaintsTable";
 import { PotholeMap } from "./PotholeMap";
 import { loadGoogleMaps } from "@/services/googleMapsService";
 import { DarkModeToggle } from "./DarkModeToggle";
-import { About } from "./About";
+import { Footer } from "./Footer";
 
 /**
  * Main dashboard component for pothole complaint management
  * Combines table view and map view with statistics
  */
 export const Dashboard = () => {
+  const navigate = useNavigate();
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
     null
   );
-  const [activeTab, setActiveTab] = useState<"overview" | "table" | "map" | "about">(
+  const [activeTab, setActiveTab] = useState<"overview" | "table" | "map">(
     "overview"
   );
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
@@ -107,7 +112,7 @@ export const Dashboard = () => {
   const stats = statsData || {
     total: 0,
     reported: 0,
-    acknowledged: 0,
+    inProgress: 0,
     resolved: 0,
   };
   const hasError = complaintsError || statsError;
@@ -118,23 +123,56 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-dashboard-bg">
-      <div className={`container mx-auto ${activeTab === 'map' ? 'p-2 space-y-2' : 'p-6 space-y-6'}`}>
+    <div className="min-h-screen bg-dashboard-bg flex flex-col">
+      <div
+        className={`container mx-auto px-4 md:px-6 py-4 md:py-6 space-y-4 md:space-y-6 flex-grow`}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Pothole Management Dashboard
+        <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+          <div className="min-w-0 flex-1 flex items-center gap-3">
+            <img 
+              src="/profile-image.png" 
+              alt="Namma Pothole Logo" 
+              className="h-10 w-10 object-contain"
+            />
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground truncate">
+              Namma Pothole
             </h1>
-            <p className="text-muted-foreground mt-1">
-              Monitor and manage pothole complaints across Bengaluru
-            </p>
+            
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 lg:flex-nowrap">
+            <Button
+              onClick={() => navigate("/about")}
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Info className="h-4 w-4" />
+              <span className="hidden sm:inline">About</span>
+            </Button>
+            <Button
+              onClick={() => navigate("/contact")}
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Mail className="h-4 w-4" />
+              <span className="hidden sm:inline">Contact</span>
+            </Button>
+            <Button
+              onClick={() => navigate("/admin/login")}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2 border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-950"
+            >
+              <ShieldCheck className="h-4 w-4" />
+              <span className="hidden sm:inline">Admin Login</span>
+            </Button>
             <DarkModeToggle />
             <Button
               onClick={handleRefresh}
               disabled={complaintsLoading || statsLoading}
+              size="sm"
               className="flex items-center gap-2"
             >
               <RefreshCw
@@ -142,7 +180,16 @@ export const Dashboard = () => {
                   complaintsLoading || statsLoading ? "animate-spin" : ""
                 }`}
               />
-              Refresh Data
+              <span className="hidden sm:inline">Refresh Data</span>
+            </Button>
+            <Button
+              onClick={() => window.open("https://wa.me/919108420079?text=Hi", "_blank")}
+              size="sm"
+              variant="outline"
+              className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600"
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span className="hidden sm:inline">Chat with Bot</span>
             </Button>
           </div>
         </div>
@@ -171,25 +218,21 @@ export const Dashboard = () => {
         <Tabs
           value={activeTab}
           onValueChange={(value) =>
-            setActiveTab(value as "overview" | "table" | "map" | "about")
+            setActiveTab(value as "overview" | "table" | "map")
           }
         >
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Overview
             </TabsTrigger>
             <TabsTrigger value="table" className="flex items-center gap-2">
               <TableIcon className="h-4 w-4" />
-              Complaints Table
+              Complaints
             </TabsTrigger>
             <TabsTrigger value="map" className="flex items-center gap-2">
               <MapPin className="h-4 w-4" />
-              Map View
-            </TabsTrigger>
-            <TabsTrigger value="about" className="flex items-center gap-2">
-              <Info className="h-4 w-4" />
-              About
+              Map
             </TabsTrigger>
           </TabsList>
 
@@ -224,15 +267,15 @@ export const Dashboard = () => {
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      {complaints.slice(0, 5).map((complaint) => (
+                      {complaints.slice(0, 8).map((complaint) => (
                         <div
-                          key={complaint._id}
+                          key={complaint.complaintId}
                           className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted cursor-pointer transition-colors"
                           onClick={() => handleViewOnMap(complaint)}
                         >
                           <div className="flex items-center gap-3">
                             <div className="text-xs font-mono text-muted-foreground">
-                              {complaint._id.slice(-8)}
+                              {complaint.complaintId.slice(-8)}
                             </div>
                             <div className="text-sm text-muted-foreground">
                               {formatCoordinates(
@@ -242,9 +285,9 @@ export const Dashboard = () => {
                             </div>
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {new Date(complaint.timestamp).toLocaleDateString(
-                              "en-IN"
-                            )}
+                            {new Date(
+                              parseInt(complaint.timestamp) * 1000
+                            ).toLocaleDateString("en-IN")}
                           </div>
                         </div>
                       ))}
@@ -259,13 +302,15 @@ export const Dashboard = () => {
               </Card>
 
               {/* Map Preview */}
-              <PotholeMap
-                complaints={complaints.slice(0, 10)} // Show limited markers for overview
-                selectedComplaint={selectedComplaint}
-                onComplaintSelect={setSelectedComplaint}
-                isLoading={complaintsLoading}
-                isFullScreen={false}
-              />
+              {!complaintsLoading && (
+                <PotholeMap
+                  complaints= {complaints.slice(0,10)} // Show limited markers for overview
+                  selectedComplaint={selectedComplaint}
+                  onComplaintSelect={setSelectedComplaint}
+                  isLoading={complaintsLoading}
+                  isFullScreen={false}
+                />
+              )}
             </div>
           </TabsContent>
 
@@ -288,13 +333,11 @@ export const Dashboard = () => {
               isFullScreen={true}
             />
           </TabsContent>
-
-          {/* About Tab */}
-          <TabsContent value="about" className="mt-6">
-            <About />
-          </TabsContent>
         </Tabs>
       </div>
+
+      {/* Footer with business information */}
+      <Footer />
     </div>
   );
 };

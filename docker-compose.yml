@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # Redis for session management
@@ -7,7 +7,7 @@ services:
     container_name: namma-pothole-redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
@@ -19,10 +19,9 @@ services:
     networks:
       - namma-network
 
-
   # Backend API server
   backend:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: namma-pothole-backend
@@ -33,20 +32,31 @@ services:
       # Database connections
       MONGODB_URI: ${MONGODB_URI}
       REDIS_URL: redis://redis:6379
-      
-      # Twilio configuration (add your credentials)
-      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
-      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
-      
+
+      # WABA configuration (add your credentials)
+      WABA_LICENSE_NUMBER: ${WABA_LICENSE_NUMBER}
+      WABA_API_KEY: ${WABA_API_KEY}
+      LOCATION_HELP_IMAGE_URL: ${LOCATION_HELP_IMAGE_URL}
+
       # AWS S3 configuration (add your credentials)
       AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
       AWS_SECRET_KEY: ${AWS_SECRET_KEY}
       AWS_S3_BUCKET: ${AWS_S3_BUCKET}
       AWS_S3_BUCKET_REGION: ${AWS_S3_BUCKET_REGION}
-      
+
       # Frontend URL for CORS
       FRONTEND_URL: https://nammapothole.com
-      
+
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+
+      # Email configuration for password reset
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+
       # Node environment
       NODE_ENV: production
     depends_on:
@@ -58,19 +68,18 @@ services:
     networks:
       - namma-network
 
-  # Frontend React application
+  # Frontend React application with Nginx
   frontend:
-    build: 
+    build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+        VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY}
     container_name: namma-pothole-frontend
     restart: unless-stopped
     ports:
-      - "80:80"
-    environment:
-      # API configuration for runtime replacement
-      VITE_API_BASE_URL: https://nammapothole.com/api
-      VITE_GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
+      - "8080:80"
     depends_on:
       - backend
     networks:

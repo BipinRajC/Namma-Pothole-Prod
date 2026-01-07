@@ -25,10 +25,10 @@ export const StatsCards = ({ stats, isLoading }: StatsCardsProps) => {
       className: "border-destructive",
     },
     {
-      title: "Acknowledged",
-      value: stats.acknowledged,
+      title: "In Progress",
+      value: stats.inProgress,
       icon: Clock,
-      className: "border-warning",
+      className: "border-yellow-500",
     },
     {
       title: "Resolved",

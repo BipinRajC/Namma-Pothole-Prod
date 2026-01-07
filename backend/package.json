@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch index.js",
-    "prod": "node index.js",
+    "dev": "node --watch index-waba.js",
+    "prod": "node index-waba.js",
     "tunnel": "node ngrok-setup.js",
-    "dev:tunnel": "concurrently \"npm run dev\" \"npm run tunnel\"",
-    "test": "node --check index.js"
+    "dev:tunnel": "concurrently \"npm run dev\" \"npm run tunnel\""
   },
   "keywords": [],
   "author": "",
@@ -16,11 +15,20 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.879.0",
     "@aws-sdk/s3-request-presigner": "^3.879.0",
+    "@supabase/supabase-js": "^2.58.0",
+    "@turf/boolean-point-in-polygon": "^7.2.0",
+    "@turf/helpers": "^7.2.0",
+    "axios": "^1.6.0",
+    "bcryptjs": "^3.0.2",
+    "compression": "^1.8.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
+    "multer": "^2.0.2",
     "node-fetch": "^3.3.2",
+    "nodemailer": "^7.0.9",
     "redis": "^5.8.2",
     "sharp": "^0.34.3",
     "twilio": "^5.8.2",
@@ -28,7 +36,10 @@
   },
   "type": "module",
   "devDependencies": {
+    "@eslint/js": "^9.36.0",
     "concurrently": "^9.2.1",
+    "eslint": "^9.36.0",
+    "globals": "^16.4.0",
     "ngrok": "^5.0.0-beta.2"
   }
 }

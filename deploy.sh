@@ -34,7 +34,7 @@ echo "🔍 Checking environment variables..."
 source .env
 
 # Validate required environment variables
-required_vars=("MONGODB_URI" "TWILIO_ACCOUNT_SID" "TWILIO_AUTH_TOKEN" "AWS_ACCESS_KEY" "AWS_SECRET_KEY" "AWS_S3_BUCKET" "GOOGLE_MAPS_API_KEY")
+required_vars=("MONGODB_URI" "AWS_ACCESS_KEY" "AWS_SECRET_KEY" "AWS_S3_BUCKET" "VITE_GOOGLE_MAPS_API_KEY" "WABA_LICENSE_NUMBER" "WABA_API_KEY" "SUPABASE_URL" "SUPABASE_ANON_KEY" "SUPABASE_SERVICE_ROLE_KEY" "JWT_SECRET" "JWT_EXPIRES_IN")
 
 for var in "${required_vars[@]}"; do
     if [ -z "${!var}" ]; then
@@ -48,6 +48,7 @@ echo "✅ Environment variables validated"
 # Stop existing containers if running
 echo "🛑 Stopping existing containers..."
 docker-compose down --remove-orphans || true
+docker system prune -a -f
 
 # Remove old images to ensure fresh build
 echo "🧹 Cleaning up old images..."
@@ -112,6 +113,6 @@ echo "   docker-compose up -d                     # Start all services"
 echo ""
 echo "🔒 Don't forget to:"
 echo "   1. Point your domain DNS to this server's IP"
-echo "   2. Configure your Twilio webhook to: https://nammapothole.com/api/whatsapp"
+echo "   2. Configure your WAPI webhook to: https://nammapothole.com/api/whatsapp"
 echo "   3. Monitor logs for any issues"
 echo ""
