@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 // Main WhatsApp webhook endpoint for WABA
 app.post("/whatsapp", async (req, res) => {
   try {
-    // console.log('📥 WABA Webhook received:', JSON.stringify(req.body, null, 2));
+    console.log('📥 WABA Webhook received:', JSON.stringify(req.body, null, 2));
 
     // Parse WABA webhook structure based on actual format
     if (
