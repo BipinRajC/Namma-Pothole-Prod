@@ -16,6 +16,7 @@ export const s3Client = new S3Client({
     accessKeyId: process.env.AWS_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SECRET_KEY,
   },
+  forcePathStyle: true,
 });
 
 export async function getObjectURL(key) {
@@ -30,7 +31,7 @@ export async function getObjectURL(key) {
 
   const bucketName = process.env.AWS_S3_BUCKET;
   const region = process.env.AWS_S3_BUCKET_REGION;
-  const publicUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${key}`;
+  const publicUrl = `${process.env.SUPABASE_STORAGE_PUBLIC_URL}/${process.env.AWS_S3_BUCKET}/${key}`;
   return publicUrl;
 }
 
